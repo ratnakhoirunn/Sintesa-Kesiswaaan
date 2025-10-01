@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin | Sintesa SMK N 2 Yogyakarta</title>
+    <title>Dashboard Admin | Sintesa SMKN 2 Yogyakarta</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -118,6 +118,9 @@
             margin-top: auto; /* Dorong ke bawah */
             padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         .sidebar .logout a {
             display: block;
@@ -248,7 +251,7 @@
             width: 100%;
         }
 
-        /* Administrasi Siswa & Tindakan Konseling Cards */
+        /* Dokumen Siswa & Tindakan Konseling Cards */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 2fr 1fr; /* Grafik lebih lebar dari sidebar kanan */
@@ -307,10 +310,10 @@
     <div class="sidebar">
         <div class="header">
             <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
-            <h3>Sintesa SMK N 2 Yogyakarta</h3>
+            <h3>Sintesa SMKN 2 Yogyakarta</h3>
         </div>
         <div class="profile">
-            <img src="{{ asset('images/admin_profile.png') }}" alt="Admin Profile">
+            <img src="{{ asset('images/profil2.jpg') }}" alt="Admin Profile">
             <div class="info">
                 <h4>Admin</h4>
                 <p>Administrator</p>
@@ -319,7 +322,9 @@
         <nav>
             <ul>
                 <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+
                 <li><a href="#"><i class="fas fa-users"></i> Data Siswa</a></li>
+
                 <li><a href="#"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle"><i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i></a>
@@ -328,7 +333,7 @@
                         <li><a href="#">Keterlambatan</a></li>
                     </ul>
                 </li>
-                <li><a href="#"><i class="fas fa-file-alt"></i> Administrasi Siswa</a></li>
+                <li><a href="#"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
                 <li><a href="#"><i class="fas fa-user-cog"></i> Manajemen Role</a></li>
             </ul>
         </nav>
@@ -341,7 +346,7 @@
         <div class="navbar">
             <h2>Dashboard Admin</h2>
             <div class="user-profile">
-                <img src="{{ asset('images/admin_profile_small.png') }}" alt="Admin Profile">
+                <img src="{{ asset('images/profil2.jpg') }}" alt="Admin Profile">
             </div>
         </div>
 
@@ -357,7 +362,7 @@
                     <h3>650</h3>
                 </div>
                 <div class="icon">
-                    <img src="{{ asset('images/icon_siswa.png') }}" alt="Total Siswa">
+                    <img src="{{ asset('images/toga1.png') }}" alt="Total Siswa">
                 </div>
             </div>
             <div class="info-card">
@@ -366,7 +371,7 @@
                     <h3>3</h3>
                 </div>
                 <div class="icon">
-                    <img src="{{ asset('images/icon_admin.png') }}" alt="Total Admin">
+                    <img src="{{ asset('images/totaladmin.png') }}" alt="Total Admin">
                 </div>
             </div>
             <div class="info-card">
@@ -375,7 +380,7 @@
                     <h3>10</h3>
                 </div>
                 <div class="icon">
-                    <img src="{{ asset('images/icon_konseling.png') }}" alt="Jumlah Konseling">
+                    <img src="{{ asset('images/totalkonsel.png') }}" alt="Jumlah Konseling">
                 </div>
             </div>
         </div>
@@ -391,17 +396,17 @@
             </div>
             <div class="right-column-cards">
                 <div class="admin-action-card">
-                    <h3>Administrasi Siswa</h3>
+                    <h3>Dokumen Siswa</h3>
                     <div class="action-item">
-                        <img src="{{ asset('images/icon_dokumen.png') }}" alt="Dokumen Lengkap">
+                        <img src="{{ asset('images/dok_lengkap.jpeg') }}" alt="Dokumen Lengkap">
                         <span>Dokumen Lengkap</span>
                     </div>
                     <div class="action-item">
-                        <img src="{{ asset('images/icon_sedang.png') }}" alt="Sedang">
+                        <img src="{{ asset('images/dok_sedang.png') }}" alt="Sedang">
                         <span>Sedang</span>
                     </div>
                     <div class="action-item">
-                        <img src="{{ asset('images/icon_berat.png') }}" alt="Berat">
+                        <img src="{{ asset('images/dok_berat.png') }}" alt="Berat">
                         <span>Berat</span>
                     </div>
                 </div>
