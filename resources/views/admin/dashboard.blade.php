@@ -306,7 +306,7 @@
 <body>
     <div class="sidebar">
         <div class="header">
-            <img src="{{ asset('images/logo_smk.png') }}" alt="Logo SMK">
+            <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
             <h3>Sintesa SMK N 2 Yogyakarta</h3>
         </div>
         <div class="profile">
@@ -320,7 +320,6 @@
             <ul>
                 <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="#"><i class="fas fa-users"></i> Data Siswa</a></li>
-                <li><a href="#"><i class="fas fa-user-friends"></i> Data Orang Tua</a></li>
                 <li><a href="#"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle"><i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i></a>
