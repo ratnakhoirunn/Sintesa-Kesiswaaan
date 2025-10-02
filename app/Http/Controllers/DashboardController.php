@@ -29,4 +29,11 @@ class DashboardController extends Controller
         // Logika untuk dashboard siswa
         return view('siswa.dashboard');
     }
+
+    //Fungsi untuk Admin-Menu Data Siswa
+    public function dataSiswa()
+    {
+        return view('admin.datasiswa.index');
+    }
+
 }
