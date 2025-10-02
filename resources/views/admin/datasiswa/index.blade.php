@@ -22,9 +22,16 @@
         <div style="display:flex; flex-direction:column;">
             <label for="jurusan" style="font-size:14px; margin-bottom:5px;">Pilih Jurusan</label>
             <select id="jurusan" style="padding:8px; border-radius:8px; min-width:200px;">
-                <option>Rekayasa Perangkat Lunak</option>
                 <option>Desain Komunikasi Visual</option>
-                <option>Teknik Jaringan Komputer</option>
+                <option>Desain Pemodelan dan Informasi Bangunan</option>
+                <option>Teknik Geospasial</option>
+                <option>Konstruksi Gedung dan Sanitasi</option>
+                <option>Teknik Mekatronika</option>
+                <option>Sistem Informasi Jaringan dan Aplikasi ( Pengembangan Perangkat Lunak dan Gim )</option>
+                <option>Teknik Audio Video</option>
+                <option>Teknik Instalasi Tenaga Listrik</option>
+                <option>Teknik Teknik Kendaraan Ringan</option>
+                <option>Teknik Pemesinan</option>
             </select>
         </div>
 
@@ -44,29 +51,40 @@
 
 </div>
 
-<table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden;">
-    <thead style="background:#2c3e50; color:white;">
+<table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; font-size:14px;">
+    <thead style="background:#2c3e50; color:white; text-align:center;">
         <tr>
-            <th style="padding:10px;">No</th>
-            <th style="padding:10px;">NIS</th>
-            <th style="padding:10px;">Nama Lengkap</th>
-            <th style="padding:10px;">ROMBEL</th>
-            <th style="padding:10px;">Jurusan</th>
-            <th style="padding:10px;">Aksi</th>
+            <th style="padding:12px;">No</th>
+            <th style="padding:12px;">NIS</th>
+            <th style="padding:12px;">Nama Lengkap</th>
+            <th style="padding:12px;">ROMBEL</th>
+            <th style="padding:12px;">Jurusan</th>
+            <th style="padding:12px;">Aksi</th>
         </tr>
     </thead>
     <tbody>
         @for($i=1; $i<=10; $i++)
-        <tr style="border-bottom:1px solid #ddd;">
-            <td style="padding:10px; text-align:center;">{{ $i }}</td>
+        <tr style="border-bottom:1px solid #ddd; text-align:center; transition: background 0.2s;"
+            onmouseover="this.style.background='#f5f5f5';" 
+            onmouseout="this.style.background='white';">
+            
+            <td style="padding:10px;">{{ $i }}</td>
             <td style="padding:10px;">2510175{{ $i }}</td>
             <td style="padding:10px;">Adinata Royyan Alfarobby</td>
             <td style="padding:10px;">X DKV 1</td>
             <td style="padding:10px;">Desain Komunikasi Visual</td>
-            <td style="padding:10px; display:flex; gap:10px; align-items:center;">
-                <a href="#" style="color:blue;"><i class="fas fa-eye"></i> Lihat</a>
-                <a href="#" style="color:orange;"><i class="fas fa-edit"></i></a>
-                <a href="#" style="color:red;"><i class="fas fa-trash"></i></a>
+            <td style="padding:10px; display:flex; justify-content:center; gap:8px;">
+                <a href="{{ route('admin.datasiswa.read', $i) }}" 
+                    style="color:blue; text-decoration:none;" title="Lihat">
+                        <i class="fas fa-eye"></i>
+                </a>
+
+                <a href="#" style="color:orange; text-decoration:none;" title="Edit">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a href="#" style="color:red; text-decoration:none;" title="Hapus">
+                    <i class="fas fa-trash"></i>
+                </a>
             </td>
         </tr>
         @endfor

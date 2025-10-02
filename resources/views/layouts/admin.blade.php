@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin | Sintesa')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -324,33 +326,59 @@
         <nav>
             <ul>
                 <li>
-                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}" 
+                    class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.datasiswa') }}" class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.datasiswa') }}" 
+                    class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}">
                         <i class="fas fa-users"></i> Data Siswa
                     </a>
                 </li>
 
                 <li>
-                    <a href="#"><i class="fas fa-id-card"></i> Kartu Pelajar</a>
+                    <a href="{{ route('admin.kartupelajar') }}" 
+                    class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}">
+                        <i class="fas fa-id-card"></i> Kartu Pelajar
+                    </a>
                 </li>
 
-                <li class="dropdown">
+                <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'open' : '' }}">
                     <a href="#" class="dropdown-toggle">
                         <i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Konseling</a></li>
-                        <li><a href="#">Keterlambatan</a></li>
+                    <ul class="dropdown-menu" style="{{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'display:block;' : '' }}">
+                        <li>
+                            <a href="{{ route('admin.konseling') }}" 
+                            class="{{ request()->is('admin/konseling*') ? 'active' : '' }}">
+                                Konseling
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.keterlambatan') }}" 
+                            class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
+                                Keterlambatan
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
-                <li><a href="#"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
-                <li><a href="#"><i class="fas fa-user-cog"></i> Manajemen Role</a></li>
+                <li>
+                    <a href="{{ route('admin.dokumensiswa') }}" 
+                    class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
+                        <i class="fas fa-file-alt"></i> Dokumen Siswa
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.role') }}" 
+                    class="{{ request()->is('admin/role*') ? 'active' : '' }}">
+                        <i class="fas fa-user-cog"></i> Manajemen Role
+                    </a>
+                </li>
             </ul>
         </nav>
 
