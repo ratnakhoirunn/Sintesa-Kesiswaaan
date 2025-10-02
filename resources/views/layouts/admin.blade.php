@@ -369,5 +369,25 @@
 
         @yield('content')
     </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
+
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                // Tutup semua dropdown lain dulu
+                document.querySelectorAll(".sidebar nav ul li.dropdown")
+                    .forEach(drop => drop.classList.remove("active"));
+
+                // Toggle dropdown yang diklik
+                this.parentElement.classList.toggle("active");
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

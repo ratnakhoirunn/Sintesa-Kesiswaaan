@@ -37,7 +37,7 @@
 
     <!-- Baris tombol -->
     <div class="action-bar">
-        <button style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <button style="background:#769CCB; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px;">
             <i class="fas fa-plus"></i> Tambah Data Siswa
         </button>
     </div>
