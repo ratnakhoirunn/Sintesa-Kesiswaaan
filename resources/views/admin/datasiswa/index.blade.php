@@ -36,12 +36,16 @@
     </div>
 
     <!-- Baris tombol -->
-    <div class="action-bar">
-        <button style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px;">
-            <i class="fas fa-plus"></i> Tambah Data Siswa
-        </button>
-    </div>
+    <div style="display:flex; gap:15px; margin-bottom: 20px;">
+        <a href="{{ route('admin.siswa.create') }}" 
+   style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration: none;">
+    <i class="fas fa-plus"></i> Tambah Data Siswa
+            </a>
 
+   <a href="{{ route('admin.upload.siswa') }}" style="background:#3498db; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration: none;">
+    <i class="fas fa-file-upload"></i> Unggah Data Siswa
+</a>
+    </div>
 </div>
 
 <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden;">

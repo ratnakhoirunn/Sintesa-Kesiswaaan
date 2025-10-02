@@ -10,16 +10,34 @@ class Siswa extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nis',
-        'nisn',
+        'NIS',
         'nama_lengkap',
+        'NISN',
+        'kelas',
         'tempat_lahir',
         'tanggal_lahir',
         'jenis_kelamin',
         'agama',
-        'nama_orang_tua',
-        'alamat_siswa',
-        'kelas',
-        'jurusan'
+        'email',
+        'nomor_wa',
+        'foto',
+        'riwayat_kesehatan',
+        // Tambahkan kolom dari tbl_detail_siswa jika diperlukan
+        'berat_badan',
+        'tinggi_badan',
+        'hobi',
+        'cita_cita',
+        'anak_ke',
+        'jumlah_saudara_kandung',
+        'nama_jalan',
+        'rt',
+        'rw',
+        'dusun',
+        'desa',
+        'kode_pos',
+        'tinggal_dengan',
+        'jarak_rumah_km',
+        'waktu_tempuh_menit',
+        'transportasi_sekolah'
     ];
 }

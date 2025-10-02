@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SiswaController;
 
 // Rute Halaman Utama (langsung ke login)
 Route::get('/', function () {
@@ -17,6 +18,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'adminDashboard'])
         ->name('admin.dashboard');
 });
+
+// ... di dalam middleware ['auth', 'role:admin']
+Route::get('/admin/upload/siswa', [DashboardController::class, 'showUploadSiswaForm'])->name('admin.upload.siswa');
+Route::post('/admin/siswa/import', [DashboardController::class, 'importSiswa'])->name('admin.siswa.import');
+
+Route::get('/admin/siswa/create', [SiswaController::class, 'create'])->name('admin.siswa.create');
+Route::post('/admin/siswa/store', [SiswaController::class, 'store'])->name('admin.siswa.store');
+
 
 // Rute untuk Dashboard Siswa
 Route::middleware(['auth', 'role:siswa'])->group(function () {
