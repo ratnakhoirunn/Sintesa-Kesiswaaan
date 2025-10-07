@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin | Sintesa')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
     <style>
+
+    {{-- Link untuk Favicon --}}
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;

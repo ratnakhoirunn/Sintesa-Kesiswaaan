@@ -4,77 +4,84 @@
 @section('page_title', 'Data Siswa')
 
 @section('content')
-<div class="filter-container" style="margin-bottom:20px;">
-
-    <!-- Baris filter -->
-    <div class="filter-bar" 
-         style="display:flex; gap:15px; margin-bottom:15px; align-items:center; flex-wrap:wrap;">
-        
-        <div style="display:flex; flex-direction:column;">
-            <label for="kelas" style="font-size:14px; margin-bottom:5px;">Pilih Kelas</label>
-            <select id="kelas" style="padding:8px; border-radius:8px; min-width:80px;">
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            </select>
-        </div>
-
-        <div style="display:flex; flex-direction:column;">
-            <label for="jurusan" style="font-size:14px; margin-bottom:5px;">Pilih Jurusan</label>
-            <select id="jurusan" style="padding:8px; border-radius:8px; min-width:200px;">
-                <option>Rekayasa Perangkat Lunak</option>
-                <option>Desain Komunikasi Visual</option>
-                <option>Teknik Jaringan Komputer</option>
-            </select>
-        </div>
-
-        <div style="display:flex; flex-direction:column;">
-            <label for="search" style="font-size:14px; margin-bottom:5px;">Cari</label>
-            <input type="text" id="search" placeholder="Ketik untuk mencari..." 
-                   style="padding:8px; border-radius:8px; min-width:200px;">
-        </div>
+@if(session('success'))
+    <div style="background:#d4edda; color:#155724; padding:10px; border-radius:5px; margin-bottom:15px;">
+        {{ session('success') }}
     </div>
+@endif
+@if(session('error'))
+    <div style="background:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:15px;">
+        {{ session('error') }}
+    </div>
+@endif
 
-    <!-- Baris tombol -->
-     
-    <div style="display:flex; gap:15px; margin-bottom: 20px;">
-        <a href="{{ route('admin.siswa.create') }}" 
-   style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration: none;">
-    <i class="fas fa-plus"></i> Tambah Data Siswa
-            </a>
-
-   <a href="{{ route('admin.upload.siswa') }}" style="background:#3498db; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration: none;">
-    <i class="fas fa-file-upload"></i> Unggah Data Siswa
-</a>
+{{-- Kontainer Filter dan Tombol Aksi --}}
+<div class="filter-container" style="margin-bottom:20px;">
+    {{-- Menggunakan display:flex untuk memastikan tombol sejajar --}}
+    <div style="display:flex; gap:15px; margin-bottom: 20px; align-items: center;">
+        
+        {{-- Tombol Tambah Data Manual --}}
+        <a href="{{ route('admin.datasiswa.create') }}" 
+           style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; text-decoration:none;">
+            <i class="fas fa-plus"></i> Tambah Data Siswa
+        </a>
+        
+        {{-- Formulir Import Excel (Menggunakan label untuk memicu input file yang tersembunyi) --}}
+        <form action="{{ route('admin.datasiswa.import') }}" method="POST" enctype="multipart/form-data" style="display:inline-block;">
+            @csrf
+            
+            <label for="file" 
+                style="background:#3498db; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer;">
+                <i class="fas fa-file-excel"></i> Import Excel
+            </label>
+            
+            {{-- Input file yang tersembunyi, akan otomatis submit saat file dipilih --}}
+            <input type="file" id="file" name="file" accept=".xlsx,.xls,.csv" 
+                style="display:none;" onchange="this.form.submit();">
+        </form>
     </div>
 </div>
 
+{{-- Tabel Data Siswa --}}
 <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden;">
     <thead style="background:#2c3e50; color:white;">
         <tr>
-            <th style="padding:10px;">No</th>
-            <th style="padding:10px;">NIS</th>
-            <th style="padding:10px;">Nama Lengkap</th>
-            <th style="padding:10px;">ROMBEL</th>
-            <th style="padding:10px;">Jurusan</th>
-            <th style="padding:10px;">Aksi</th>
+            <th style="padding:10px; text-align:left;">No</th>
+            <th style="padding:10px; text-align:left;">NISN</th>
+            <th style="padding:10px; text-align:left;">Nama Lengkap</th>
+            <th style="padding:10px; text-align:left;">Rombel</th>
+            <th style="padding:10px; text-align:left;">Kompetensi Keahlian</th>
+            <th style="padding:10px; text-align:left;">Aksi</th>
         </tr>
     </thead>
     <tbody>
-        @for($i=1; $i<=10; $i++)
+        @forelse($siswas as $i => $siswa)
         <tr style="border-bottom:1px solid #ddd;">
-            <td style="padding:10px; text-align:center;">{{ $i }}</td>
-            <td style="padding:10px;">2510175{{ $i }}</td>
-            <td style="padding:10px;">Adinata Royyan Alfarobby</td>
-            <td style="padding:10px;">X DKV 1</td>
-            <td style="padding:10px;">Desain Komunikasi Visual</td>
+            {{-- Nomor urut yang benar untuk paginasi --}}
+            <td style="padding:10px; text-align:center;">{{ $i + $siswas->firstItem() }}</td>
+            <td style="padding:10px;">{{ $siswa->nisn }}</td>
+            <td style="padding:10px;">{{ $siswa->nama }}</td>
+            <td style="padding:10px;">{{ $siswa->rombel }}</td>
+            <td style="padding:10px;">{{ $siswa->kompetensi_keahlian }}</td>
             <td style="padding:10px; display:flex; gap:10px; align-items:center;">
-                <a href="#" style="color:blue;"><i class="fas fa-eye"></i> Lihat</a>
-                <a href="#" style="color:orange;"><i class="fas fa-edit"></i></a>
-                <a href="#" style="color:red;"><i class="fas fa-trash"></i></a>
+                {{-- Tautan Aksi --}}
+                <a href="{{ route('admin.datasiswa.show', $siswa->id) }}" style="color:blue;"><i class="fas fa-eye"></i> Lihat</a>
+                <a href="{{ route('admin.datasiswa.edit', $siswa->id) }}" style="color:orange;"><i class="fas fa-edit"></i> Edit</a>
+                <form action="{{ route('admin.datasiswa.destroy', $siswa->id) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" style="border:none; background:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i> Hapus</button>
+                </form>
             </td>
         </tr>
-        @endfor
+        @empty
+        <tr><td colspan="6" style="text-align:center; padding:10px;">Belum ada data siswa.</td></tr>
+        @endforelse
     </tbody>
 </table>
+
+{{-- Link Paginasi (Penting agar tidak error BadMethodCallException) --}}
+<div style="margin-top:15px; display:flex; justify-content:center;">
+    {{ $siswas->links() }}
+</div>
 @endsection

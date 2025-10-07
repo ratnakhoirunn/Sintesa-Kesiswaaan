@@ -12,14 +12,16 @@ return new class extends Migration
    public function up()
 {
     Schema::table('siswas', function (Blueprint $table) {
-        $table->string('alamat_siswa')->nullable()->change();
+        $table->dropColumn('nama_orang_tua');
+        $table->dropColumn('alamat_siswa');
     });
 }
 
 public function down()
 {
     Schema::table('siswas', function (Blueprint $table) {
-        $table->string('alamat_siswa')->nullable(false)->change();
+        $table->string('nama_orang_tua')->nullable();
+        $table->text('alamat_siswa')->nullable();
     });
 }
 };

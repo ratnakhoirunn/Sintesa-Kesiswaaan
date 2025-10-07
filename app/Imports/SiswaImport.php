@@ -4,47 +4,37 @@ namespace App\Imports;
 
 use App\Models\Siswa;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow; // Menggunakan header sebagai key
-use Maatwebsite\Excel\Concerns\WithValidation; // Contoh jika butuh validasi
-use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
 
-class SiswaImport implements ToModel, WithHeadingRow
+class SiswaImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {
+    use Importable, SkipsFailures;
+
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * Setiap baris dari file Excel akan diproses ke model Siswa.
+     */
     public function model(array $row)
     {
-        // Abaikan baris yang kosong atau tidak memiliki NIS
-        if (empty($row['nis'])) {
-            return null;
-        }
-
-        // Logika untuk memproses kolom 'ttl' yang digabung
-        $ttl = explode(', ', $row['ttl'] ?? '');
-        $tempatLahir = $ttl[0] ?? null;
-        $tanggalLahir = isset($ttl[1]) ? date('Y-m-d', strtotime(str_replace('/', '-', $ttl[1]))) : null;
-    
-        // Perbaikan: Menggunakan $row['jk'] untuk memetakan jenis_kelamin
-        $jenisKelamin = ($row['jk'] === 'L') ? 'Laki-laki' : 'Perempuan';
-        dd($row);
-
-        // Mengembalikan instance model Siswa dengan data yang sudah dipetakan
         return new Siswa([
-            'NIS' => $row['nis'],
-            'NISN' => $row['nisn'],
-            'nama' => $row['nama'],
-            'kelas' => $row['kelas'],
-            'jurusan' => $row['jurusan'],
-            'jenis_kelamin' => $jenisKelamin, // Menggunakan variabel yang sudah diproses
-            'tempat_lahir' => $tempatLahir,
-            'tanggal_lahir' => $tanggalLahir,
-            'agama' => $row['agama'],
-            'nama_ayah' => $row['ayah'] ?? null, // Menggunakan null coalescing untuk menghindari error
-            'nama_ibu' => $row['ibu'] ?? null,
-            'alamat_siswa' => $row['alamat'],
+            'nisn' => $row['nisn'] ?? null,
+            'nama' => $row['nama'] ?? null,
+            'rombel' => $row['rombel'] ?? null,
+            'kompetensi_keahlian' => $row['kompetensi_keahlian'] ?? null,
         ]);
+    }
+
+    /**
+     * Validasi data per baris.
+     */
+    public function rules(): array
+    {
+        return [
+            '*.nisn' => ['required', 'numeric'],
+            '*.nama' => ['required', 'string'],
+        ];
     }
 }
