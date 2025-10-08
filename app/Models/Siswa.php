@@ -10,14 +10,16 @@ class Siswa extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nisn',
-        'nama',
+        'nis',
+        'nama_lengkap',
         'rombel',
-        'kompetensi_keahlian',
+        'jurusan',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'agama',
+        'nama_ortu',
+        'alamat',
+        'foto'
     ];
-
-    public function detail()
-    {
-        return $this->hasOne(DetailSiswa::class);
-    }
 }

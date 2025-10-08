@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SINTESA - Login Admin SMK N 2 Yogyakarta</title>
+    <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
     
     {{-- Memuat aset CSS & JS dari Laravel Vite/Mix --}}
     @vite(['resources/css/app.css', 'resources/js/app.js']) 
