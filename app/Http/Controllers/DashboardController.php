@@ -33,12 +33,13 @@ class DashboardController extends Controller
         return view('siswa.dashboard');
     }
 
-    //Fungsi untuk Admin-Menu Data Siswa
+    // 📌 Menu Data Siswa
     public function dataSiswa()
     {
         return view('admin.datasiswa.index');
     }
 
+<<<<<<< HEAD
     public function showUploadSiswaForm()
     {
         return view('admin.datasiswa.upload_siswa');
@@ -54,7 +55,5 @@ class DashboardController extends Controller
 
         return back()->with('success', 'Data siswa berhasil diunggah!');
     }
-
-    
-
 }
+

@@ -4,13 +4,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SiswaController;
+<<<<<<< HEAD
 use App\Http\Controllers\SiswaImportController;
+=======
+use App\Http\Middleware\PreventBackHistory;
+>>>>>>> bf367b5ee2c3fca5276fd5b4a6f129a095100eaa
 
-// Rute Halaman Utama (langsung ke login)
+// 🔹 Rute Halaman Utama (langsung ke login)
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
+<<<<<<< HEAD
 // Rute Login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login'); 
 Route::post('/login', [LoginController::class, 'login'])->name('login.process');

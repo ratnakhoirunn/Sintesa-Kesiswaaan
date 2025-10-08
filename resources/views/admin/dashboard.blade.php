@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Admin | Sintesa SMKN 2 Yogyakarta')
+@section('title', 'Dashboard Admin')
 @section('page_title', 'Dashboard Admin')
 
 @section('content')

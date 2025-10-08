@@ -20,6 +20,7 @@
     {{-- Menggunakan display:flex untuk memastikan tombol sejajar --}}
     <div style="display:flex; gap:15px; margin-bottom: 20px; align-items: center;">
         
+<<<<<<< HEAD
         {{-- Tombol Tambah Data Manual --}}
         <a href="{{ route('admin.datasiswa.create') }}" 
            style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; text-decoration:none;">
@@ -42,6 +43,7 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 {{-- Tabel Data Siswa --}}
 <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden;">
     <thead style="background:#2c3e50; color:white;">
@@ -72,6 +74,7 @@
                     @method('DELETE')
                     <button type="submit" style="border:none; background:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i> Hapus</button>
                 </form>
+
             </td>
         </tr>
         @empty

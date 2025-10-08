@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use PDF;
-
 class SiswaController extends Controller
 {
     public function index()
     {
+<<<<<<< HEAD
         // Gunakan paginate agar bisa pakai links() di Blade
         $siswas = Siswa::orderBy('nama_lengkap', 'asc')->paginate(10); // 10 data per halaman
         return view('admin.datasiswa.index', compact('siswas'));
@@ -96,4 +97,3 @@ class SiswaController extends Controller
         $pdf = PDF::loadView('admin.siswa.kartu', compact('siswa'))->setPaper('A7', 'landscape');
         return $pdf->download('Kartu_Pelajar_'.$siswa->nama_lengkap.'.pdf');
     }
-}
