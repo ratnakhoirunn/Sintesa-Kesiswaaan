@@ -98,13 +98,6 @@
         margin-bottom: 20px;
     }
 
-    .content-wrapper {
-        padding: 20px 30px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    /* bagian tambahan dua kolom */
     .detail-container {
         display: flex;
         flex-wrap: wrap;
@@ -160,14 +153,14 @@
                     <button type="button" class="upload-btn" onclick="document.getElementById('foto').click()">Upload Foto</button>
                 </div>
 
-                <!-- FORM INPUT UTAMA -->
+                <!-- FORM UTAMA -->
                 <div class="form-row">
                     <div>
-                        <label>Nomer Induk Siswa</label>
+                        <label>NIS</label>
                         <input type="text" name="nis" class="form-control" required>
                     </div>
                     <div>
-                        <label>Nomer Induk Siswa Nasional</label>
+                        <label>NISN</label>
                         <input type="text" name="nisn" class="form-control">
                     </div>
                 </div>
@@ -201,22 +194,22 @@
                 <div class="form-row">
                     <div>
                         <label>Rombel</label>
-                        <input type="text" name="rombel" class="form-control" required>
+                        <input type="text" name="rombel" class="form-control">
                     </div>
                     <div>
                         <label>Jurusan</label>
-                        <input type="text" name="jurusan" class="form-control" required>
+                        <input type="text" name="jurusan" class="form-control">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
                         <label>Tempat Lahir</label>
-                        <input type="text" name="tempat_lahir" class="form-control" required>
+                        <input type="text" name="tempat_lahir" class="form-control">
                     </div>
                     <div>
                         <label>Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="form-control" required>
+                        <input type="date" name="tanggal_lahir" class="form-control">
                     </div>
                 </div>
 
@@ -226,22 +219,20 @@
                         <input type="text" name="agama" class="form-control">
                     </div>
                     <div>
-                        <label>Nama Orang Tua</label>
+                        <label>Nama Orang Tua (Utama)</label>
                         <input type="text" name="nama_ortu" class="form-control">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div style="grid-column: span 2;">
-                        <label>Alamat</label>
-                        <textarea name="alamat" rows="3" class="form-control"></textarea>
+                        <label>Alamat Lengkap</label>
+                        <textarea name="alamat" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
 
-                <!-- FORM BIODATA DETAIL & ALAMAT -->
+                <!-- DETAIL SISWA & ALAMAT -->
                 <div class="detail-container">
-
-                    <!-- Biodata Detail -->
                     <div class="detail-box">
                         <div class="header">BIODATA DETAIL SISWA</div>
                         <div class="body">
@@ -250,15 +241,14 @@
                             <div class="form-group"><label>Berat Badan</label><input type="text" name="berat_badan" class="form-control"></div>
                             <div class="form-group"><label>Tinggi Badan</label><input type="text" name="tinggi_badan" class="form-control"></div>
                             <div class="form-group"><label>Anak ke-</label><input type="number" name="anak_ke" class="form-control"></div>
-                            <div class="form-group"><label>Jumlah Saudara Kandung</label><input type="number" name="jumlah_saudara" class="form-control"></div>
-                            <div class="form-group"><label>Tinggal dengan</label><input type="text" name="tinggal_dengan" class="form-control"></div>
+                            <div class="form-group"><label>Jumlah Saudara</label><input type="number" name="jumlah_saudara" class="form-control"></div>
+                            <div class="form-group"><label>Tinggal Dengan</label><input type="text" name="tinggal_dengan" class="form-control"></div>
                             <div class="form-group"><label>Jarak Rumah</label><input type="text" name="jarak_rumah" class="form-control"></div>
                             <div class="form-group"><label>Waktu Tempuh</label><input type="text" name="waktu_tempuh" class="form-control"></div>
                             <div class="form-group"><label>Transportasi</label><input type="text" name="transportasi" class="form-control"></div>
                         </div>
                     </div>
 
-                    <!-- Data Alamat -->
                     <div class="detail-box">
                         <div class="header">DATA ALAMAT SISWA</div>
                         <div class="body">
@@ -272,60 +262,58 @@
                     </div>
                 </div>
 
-                <!-- DATA ORANG TUA -->
-<div class="detail-container">
+                <!-- ORANG TUA & WALI -->
+                <div class="detail-container">
+                    <div class="detail-box">
+                        <div class="header">BIODATA AYAH</div>
+                        <div class="body">
+                            <div class="form-group"><label>Nama Ayah</label><input type="text" name="nama_ayah" class="form-control"></div>
+                            <div class="form-group"><label>NIK</label><input type="text" name="nik_ayah" class="form-control"></div>
+                            <div class="form-group"><label>Tahun Lahir</label><input type="number" name="tahun_lahir_ayah" class="form-control"></div>
+                            <div class="form-group"><label>Pendidikan</label><input type="text" name="pendidikan_ayah" class="form-control"></div>
+                            <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_ayah" class="form-control"></div>
+                            <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_ayah" class="form-control"></div>
+                            <div class="form-group"><label>Status Hidup</label><input type="text" name="status_ayah" class="form-control"></div>
+                            <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_ayah" class="form-control"></div>
+                        </div>
+                    </div>
 
-    <!-- Biodata Ayah -->
-    <div class="detail-box">
-        <div class="header">BIODATA AYAH</div>
-        <div class="body">
-            <div class="form-group"><label>Nama Lengkap</label><input type="text" name="nama_ayah" class="form-control" placeholder="Masukkan nama ayah..."></div>
-            <div class="form-group"><label>NIK</label><input type="text" name="nik_ayah" class="form-control"></div>
-            <div class="form-group"><label>Tahun Lahir</label><input type="number" name="tahun_lahir_ayah" class="form-control"></div>
-            <div class="form-group"><label>Pendidikan Terakhir</label><input type="text" name="pendidikan_ayah" class="form-control"></div>
-            <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_ayah" class="form-control"></div>
-            <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_ayah" class="form-control" placeholder="< 500.000"></div>
-            <div class="form-group"><label>Status Ayah</label><input type="text" name="status_ayah" class="form-control" placeholder="Hidup / Meninggal"></div>
-            <div class="form-group"><label>No Telepon</label><input type="text" name="no_telp_ayah" class="form-control"></div>
-        </div>
-    </div>
+                    <div class="detail-box">
+                        <div class="header">BIODATA IBU</div>
+                        <div class="body">
+                            <div class="form-group"><label>Nama Ibu</label><input type="text" name="nama_ibu" class="form-control"></div>
+                            <div class="form-group"><label>NIK</label><input type="text" name="nik_ibu" class="form-control"></div>
+                            <div class="form-group"><label>Tahun Lahir</label><input type="number" name="tahun_lahir_ibu" class="form-control"></div>
+                            <div class="form-group"><label>Pendidikan</label><input type="text" name="pendidikan_ibu" class="form-control"></div>
+                            <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_ibu" class="form-control"></div>
+                            <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_ibu" class="form-control"></div>
+                            <div class="form-group"><label>Status Hidup</label><input type="text" name="status_ibu" class="form-control"></div>
+                            <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_ibu" class="form-control"></div>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Biodata Ibu -->
-    <div class="detail-box">
-        <div class="header">BIODATA IBU</div>
-        <div class="body">
-            <div class="form-group"><label>Nama Lengkap</label><input type="text" name="nama_ibu" class="form-control" placeholder="Masukkan nama ibu..."></div>
-            <div class="form-group"><label>NIK</label><input type="text" name="nik_ibu" class="form-control"></div>
-            <div class="form-group"><label>Tahun Lahir</label><input type="number" name="tahun_lahir_ibu" class="form-control"></div>
-            <div class="form-group"><label>Pendidikan Terakhir</label><input type="text" name="pendidikan_ibu" class="form-control"></div>
-            <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_ibu" class="form-control"></div>
-            <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_ibu" class="form-control" placeholder="< 500.000"></div>
-            <div class="form-group"><label>Status Ibu</label><input type="text" name="status_ibu" class="form-control" placeholder="Hidup / Meninggal"></div>
-            <div class="form-group"><label>No Telepon</label><input type="text" name="no_telp_ibu" class="form-control"></div>
-        </div>
-    </div>
+                <div class="detail-container">
+                    <div class="detail-box" style="flex:1;">
+                        <div class="header">BIODATA WALI</div>
+                        <div class="body">
+                            <div class="form-group"><label>Nama Wali</label><input type="text" name="nama_wali" class="form-control"></div>
+                            <div class="form-group"><label>NIK</label><input type="text" name="nik_wali" class="form-control"></div>
+                            <div class="form-group"><label>Tahun Lahir</label><input type="number" name="tahun_lahir_wali" class="form-control"></div>
+                            <div class="form-group"><label>Pendidikan</label><input type="text" name="pendidikan_wali" class="form-control"></div>
+                            <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_wali" class="form-control"></div>
+                            <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_wali" class="form-control"></div>
+                            <div class="form-group"><label>Status Hidup</label><input type="text" name="status_wali" class="form-control"></div>
+                            <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_wali" class="form-control"></div>
+                        </div>
+                    </div>
+                </div>
 
-</div>
+                <div class="mt-4 text-center">
+                    <button type="submit" class="btn btn-primary">Simpan Data</button>
+                    <a href="{{ route('admin.datasiswa.index') }}" class="btn btn-secondary">Batal</a>
+                </div>
 
-<!-- DATA WALI -->
-<div class="detail-container">
-    <div class="detail-box" style="flex: 1;">
-        <div class="header">BIODATA WALI</div>
-        <div class="body">
-            <div class="form-group"><label>Nama Lengkap</label><input type="text" name="nama_wali" class="form-control" placeholder="Masukkan nama wali..."></div>
-            <div class="form-group"><label>NIK</label><input type="text" name="nik_wali" class="form-control"></div>
-            <div class="form-group"><label>Tahun Lahir</label><input type="number" name="tahun_lahir_wali" class="form-control"></div>
-            <div class="form-group"><label>Pendidikan Terakhir</label><input type="text" name="pendidikan_wali" class="form-control"></div>
-            <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_wali" class="form-control"></div>
-            <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_wali" class="form-control" placeholder="< 500.000"></div>
-            <div class="form-group"><label>Status Wali</label><input type="text" name="status_wali" class="form-control" placeholder="Hidup / Meninggal"></div>
-            <div class="form-group"><label>No Telepon</label><input type="text" name="no_telp_wali" class="form-control"></div>
-        </div>
-    </div>
-</div>
-<div class="mt-4"> <button type="submit" class="btn btn-primary">Simpan Data</button> 
-    <button type="button" class="btn btn-secondary">Batal</button>
-</div>
             </form>
         </div>
     </div>

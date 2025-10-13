@@ -9,6 +9,7 @@ class Siswa extends Model
 {
     use HasFactory;
 
+    // Kolom $fillable disesuaikan persis dengan yang Anda berikan.
     protected $fillable = [
         'nis',
         'nama_lengkap',
@@ -20,6 +21,16 @@ class Siswa extends Model
         'agama',
         'nama_ortu',
         'alamat',
-        'foto'
+        'foto',
     ];
+
+    /**
+     * Definisi relasi One-to-One ke model OrangTua.
+     * Baris ini harus ada agar $siswa->orangTua di Controller/View berfungsi.
+     */
+    public function orangTua()
+    {
+        // Relasi hasOne: Siswa memiliki satu data OrangTua (melalui siswa_id di tabel orang_tua)
+        return $this->hasOne(OrangTua::class, 'siswa_id', 'id');
+    }
 }
