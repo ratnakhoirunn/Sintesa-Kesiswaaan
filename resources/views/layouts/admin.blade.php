@@ -6,10 +6,6 @@
     <title>@yield('title', 'Admin | Sintesa')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
-<<<<<<< HEAD
-=======
-
->>>>>>> bf367b5ee2c3fca5276fd5b4a6f129a095100eaa
     <style>
 
     {{-- Link untuk Favicon --}}
@@ -339,14 +335,14 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.datasiswa') }}" 
+                    <a href="{{ route('admin.datasiswa.index') }}" 
                     class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}">
                         <i class="fas fa-users"></i> Data Siswa
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.kartupelajar') }}" 
+                    <a href="{{ route('admin.kartupelajar.index') }}" 
                     class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}">
                         <i class="fas fa-id-card"></i> Kartu Pelajar
                     </a>

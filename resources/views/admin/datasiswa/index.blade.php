@@ -20,7 +20,6 @@
     {{-- Menggunakan display:flex untuk memastikan tombol sejajar --}}
     <div style="display:flex; gap:15px; margin-bottom: 20px; align-items: center;">
         
-<<<<<<< HEAD
         {{-- Tombol Tambah Data Manual --}}
         <a href="{{ route('admin.datasiswa.create') }}" 
            style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; text-decoration:none;">
@@ -43,7 +42,6 @@
     </div>
 </div>
 
-<<<<<<< HEAD
 {{-- Tabel Data Siswa --}}
 <table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden;">
     <thead style="background:#2c3e50; color:white;">
@@ -56,15 +54,15 @@
             <th style="padding:10px; text-align:left;">Aksi</th>
         </tr>
     </thead>
-    <tbody>
+   <tbody>
         @forelse($siswas as $i => $siswa)
         <tr style="border-bottom:1px solid #ddd;">
             {{-- Nomor urut yang benar untuk paginasi --}}
             <td style="padding:10px; text-align:center;">{{ $i + $siswas->firstItem() }}</td>
-            <td style="padding:10px;">{{ $siswa->nisn }}</td>
-            <td style="padding:10px;">{{ $siswa->nama }}</td>
+            <td style="padding:10px;">{{ $siswa->nis }}</td>
+            <td style="padding:10px;">{{ $siswa->nama_lengkap }}</td>
             <td style="padding:10px;">{{ $siswa->rombel }}</td>
-            <td style="padding:10px;">{{ $siswa->kompetensi_keahlian }}</td>
+            <td style="padding:10px;">{{ $siswa->jurusan }}</td>
             <td style="padding:10px; display:flex; gap:10px; align-items:center;">
                 {{-- Tautan Aksi --}}
                 <a href="{{ route('admin.datasiswa.show', $siswa->id) }}" style="color:blue;"><i class="fas fa-eye"></i> Lihat</a>
