@@ -187,7 +187,7 @@
                     </div>
                     <div>
                         <label>No. WhatsApp</label>
-                        <input type="text" name="no_wa" class="form-control">
+                        <input type="text" name="no_whatsapp" class="form-control">
                     </div>
                 </div>
 
@@ -273,7 +273,13 @@
                             <div class="form-group"><label>Pendidikan</label><input type="text" name="pendidikan_ayah" class="form-control"></div>
                             <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_ayah" class="form-control"></div>
                             <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_ayah" class="form-control"></div>
-                            <div class="form-group"><label>Status Hidup</label><input type="text" name="status_ayah" class="form-control"></div>
+                            <div class="form-group"><label>Status Hidup</label>
+                                <select name="status_hidup_ayah" class="form-control" required>
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Hidup">Masih Hidup</option>
+                                    <option value="Meninggal">Sudah Meninggal</option>
+                                </select>
+                            </div>
                             <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_ayah" class="form-control"></div>
                         </div>
                     </div>
@@ -287,7 +293,13 @@
                             <div class="form-group"><label>Pendidikan</label><input type="text" name="pendidikan_ibu" class="form-control"></div>
                             <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_ibu" class="form-control"></div>
                             <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_ibu" class="form-control"></div>
-                            <div class="form-group"><label>Status Hidup</label><input type="text" name="status_ibu" class="form-control"></div>
+                            <div class="form-group"><label>Status Hidup</label>
+                                <select name="status_hidup_ibu" class="form-control" required>
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Hidup">Masih Hidup</option>
+                                    <option value="Meninggal">Sudah Meninggal</option>
+                                </select>
+                            </div>
                             <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_ibu" class="form-control"></div>
                         </div>
                     </div>
@@ -303,7 +315,13 @@
                             <div class="form-group"><label>Pendidikan</label><input type="text" name="pendidikan_wali" class="form-control"></div>
                             <div class="form-group"><label>Pekerjaan</label><input type="text" name="pekerjaan_wali" class="form-control"></div>
                             <div class="form-group"><label>Penghasilan</label><input type="text" name="penghasilan_wali" class="form-control"></div>
-                            <div class="form-group"><label>Status Hidup</label><input type="text" name="status_wali" class="form-control"></div>
+                            <div class="form-group"><label>Status Hidup</label>
+                                <select name="status_hidup_wali" class="form-control">
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Hidup">Masih Hidup</option>
+                                    <option value="Meninggal">Sudah Meninggal</option>
+                                </select>
+                            </div>
                             <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_wali" class="form-control"></div>
                         </div>
                     </div>

@@ -47,7 +47,7 @@
     <thead style="background:#2c3e50; color:white;">
         <tr>
             <th style="padding:10px; text-align:left;">No</th>
-            <th style="padding:10px; text-align:left;">NISN</th>
+            <th style="padding:10px; text-align:left;">NIS</th>
             <th style="padding:10px; text-align:left;">Nama Lengkap</th>
             <th style="padding:10px; text-align:left;">Rombel</th>
             <th style="padding:10px; text-align:left;">Kompetensi Keahlian</th>

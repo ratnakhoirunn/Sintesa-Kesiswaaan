@@ -26,7 +26,7 @@ class KartuPelajarController extends Controller
 
         $siswas = $query->orderBy('nama_lengkap')->paginate(10)->withQueryString();
 
-        return view('.kartu_pelajar.index', compact('siswas','q'));
+        return view('admin.kartupelajar.index', compact('siswas','q'));
     }
 
     // optional ajax search to return html rows
@@ -44,7 +44,7 @@ class KartuPelajarController extends Controller
     public function printSingle($id)
     {
         $siswa = Siswa::findOrFail($id);
-        $pdf = PDF::loadView('admin.kartu_pelajar.kartu', compact('siswa'));
+        $pdf = PDF::loadView('admin.kartupelajar.kartu', compact('siswa'));
         // stream to browser
         return $pdf->stream("kartu_{$siswa->nis}.pdf");
         // or return $pdf->download("kartu_{$siswa->nis}.pdf");

@@ -25,7 +25,7 @@
                 <h3>3</h3>
             </div>
             <div class="icon">
-                <img src="{{ asset('images/totaladmincb.jpeg') }}" alt="Total Admin">
+                <img src="{{ asset('images/totaladmin.png') }}" alt="Total Admin">
             </div>
         </div>
         <div class="info-card">

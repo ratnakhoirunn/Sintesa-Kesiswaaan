@@ -16,7 +16,10 @@ return new class extends Migration
             $table->id(); 
             
             $table->string('nis')->unique();
+            $table->string('nisn')->nullable();
             $table->string('nama_lengkap');
+            $table->string('email')->nullable();
+            $table->string('no_whatsapp')->nullable();
             $table->string('rombel')->nullable();
             $table->string('jurusan')->nullable();
             $table->string('tempat_lahir')->nullable();
