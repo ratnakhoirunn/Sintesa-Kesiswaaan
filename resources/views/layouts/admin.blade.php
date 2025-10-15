@@ -317,6 +317,15 @@
             margin-right: 15px;
             font-size: 1.2rem;
         }
+
+         .pagination svg {
+            /* Perkecil lebar ikon (misalnya dari default 1.5rem menjadi 1rem) */
+            width: 1rem; 
+            /* Perkecil tinggi ikon */
+            height: 1rem; 
+            /* Penyesuaian vertikal agar ikon sejajar dengan teks (opsional) */
+            margin-top: -3px; 
+        }
     </style>
 </head>
 <body>

@@ -276,8 +276,8 @@
                             <div class="form-group"><label>Status Hidup</label>
                                 <select name="status_hidup_ayah" class="form-control" required>
                                     <option value="">-- Pilih Status --</option>
-                                    <option value="Hidup">Masih Hidup</option>
-                                    <option value="Meninggal">Sudah Meninggal</option>
+                                    <option value="Masih Hidup">Masih Hidup</option>
+                                    <option value="Sudah Meninggal">Sudah Meninggal</option>
                                 </select>
                             </div>
                             <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_ayah" class="form-control"></div>
@@ -296,8 +296,8 @@
                             <div class="form-group"><label>Status Hidup</label>
                                 <select name="status_hidup_ibu" class="form-control" required>
                                     <option value="">-- Pilih Status --</option>
-                                    <option value="Hidup">Masih Hidup</option>
-                                    <option value="Meninggal">Sudah Meninggal</option>
+                                    <option value="Masih Hidup">Masih Hidup</option>
+                                    <option value="Sudah Meninggal">Sudah Meninggal</option>
                                 </select>
                             </div>
                             <div class="form-group"><label>No. Telepon</label><input type="text" name="no_telp_ibu" class="form-control"></div>
