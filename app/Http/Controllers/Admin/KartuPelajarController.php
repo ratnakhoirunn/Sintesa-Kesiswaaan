@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use PDF; // Dompdf
+use Milon\Barcode\Facades\DNS1D;
+use Milon\Barcode\Facades\DNS2D;
+
 
 class KartuPelajarController extends Controller
 {
@@ -73,4 +76,13 @@ class KartuPelajarController extends Controller
 
         return $pdf->stream("kartu_mass.pdf");
     }
+
+    public function cetak($id)
+{
+    $siswa = Siswa::findOrFail($id);
+    $pdf = Pdf::loadView('admin.kartupelajar.kartu', compact('siswa'))
+        ->setPaper([0, 0, 243.78, 153.07], 'portrait'); // 8.6cm x 5.4cm
+
+    return $pdf->stream('kartu_pelajar_'.$siswa->nama_lengkap.'.pdf');
+}
 }

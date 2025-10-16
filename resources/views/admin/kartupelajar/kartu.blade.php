@@ -1,188 +1,156 @@
-<?php
-    header("Content-Type: text/html");
-?>
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Kartu Pelajar - {{ $siswa->nama_lengkap }}</title>
+    <title>Kartu Pelajar - {{ $siswa->nama }}</title>
     <style>
-        @page {
-            size: A6 landscape;
-            margin: 10mm;
-        }
-
+        @page { margin: 0; }
         body {
-            font-family: 'Arial', sans-serif;
-            background: white;
-            color: #000;
             margin: 0;
-            padding: 0;
+            font-family: 'Arial', sans-serif;
         }
-
-        .kartu-container {
-            width: 148mm;
-            height: 105mm;
-            border: 2px solid #000;
-            padding: 10px 20px;
+        .kartu {
+            width: 323px;
+            height: 204px;
+            border-radius: 8px;
+            overflow: hidden;
             position: relative;
-            box-sizing: border-box;
+            background: #f8f9fa;
         }
 
+        /* HEADER BIRU */
         .header {
+            background-color: #0073cf;
+            color: white;
             text-align: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 4px;
-            margin-bottom: 8px;
+            font-size: 6.5pt;
+            line-height: 1.3;
+            padding: 5px 5px 2px;
+            position: relative;
         }
 
         .header img {
-            width: 60px;
-            height: 60px;
             position: absolute;
-            top: 12px;
-            left: 20px;
+            top: 4px;
+            width: 25px;
         }
+        .logo-left { left: 8px; }
+        .logo-right { right: 8px; }
 
-        .header h1, .header h2, .header p {
-            margin: 0;
-            padding: 0;
-        }
-
-        .header h1 {
-            font-size: 18px;
+        .judul {
             font-weight: bold;
-        }
-
-        .header h2 {
-            font-size: 16px;
+            font-size: 7.5pt;
             margin-top: 2px;
         }
 
-        .header p {
-            font-size: 12px;
+        /* BAGIAN ISI */
+        .isi {
+            padding: 5px 8px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
         }
 
         .foto {
-            width: 100px;
-            height: 120px;
-            border: 2px solid #000;
+            width: 75px;
+            text-align: center;
+        }
+
+        .foto img {
+            width: 65px;
+            height: 80px;
+            border: 1px solid #ccc;
             object-fit: cover;
-            position: absolute;
-            right: 20px;
-            top: 80px;
         }
 
-        table {
-            font-size: 13px;
-            line-height: 1.5;
-            margin-left: 20px;
+        .barcode {
+            margin-top: 6px;
         }
 
-        td {
-            padding: 2px 5px;
+        .barcode img {
+            width: 65px;
+            height: 15px;
+        }
+
+        .biodata {
+            font-size: 7pt;
+            line-height: 1.3;
+            width: 65%;
+        }
+
+        .biodata td {
+            padding: 1px 2px;
             vertical-align: top;
         }
 
+        /* FOOTER KEPSEK */
         .footer {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
+            font-size: 6pt;
             text-align: right;
-            padding-right: 40px;
-            font-size: 12px;
+            padding-right: 10px;
+            margin-top: -5px;
         }
 
-        .footer p {
-            margin: 2px 0;
+        .footer strong {
+            font-size: 6.5pt;
         }
 
-        .ttd {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .btn-print {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 6px 12px;
-            background: #1e3a67;
+        /* BAGIAN JURUSAN HIJAU */
+        .jurusan {
+            background-color: #00a859;
             color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        @media print {
-            .btn-print {
-                display: none;
-            }
-            body {
-                margin: 0;
-            }
+            text-align: center;
+            font-weight: bold;
+            font-size: 7pt;
+            padding: 2px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
-<button class="btn-print" onclick="window.print()">🖨️ Cetak</button>
-
-<div class="kartu-container">
+<div class="kartu">
     <div class="header">
-        <img src="{{ asset('images/logo_smk.png') }}" alt="Logo Sekolah">
-        <h1>PEMERINTAH DAERAH DIY</h1>
-        <h2>DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA</h2>
-        <h2>SMK NEGERI 2 YOGYAKARTA</h2>
-        <p>Jl. A.M Sangaji No.47 Yogyakarta 55233 Telp. (0274) 513202</p>
-        <p>Website: www.smkn2yk.sch.id Email: info@smkn2yk.sch.id</p>
+        <img src="{{ public_path('images/logo-left.png') }}" class="logo-left">
+        <img src="{{ public_path('images/logo-right.png') }}" class="logo-right">
+        <div>PEMERINTAH DAERAH ISTIMEWA YOGYAKARTA<br>
+        DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA<br>
+        BALAI PENDIDIKAN MENENGAH KOTA YOGYAKARTA</div>
+        <div class="judul">SMK NEGERI 2 YOGYAKARTA</div>
+        <div style="font-size:6pt;">Jl. P. Mangkubumi / A.M Sangaji 47 Yogyakarta Telp. (0274) 513480 Fax. (0274) 512839</div>
     </div>
 
-    <table>
-        <tr>
-            <td><strong>Nama</strong></td>
-            <td>: {{ $siswa->nama_lengkap }}</td>
-        </tr>
-        <tr>
-            <td><strong>NIPD</strong></td>
-            <td>: {{ $siswa->nis }}</td>
-        </tr>
-        <tr>
-            <td><strong>NISN</strong></td>
-            <td>: {{ $siswa->nisn }}</td>
-        </tr>
-        <tr>
-            <td><strong>TTL</strong></td>
-            <td>: {{ $siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($siswa->tanggal_lahir)->format('d M Y') }}</td>
-        </tr>
-        <tr>
-            <td><strong>Jenis Kelamin</strong></td>
-            <td>: {{ $siswa->jenis_kelamin }}</td>
-        </tr>
-        <tr>
-            <td><strong>Agama</strong></td>
-            <td>: {{ $siswa->agama }}</td>
-        </tr>
-        <tr>
-            <td><strong>Alamat</strong></td>
-            <td>: {{ $siswa->alamat }}</td>
-        </tr>
-        <tr>
-            <td><strong>Nama Orang Tua</strong></td>
-            <td>: {{ $siswa->nama_ortu ?? '-' }}</td>
-        </tr>
-    </table>
+    <div class="isi">
+        <div class="foto">
+            <img src="{{ public_path('images/foto-siswa/' . ($siswa->foto ?? 'default.jpg')) }}" alt="Foto Siswa">
+            <div class="barcode">
+                <img src="{{ public_path('images/barcode.png') }}" alt="Barcode">
+            </div>
+        </div>
 
-    <img class="foto" src="{{ $siswa->foto ? asset('storage/' . $siswa->foto) : asset('images/student.png') }}" alt="Foto Siswa">
+        <table class="biodata">
+            <tr><td>Nama</td><td>: <strong>{{ strtoupper($siswa->nama) }}</strong></td></tr>
+            <tr><td>NIPD</td><td>: {{ $siswa->nipd }}</td></tr>
+            <tr><td>NISN</td><td>: {{ $siswa->nisn ?? '-' }}</td></tr>
+            <tr><td>Tempat, Tgl Lahir</td><td>: {{ $siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($siswa->tanggal_lahir)->format('d F Y') }}</td></tr>
+            <tr><td>Jenis Kelamin</td><td>: {{ $siswa->jenis_kelamin }}</td></tr>
+            <tr><td>Agama</td><td>: {{ $siswa->agama }}</td></tr>
+            <tr><td>Nama Orang Tua</td><td>: {{ $siswa->orangTua->nama ?? '-' }}</td></tr>
+            <tr><td>Alamat</td><td>: {{ $siswa->alamat }}</td></tr>
+        </table>
+    </div>
 
     <div class="footer">
-        <p>Yogyakarta, {{ now()->translatedFormat('d F Y') }}</p>
-        <div class="ttd">
-            <p><strong>Kepala Sekolah</strong></p>
-            <br><br>
-            <p><strong>Drs. Suripto, M.Pd</strong></p>
-            <p>NIP. 19601015 198803 1 003</p>
-        </div>
+        Yogyakarta, {{ now()->translatedFormat('F Y') }}<br>
+        Kepala Sekolah<br><br><br>
+        <strong>Drs. Agus Waluyo, M.Eng</strong><br>
+        NIP. 196512271994121002
+    </div>
+
+    <div class="jurusan">
+        DESAIN KOMUNIKASI VISUAL
     </div>
 </div>
 

@@ -12,9 +12,11 @@ return new class extends Migration {
             // PERBAIKAN UTAMA: Menggunakan foreignId()
             // Ini otomatis membuat kolom siswa_id sebagai UNSIGNED BIGINT, 
             // menambahkan index, dan foreign key constraint ke siswas(id).
+
             $table->foreignId('siswa_id')
                   ->constrained('siswas') 
                   ->onDelete('cascade');
+
 
             // Data Ayah
             $table->string('nama_ayah')->nullable();
