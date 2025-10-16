@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detail_siswas', function (Blueprint $table) {
             $table->id();
             // Perbaikan di sini: gabungkan foreignId dan constrained
-            $table->foreignId('siswa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
             $table->string('hobi')->nullable();
             $table->string('cita_cita')->nullable();
             $table->integer('berat_badan')->nullable();

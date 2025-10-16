@@ -44,10 +44,10 @@
     
     /* Gaya untuk tampilan detail */
     .detail-value {
-        padding: 10px 15px;
-        border-radius: 6px;
-        background-color: #f5f5f5;
-        border: 1px solid #eee;
+        padding: 1px 5px;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
         font-size: 0.95rem;
         color: #333;
         font-weight: 500;
@@ -120,6 +120,7 @@
         min-width: 350px;
         background-color: #f9fafc;
         border-radius: 10px;
+        overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
 
@@ -156,7 +157,7 @@
             <div class="foto-wrapper">
                 {{-- Tampilkan foto siswa jika ada, jika tidak, tampilkan placeholder --}}
                 <img id="preview-image" 
-                     src="{{ $siswa->foto ? asset('storage/' . $siswa->foto) : asset('images/student.png') }}" 
+                     src="{{ $siswa->foto ? asset('uploads/foto_siswa/' . $siswa->foto) : asset('images/student.png') }}" 
                      alt="Foto Siswa">
                 <br>
                 {{-- Hapus tombol upload, ini hanya tampilan --}}
@@ -191,7 +192,7 @@
                 </div>
                 <div>
                     <label>No. WhatsApp</label>
-                    <div class="detail-value">{{ $siswa->no_wa ?? '-' }}</div>
+                    <div class="detail-value">{{ $siswa->no_whatsapp ?? '-' }}</div>
                 </div>
             </div>
 
@@ -239,17 +240,17 @@
                 <div class="detail-box">
                     <div class="header">BIODATA DETAIL SISWA</div>
                     <div class="body">
-                        {{-- Ambil data dari kolom Siswa Model (Asumsi kolom ada di tabel Siswas) --}}
-                        <div class="form-group"><label>Cita-cita</label><div class="detail-value">{{ $siswa->cita_cita ?? '-' }}</div></div>
-                        <div class="form-group"><label>Hobi</label><div class="detail-value">{{ $siswa->hobi ?? '-' }}</div></div>
-                        <div class="form-group"><label>Berat Badan</label><div class="detail-value">{{ $siswa->berat_badan ?? '-' }}</div></div>
-                        <div class="form-group"><label>Tinggi Badan</label><div class="detail-value">{{ $siswa->tinggi_badan ?? '-' }}</div></div>
-                        <div class="form-group"><label>Anak ke-</label><div class="detail-value">{{ $siswa->anak_ke ?? '-' }}</div></div>
-                        <div class="form-group"><label>Jumlah Saudara</label><div class="detail-value">{{ $siswa->jumlah_saudara ?? '-' }}</div></div>
-                        <div class="form-group"><label>Tinggal Dengan</label><div class="detail-value">{{ $siswa->tinggal_dengan ?? '-' }}</div></div>
-                        <div class="form-group"><label>Jarak Rumah</label><div class="detail-value">{{ $siswa->jarak_rumah ?? '-' }}</div></div>
-                        <div class="form-group"><label>Waktu Tempuh</label><div class="detail-value">{{ $siswa->waktu_tempuh ?? '-' }}</div></div>
-                        <div class="form-group"><label>Transportasi</label><div class="detail-value">{{ $siswa->transportasi ?? '-' }}</div></div>
+                        @php $detail = $siswa->detailSiswa; @endphp
+                        <div class="form-group"><label>Cita-cita</label><div class="detail-value">{{ $detail->cita_cita ?? '-' }}</div></div>
+                        <div class="form-group"><label>Hobi</label><div class="detail-value">{{ $detail->hobi ?? '-' }}</div></div>
+                        <div class="form-group"><label>Berat Badan</label><div class="detail-value">{{ $detail->berat_badan ?? '-' }}</div></div>
+                        <div class="form-group"><label>Tinggi Badan</label><div class="detail-value">{{ $detail->tinggi_badan ?? '-' }}</div></div>
+                        <div class="form-group"><label>Anak ke-</label><div class="detail-value">{{ $detail->anak_ke ?? '-' }}</div></div>
+                        <div class="form-group"><label>Jumlah Saudara</label><div class="detail-value">{{ $detail->jumlah_saudara ?? '-' }}</div></div>
+                        <div class="form-group"><label>Tinggal Dengan</label><div class="detail-value">{{ $detail->tinggal_dengan ?? '-' }}</div></div>
+                        <div class="form-group"><label>Jarak Rumah</label><div class="detail-value">{{ $detail->jarak_rumah ?? '-' }}</div></div>
+                        <div class="form-group"><label>Waktu Tempuh</label><div class="detail-value">{{ $detail->waktu_tempuh ?? '-' }}</div></div>
+                        <div class="form-group"><label>Transportasi</label><div class="detail-value">{{ $detail->transportasi ?? '-' }}</div></div>
                     </div>
                 </div>
 
@@ -257,12 +258,13 @@
                     <div class="header">DATA ALAMAT SISWA</div>
                     <div class="body">
                         {{-- Ambil data dari kolom Siswa Model --}}
-                        <div class="form-group"><label>Nama Jalan</label><div class="detail-value">{{ $siswa->nama_jalan ?? '-' }}</div></div>
-                        <div class="form-group"><label>RT</label><div class="detail-value">{{ $siswa->rt ?? '-' }}</div></div>
-                        <div class="form-group"><label>RW</label><div class="detail-value">{{ $siswa->rw ?? '-' }}</div></div>
-                        <div class="form-group"><label>Dusun</label><div class="detail-value">{{ $siswa->dusun ?? '-' }}</div></div>
-                        <div class="form-group"><label>Desa/Kelurahan</label><div class="detail-value">{{ $siswa->desa ?? '-' }}</div></div>
-                        <div class="form-group"><label>Kode Pos</label><div class="detail-value">{{ $siswa->kode_pos ?? '-' }}</div></div>
+                        @php $alamat = $siswa->detailSiswa; @endphp
+                        <div class="form-group"><label>Nama Jalan</label><div class="detail-value">{{ $alamat->nama_jalan ?? '-' }}</div></div>
+                        <div class="form-group"><label>RT</label><div class="detail-value">{{ $alamat->rt ?? '-' }}</div></div>
+                        <div class="form-group"><label>RW</label><div class="detail-value">{{ $alamat->rw ?? '-' }}</div></div>
+                        <div class="form-group"><label>Dusun</label><div class="detail-value">{{ $alamat->dusun ?? '-' }}</div></div>
+                        <div class="form-group"><label>Desa/Kelurahan</label><div class="detail-value">{{ $alamat->desa ?? '-' }}</div></div>
+                        <div class="form-group"><label>Kode Pos</label><div class="detail-value">{{ $alamat->kode_pos ?? '-' }}</div></div>
                     </div>
                 </div>
             </div>

@@ -3,37 +3,47 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Keterlambatan;
 use App\Models\Siswa;
-use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf; // pastikan ini ada di composer
 
 class KeterlambatanController extends Controller
 {
+    /**
+     * Tampilkan daftar keterlambatan siswa.
+     */
     public function index(Request $request)
     {
-        // Ambil filter tanggal dari query string
+        // Ambil filter tanggal dari query string (opsional)
         $tanggal = $request->input('tanggal');
 
-        // Query dasar keterlambatan + relasi siswa
+        // Query keterlambatan dengan relasi siswa
         $query = Keterlambatan::with('siswa')->orderBy('tanggal', 'desc');
 
         if ($tanggal) {
             $query->whereDate('tanggal', $tanggal);
         }
 
-        // Ambil data dari database
+        // Ambil semua data dari database
         $keterlambatans = $query->get();
 
-        // Kirim ke view
+        // Tampilkan ke view
         return view('admin.keterlambatan.index', compact('keterlambatans', 'tanggal'));
     }
 
+    /**
+     * Form tambah data keterlambatan.
+     */
     public function create()
     {
-        $siswas = Siswa::all();
+        $siswas = Siswa::orderBy('nama_lengkap')->get();
         return view('admin.keterlambatan.create', compact('siswas'));
     }
 
+    /**
+     * Simpan data keterlambatan baru.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -44,16 +54,29 @@ class KeterlambatanController extends Controller
             'keterangan' => 'nullable|string|max:255',
         ]);
 
-        Keterlambatan::create($request->all());
+        Keterlambatan::create([
+            'siswa_id' => $request->siswa_id,
+            'tanggal' => $request->tanggal,
+            'jam_datang' => $request->jam_datang,
+            'menit_terlambat' => $request->menit_terlambat,
+            'keterangan' => $request->keterangan,
+        ]);
 
         return redirect()->route('admin.keterlambatan.index')
             ->with('success', 'Data keterlambatan berhasil ditambahkan.');
     }
 
+    /**
+     * Cetak surat keterlambatan dalam bentuk PDF.
+     */
     public function cetakSurat($id)
     {
         $data = Keterlambatan::with('siswa')->findOrFail($id);
-        $pdf = \PDF::loadView('admin.keterlambatan.surat', compact('data'));
-        return $pdf->stream('Surat_Keterlambatan_'.$data->siswa->nama_lengkap.'.pdf');
+
+        // Pastikan view: resources/views/admin/keterlambatan/surat.blade.php
+        $pdf = Pdf::loadView('admin.keterlambatan.surat', compact('data'))
+            ->setPaper('A4', 'portrait');
+
+        return $pdf->stream('Surat_Keterlambatan_' . $data->siswa->nama_lengkap . '.pdf');
     }
 }
