@@ -145,7 +145,7 @@
     <div class="card-siswa">
         <div class="section-title">EDIT BIODATA SISWA: {{ $siswa->nama_lengkap }}</div>
 
-        <form action="{{ route('admin.datasiswa.update', $siswa->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.datasiswa.update', $siswa->nis) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 

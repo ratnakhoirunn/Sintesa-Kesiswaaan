@@ -9,7 +9,7 @@ class OrangTua extends Model
 {
     use HasFactory;
 
-    protected $table = 'orang_tua';
+    protected $table = 'orang_tuas';
 
     protected $fillable = [
         'nis',

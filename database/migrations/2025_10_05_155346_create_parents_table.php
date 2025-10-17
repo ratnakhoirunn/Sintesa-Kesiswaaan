@@ -8,20 +8,10 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('orang_tuas', function (Blueprint $table) {
             $table->id();
-<<<<<<< HEAD
             $table->string('nis'); // foreign key baru
-=======
-
-            // PERBAIKAN UTAMA: Menggunakan foreignId()
-            // Ini otomatis membuat kolom siswa_id sebagai UNSIGNED BIGINT, 
-            // menambahkan index, dan foreign key constraint ke siswas(id).
-
             $table->foreignId('siswa_id')
                   ->constrained('siswas') 
                   ->onDelete('cascade');
-
-
->>>>>>> 0e04958bc84014f889a4e2fdb735b09a43749507
             // Data Ayah
             $table->string('nama_ayah')->nullable();
             $table->string('nik_ayah')->nullable();

@@ -54,9 +54,9 @@
             <td style="padding:10px;">{{ $siswa->rombel }}</td>
             <td style="padding:10px;">{{ $siswa->jurusan }}</td>
             <td style="padding:10px; display:flex; gap:10px; align-items:center;">
-                <a href="{{ route('admin.datasiswa.show', $siswa->id) }}" style="color:blue;"><i class="fas fa-eye"></i> Lihat</a>
-                <a href="{{ route('admin.datasiswa.edit', $siswa->id) }}" style="color:orange;"><i class="fas fa-edit"></i> Edit</a>
-                <form action="{{ route('admin.datasiswa.destroy', $siswa->id) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+                <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" style="color:blue;"><i class="fas fa-eye"></i> Lihat</a>
+                <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" style="color:orange;"><i class="fas fa-edit"></i> Edit</a>
+                <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
                     @csrf
                     @method('DELETE')
                     <button type="submit" style="border:none; background:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i> Hapus</button>

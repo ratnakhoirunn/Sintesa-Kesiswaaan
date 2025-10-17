@@ -6,8 +6,6 @@ use App\Models\Siswa;
 use App\Models\DetailSiswa;
 use App\Models\OrangTua;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use PDF;
 
 class SiswaController extends Controller
 {
@@ -54,60 +52,29 @@ class SiswaController extends Controller
         $siswa = Siswa::create($validatedSiswa);
 
         // === 4. Simpan ke Tabel Detail Siswa ===
-        $detailData = [
-            'nis' => $siswa->nis,
-            'hobi' => $request->hobi,
-            'cita_cita' => $request->cita_cita,
-            'berat_badan' => $request->berat_badan,
-            'tinggi_badan' => $request->tinggi_badan,
-            'anak_ke' => $request->anak_ke,
-            'jumlah_saudara' => $request->jumlah_saudara,
-            'tinggal_dengan' => $request->tinggal_dengan,
-            'jarak_rumah' => $request->jarak_rumah,
-            'waktu_tempuh' => $request->waktu_tempuh,
-            'transportasi' => $request->transportasi,
-            'nama_jalan' => $request->nama_jalan,
-            'rt' => $request->rt,
-            'rw' => $request->rw,
-            'dusun' => $request->dusun,
-            'desa' => $request->desa,
-            'kode_pos' => $request->kode_pos,
-        ];
+        $detailData = $request->only([
+            'hobi', 'cita_cita', 'berat_badan', 'tinggi_badan', 'anak_ke',
+            'jumlah_saudara', 'tinggal_dengan', 'jarak_rumah', 'waktu_tempuh',
+            'transportasi', 'nama_jalan', 'rt', 'rw', 'dusun', 'desa', 'kode_pos'
+        ]);
 
+        $detailData['nis'] = $siswa->nis; // foreign key pakai nis
         DetailSiswa::create($detailData);
 
         // === 5. Simpan ke Tabel Orang Tua ===
-        $orangTuaData = [
-            'nis' => $siswa->nis,
+        $orangTuaData = $request->only([
             // Ayah
-            'nama_ayah' => $request->nama_ayah,
-            'nik_ayah' => $request->nik_ayah,
-            'tahun_lahir_ayah' => $request->tahun_lahir_ayah,
-            'pendidikan_ayah' => $request->pendidikan_ayah,
-            'pekerjaan_ayah' => $request->pekerjaan_ayah,
-            'penghasilan_ayah' => $request->penghasilan_ayah,
-            'status_hidup_ayah' => $request->status_hidup_ayah,
-            'no_telp_ayah' => $request->no_telp_ayah,
+            'nama_ayah','nik_ayah','tahun_lahir_ayah','pendidikan_ayah',
+            'pekerjaan_ayah','penghasilan_ayah','status_hidup_ayah','no_telp_ayah',
             // Ibu
-            'nama_ibu' => $request->nama_ibu,
-            'nik_ibu' => $request->nik_ibu,
-            'tahun_lahir_ibu' => $request->tahun_lahir_ibu,
-            'pendidikan_ibu' => $request->pendidikan_ibu,
-            'pekerjaan_ibu' => $request->pekerjaan_ibu,
-            'penghasilan_ibu' => $request->penghasilan_ibu,
-            'status_hidup_ibu' => $request->status_hidup_ibu,
-            'no_telp_ibu' => $request->no_telp_ibu,
+            'nama_ibu','nik_ibu','tahun_lahir_ibu','pendidikan_ibu',
+            'pekerjaan_ibu','penghasilan_ibu','status_hidup_ibu','no_telp_ibu',
             // Wali
-            'nama_wali' => $request->nama_wali,
-            'nik_wali' => $request->nik_wali,
-            'tahun_lahir_wali' => $request->tahun_lahir_wali,
-            'pendidikan_wali' => $request->pendidikan_wali,
-            'pekerjaan_wali' => $request->pekerjaan_wali,
-            'penghasilan_wali' => $request->penghasilan_wali,
-            'status_hidup_wali' => $request->status_hidup_wali,
-            'no_telp_wali' => $request->no_telp_wali,
-        ];
+            'nama_wali','nik_wali','tahun_lahir_wali','pendidikan_wali',
+            'pekerjaan_wali','penghasilan_wali','status_hidup_wali','no_telp_wali'
+        ]);
 
+        $orangTuaData['nis'] = $siswa->nis; // foreign key pakai nis
         OrangTua::create($orangTuaData);
 
         return redirect()->route('admin.datasiswa.index')
@@ -147,7 +114,6 @@ class SiswaController extends Controller
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Upload foto baru jika ada
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -202,4 +168,3 @@ class SiswaController extends Controller
         return redirect()->route('admin.datasiswa.index')->with('success', 'Data siswa berhasil dihapus.');
     }
 }
-
