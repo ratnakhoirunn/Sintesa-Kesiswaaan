@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
-use PDF; // Dompdf
+use Barryvdh\DomPDF\Facade\Pdf; // pastikan ini benar
+use Milon\Barcode\Facades\DNS1D;
+use Milon\Barcode\Facades\DNS2D;
 
 class KartuPelajarController extends Controller
 {
+    // 🧭 Menampilkan daftar siswa
     public function index(Request $request)
     {
         $q = $request->query('q');
@@ -24,44 +27,58 @@ class KartuPelajarController extends Controller
             });
         }
 
-        $siswas = $query->orderBy('nama_lengkap')->paginate(10)->withQueryString();
+        $siswas = $query->orderBy('nama_lengkap')
+                        ->paginate(10)
+                        ->withQueryString();
 
-        return view('admin.kartupelajar.index', compact('siswas','q'));
+        // ✅ Pastikan view: resources/views/admin/kartupelajar/index.blade.php
+        return view('admin.kartupelajar.index', compact('siswas', 'q'));
     }
 
-    // optional ajax search to return html rows
+    // 🔍 Ajax search (opsional)
     public function search(Request $request)
     {
         $q = $request->query('q');
-        $siswas = Siswa::when($q, fn($q2) => $q2->where('nama_lengkap','like',"%{$q}%"))
-                      ->orderBy('nama_lengkap')->limit(50)->get();
+        $siswas = Siswa::when($q, fn($query) => $query->where('nama_lengkap', 'like', "%{$q}%"))
+                       ->orderBy('nama_lengkap')
+                       ->limit(50)
+                       ->get();
 
-        // return partial view rows
-        return view('admin.kartu_pelajar._rows', compact('siswas'));
+        // ✅ Pastikan partial view: resources/views/admin/kartupelajar/_rows.blade.php
+        return view('admin.kartupelajar._rows', compact('siswas'));
     }
 
-    // Print single siswa -> render PDF and stream/download
-    public function printSingle($id)
+    // 🧾 Cetak satu kartu pelajar (PDF)
+    public function cetak($id)
     {
         $siswa = Siswa::findOrFail($id);
-        $pdf = PDF::loadView('admin.kartupelajar.kartu', compact('siswa'));
-        // stream to browser
-        return $pdf->stream("kartu_{$siswa->nis}.pdf");
-        // or return $pdf->download("kartu_{$siswa->nis}.pdf");
+
+        // ukuran kartu pelajar: 8.6cm x 5.4cm
+        $pdf = Pdf::loadView('admin.kartupelajar.kartu', compact('siswa'))
+            ->setPaper([0, 0, 243.78, 153.07], 'portrait');
+
+        return $pdf->stream('Kartu_Pelajar_' . $siswa->nama_lengkap . '.pdf');
     }
 
-    // Print mass: menerima array id (checkbox) atau 'all' flag
+    // 🧾 Cetak banyak kartu pelajar (massal)
     public function printMass(Request $request)
     {
-        $ids = $request->input('ids'); // array
+        $ids = $request->input('ids');
+
         if ($ids && is_array($ids)) {
             $siswas = Siswa::whereIn('id', $ids)->get();
         } else {
-            // fallback: semua siswa (batasi jumlah sesuai kebutuhan)
             $siswas = Siswa::orderBy('nama_lengkap')->limit(200)->get();
         }
 
-        $pdf = PDF::loadView('admin.kartu_pelajar.kartu_mass', compact('siswas'));
-        return $pdf->stream("kartu_mass.pdf");
+        // ✅ View: resources/views/admin/kartupelajar/kartu_mass.blade.php
+        $pdf = Pdf::loadView('admin.kartupelajar.kartu_mass', compact('siswas'))
+            ->setPaper([0, 0, 323, 204], 'landscape')
+            ->setOption('isHtml5ParserEnabled', true)
+            ->setOption('isRemoteEnabled', true)
+            ->setOption('isPhpEnabled', true)
+            ->setOption('isCssBackgroundEnabled', true);
+
+        return $pdf->stream('Kartu_Pelajar_Massal.pdf');
     }
 }

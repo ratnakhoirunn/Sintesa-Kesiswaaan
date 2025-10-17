@@ -370,13 +370,14 @@
                     </a>
                     <ul class="dropdown-menu" style="{{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'display:block;' : '' }}">
                         <li>
-                            <a href="{{ route('admin.konseling') }}" 
-                            class="{{ request()->is('admin/konseling*') ? 'active' : '' }}">
+                           <a href="{{ route('admin.konseling.index') }}" 
+                                class="{{ request()->is('admin/konseling*') ? 'active' : '' }}">
                                 Konseling
                             </a>
+
                         </li>
                         <li>
-                            <a href="{{ route('admin.keterlambatan') }}" 
+                            <a href="{{ route('admin.keterlambatan.index') }}" 
                             class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
                                 Keterlambatan
                             </a>

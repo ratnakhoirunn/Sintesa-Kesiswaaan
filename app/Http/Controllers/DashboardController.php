@@ -81,4 +81,10 @@ class DashboardController extends Controller
     return view('admin.kartupelajar.index', compact('siswas'));
 }
 
+public function konseling() {
+    return view('admin.konseling.index');
+}
+
+
+
 }
