@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('detail_siswas', function (Blueprint $table) {
             $table->id();
-            // Perbaikan di sini: gabungkan foreignId dan constrained
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
+            $table->string('nis'); // foreign key baru
             $table->string('hobi')->nullable();
             $table->string('cita_cita')->nullable();
             $table->integer('berat_badan')->nullable();
@@ -31,6 +30,7 @@ return new class extends Migration
             $table->string('dusun')->nullable();
             $table->string('desa')->nullable();
             $table->string('kode_pos')->nullable();
+            $table->foreign('nis')->references('nis')->on('siswas')->onDelete('cascade');
             $table->timestamps();
         });
     }

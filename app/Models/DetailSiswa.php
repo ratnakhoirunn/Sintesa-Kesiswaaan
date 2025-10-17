@@ -10,7 +10,7 @@ class DetailSiswa extends Model
     use HasFactory;
 
     protected $fillable = [
-        'siswa_id',
+        'siswa_nis', // foreign key mengacu ke siswa.nis
         'cita_cita',
         'hobi',
         'berat_badan',
@@ -31,6 +31,7 @@ class DetailSiswa extends Model
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class);
+        // relasi belongsTo ke tabel siswa pakai foreign key siswa_nis
+        return $this->belongsTo(Siswa::class, 'siswa_nis', 'nis');
     }
 }

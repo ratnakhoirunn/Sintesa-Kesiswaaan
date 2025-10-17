@@ -6,14 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('orang_tua', function (Blueprint $table) {
+        Schema::create('orang_tuas', function (Blueprint $table) {
             $table->id();
-
-            // PERBAIKAN UTAMA: Menggunakan foreignId()
-            // Ini otomatis membuat kolom siswa_id sebagai UNSIGNED BIGINT, 
-            // menambahkan index, dan foreign key constraint ke siswas(id).
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
-
+            $table->string('nis'); // foreign key baru
             // Data Ayah
             $table->string('nama_ayah')->nullable();
             $table->string('nik_ayah')->nullable();
@@ -44,6 +39,7 @@ return new class extends Migration {
             $table->string('status_hidup_wali')->nullable();
             $table->string('no_telp_wali')->nullable();
 
+            $table->foreign('nis')->references('nis')->on('siswas')->onDelete('cascade');
             $table->timestamps();
         });
     }

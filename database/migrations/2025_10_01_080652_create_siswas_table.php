@@ -12,10 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('siswas', function (Blueprint $table) {
-            // KOLOM KUNCI: Membuat 'id' sebagai UNSIGNED BIGINT
-            $table->id(); 
-            
-            $table->string('nis')->unique();
+            $table->string('nis')->primary(); // Ubah menjadi primary key
             $table->string('nisn')->nullable();
             $table->string('nama_lengkap');
             $table->string('email')->nullable();
@@ -27,10 +24,11 @@ return new class extends Migration
             $table->string('jenis_kelamin')->nullable();
             $table->string('agama')->nullable();
             $table->string('nama_ortu')->nullable();
-            $table->string('alamat')->nullable();
+            $table->text('alamat')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**
