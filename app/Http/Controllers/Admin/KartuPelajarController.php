@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
-use Barryvdh\DomPDF\Facade\Pdf; // pastikan ini benar
+use Barryvdh\DomPDF\Facade\Pdf;
 use Milon\Barcode\Facades\DNS1D;
-use Milon\Barcode\Facades\DNS2D;
 
 class KartuPelajarController extends Controller
 {
@@ -18,12 +17,12 @@ class KartuPelajarController extends Controller
         $query = Siswa::query();
 
         if ($q) {
-            $query->where(function($w) use ($q) {
+            $query->where(function ($w) use ($q) {
                 $w->where('nama_lengkap', 'like', "%{$q}%")
-                  ->orWhere('nis', 'like', "%{$q}%")
-                  ->orWhere('nisn', 'like', "%{$q}%")
-                  ->orWhere('rombel', 'like', "%{$q}%")
-                  ->orWhere('jurusan', 'like', "%{$q}%");
+                    ->orWhere('nis', 'like', "%{$q}%")
+                    ->orWhere('nisn', 'like', "%{$q}%")
+                    ->orWhere('rombel', 'like', "%{$q}%")
+                    ->orWhere('jurusan', 'like', "%{$q}%");
             });
         }
 
@@ -31,7 +30,6 @@ class KartuPelajarController extends Controller
                         ->paginate(10)
                         ->withQueryString();
 
-        // ✅ Pastikan view: resources/views/admin/kartupelajar/index.blade.php
         return view('admin.kartupelajar.index', compact('siswas', 'q'));
     }
 
@@ -39,24 +37,29 @@ class KartuPelajarController extends Controller
     public function search(Request $request)
     {
         $q = $request->query('q');
-        $siswas = Siswa::when($q, fn($query) => $query->where('nama_lengkap', 'like', "%{$q}%"))
-                       ->orderBy('nama_lengkap')
-                       ->limit(50)
-                       ->get();
+        $siswas = Siswa::when($q, fn($query) => 
+                        $query->where('nama_lengkap', 'like', "%{$q}%"))
+                        ->orderBy('nama_lengkap')
+                        ->limit(50)
+                        ->get();
 
-        // ✅ Pastikan partial view: resources/views/admin/kartupelajar/_rows.blade.php
         return view('admin.kartupelajar._rows', compact('siswas'));
     }
 
     // 🧾 Cetak satu kartu pelajar (PDF)
-    public function cetak($id)
+    public function cetak($nis)
     {
-        $siswa = Siswa::findOrFail($id);
+        $siswa = Siswa::where('nis', $nis)->firstOrFail();
 
-        // ukuran kartu pelajar: 8.6cm x 5.4cm
+        // ✅ Pastikan ukuran sesuai (8.6cm x 5.4cm) dan layout tetap satu halaman
         $pdf = Pdf::loadView('admin.kartupelajar.kartu', compact('siswa'))
-            ->setPaper([0, 0, 243.78, 153.07], 'portrait');
+            ->setPaper([0, 0, 243.78, 153.07], 'portrait') // ukuran cm ke point
+            ->setOption('isHtml5ParserEnabled', true)
+            ->setOption('isRemoteEnabled', true)
+            ->setOption('isPhpEnabled', true)
+            ->setOption('isCssBackgroundEnabled', true);
 
+        // ✅ Stream hasil PDF
         return $pdf->stream('Kartu_Pelajar_' . $siswa->nama_lengkap . '.pdf');
     }
 
@@ -71,13 +74,15 @@ class KartuPelajarController extends Controller
             $siswas = Siswa::orderBy('nama_lengkap')->limit(200)->get();
         }
 
-        // ✅ View: resources/views/admin/kartupelajar/kartu_mass.blade.php
-        $pdf = Pdf::loadView('admin.kartupelajar.kartu_mass', compact('siswas'))
-            ->setPaper([0, 0, 323, 204], 'landscape')
+       $pdf = Pdf::loadView('admin.kartupelajar.kartu', compact('siswa'))
+            ->setPaper([0, 0, 243.78, 153.07], 'portrait')
             ->setOption('isHtml5ParserEnabled', true)
-            ->setOption('isRemoteEnabled', true)
             ->setOption('isPhpEnabled', true)
-            ->setOption('isCssBackgroundEnabled', true);
+            ->setOption('isRemoteEnabled', true)
+            ->setOption('isCssBackgroundEnabled', true)
+            ->setOption('dpi', 150)
+            ->setOption('defaultFont', 'Arial');
+
 
         return $pdf->stream('Kartu_Pelajar_Massal.pdf');
     }

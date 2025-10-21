@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller; // Tambahkan ini!
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Siswa;
@@ -62,7 +63,6 @@ class DashboardController extends Controller
      *  =============================== */
     public function manajemenKartu(Request $request)
     {
-        // Jika nanti mau ditambah fitur search
         $search = $request->input('search');
 
         $siswas = Siswa::when($search, function ($query, $search) {
@@ -70,21 +70,22 @@ class DashboardController extends Controller
                   ->orWhere('nis', 'like', "%{$search}%");
         })
         ->orderBy('nama_lengkap')
-        ->paginate(10); // pakai paginate biar rapi
+        ->paginate(10);
 
         return view('admin.kartupelajar.index', compact('siswas', 'search'));
     }
 
     public function kartuPelajar()
-{
-    $siswas = Siswa::all();
-    return view('admin.kartupelajar.index', compact('siswas'));
-}
+    {
+        $siswas = Siswa::all();
+        return view('admin.kartupelajar.index', compact('siswas'));
+    }
 
-public function konseling() {
-    return view('admin.konseling.index');
-}
-
-
-
+    /** ===============================
+     *  MANAJEMEN KONSELING
+     *  =============================== */
+    public function konseling()
+    {
+        return view('admin.konseling.index');
+    }
 }

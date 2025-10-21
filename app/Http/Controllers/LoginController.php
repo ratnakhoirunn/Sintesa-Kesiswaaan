@@ -9,13 +9,26 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    // Method untuk menampilkan halaman login umum (siswa, guru)
+    /**
+     * Constructor untuk menerapkan middleware 'guest' pada semua route,
+     * kecuali 'logout' agar user yang sudah login tidak bisa akses halaman login lagi.
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Tampilkan halaman login
+     */
     public function showLoginForm()
     {
         return view('login');
     }
 
-    // Method untuk memproses login siswa/user
+    /**
+     * Proses login user (admin / siswa / bk)
+     */
     public function login(Request $request)
     {
         // Validasi input
@@ -24,34 +37,42 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        // Beritahu Laravel untuk login menggunakan kolom 'username'
+        // Coba login dengan username & password
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $request->session()->regenerate();
 
-            // Cek peran (role) pengguna dan arahkan ke dashboard yang sesuai
+            // Arahkan sesuai role
             $userRole = Auth::user()->role;
+
             if ($userRole === 'admin') {
-                return redirect()->intended('/admin/dashboard');
+                return redirect()->intended(route('admin.dashboard'));
             } elseif ($userRole === 'siswa') {
-                return redirect()->intended('/siswa/dashboard');
+                return redirect()->intended(route('siswa.dashboard'));
             } elseif ($userRole === 'bk') {
                 return redirect()->intended('/bk/dashboard');
             }
-            
-            return redirect()->intended('/');
+
+            // Jika role tidak dikenal, logout dan kembali ke login
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['username' => 'Role tidak dikenali.']);
         }
 
+        // Jika gagal login
         return back()->withErrors([
             'username' => 'Username atau password salah.',
         ])->onlyInput('username');
     }
 
-    // Method untuk memproses logout
+    /**
+     * Logout user dan hapus session
+     */
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+
+        return redirect()->route('login')->with('success', 'Anda telah logout.');
     }
 }
