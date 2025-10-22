@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller; // Tambahkan ini!
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Siswa;
 use App\Models\Konseling;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\SiswaImport;
 
@@ -22,10 +23,19 @@ class DashboardController extends Controller
         $totalAdmin = User::where('role', 'admin')->count();
         $totalKonseling = Konseling::count();
 
+        // === Data untuk Chart: Jumlah siswa per jurusan ===
+        // Ubah 'jurusan' jika nama kolom di tabel siswa kamu berbeda
+        $chartData = Siswa::select('jurusan', DB::raw('COUNT(*) as total'))
+            ->groupBy('jurusan')
+            ->orderBy('jurusan')
+            ->get();
+
+        // Kirim semua data ke view dashboard
         return view('admin.dashboard', compact(
             'totalSiswa',
             'totalAdmin',
-            'totalKonseling'
+            'totalKonseling',
+            'chartData'
         ));
     }
 

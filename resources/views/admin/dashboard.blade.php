@@ -13,7 +13,7 @@
         <div class="info-card">
             <div class="content">
                 <p>Total Siswa Aktif</p>
-                <h3>650</h3>
+                <h3>{{ $totalSiswa }}</h3>
             </div>
             <div class="icon">
                 <img src="{{ asset('images/toga1.png') }}" alt="Total Siswa">
@@ -22,7 +22,7 @@
         <div class="info-card">
             <div class="content">
                 <p>Total Admin</p>
-                <h3>3</h3>
+                <h3>{{ $totalAdmin }}</h3>
             </div>
             <div class="icon">
                 <img src="{{ asset('images/totaladmin.png') }}" alt="Total Admin">
@@ -31,7 +31,7 @@
         <div class="info-card">
             <div class="content">
                 <p>Jumlah Kunjungan Konseling</p>
-                <h3>10</h3>
+                <h3>{{ $totalKonseling }}</h3>
             </div>
             <div class="icon">
                 <img src="{{ asset('images/totalkonsel.png') }}" alt="Jumlah Konseling">
@@ -48,6 +48,7 @@
                 </div>
             </div>
         </div>
+
         <div class="right-column-cards">
             <div class="admin-action-card">
                 <h3>Dokumen Siswa</h3>
@@ -64,6 +65,7 @@
                     <span>Berat</span>
                 </div>
             </div>
+
             <div class="konseling-action-card">
                 <h3>Tindakan Konseling</h3>
                 <div class="notification-item">
@@ -73,4 +75,30 @@
             </div>
         </div>
     </div>
+
+    {{-- Script ChartJS --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('siswaPerJurusanChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($chartData->pluck('jurusan')) !!},
+                datasets: [{
+                    label: 'Jumlah Siswa',
+                    data: {!! json_encode($chartData->pluck('total')) !!},
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
 @endsection

@@ -11,7 +11,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    font-size: 8px;
+    font-weight: bold; 
+    font-size: 6px;
     line-height: 1.1;
     width: 8.6cm;
 }
@@ -71,6 +72,7 @@ body {
     flex-wrap: nowrap;
     align-items: flex-start;
     padding: 3px 5px;
+    font: bold;
 }
 
 /* FOTO DAN BARCODE */
@@ -101,6 +103,7 @@ body {
     flex: 1;
     font-size: 7.5px;
     line-height: 1.05;
+    font: bold;
 }
 .data table {
     width: 100%;
