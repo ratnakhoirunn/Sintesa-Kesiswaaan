@@ -282,7 +282,12 @@
                             <label>Pendidikan</label><input type="text" name="pendidikan_ayah" value="{{ old('pendidikan_ayah', $ortu->pendidikan_ayah ?? '') }}">
                             <label>Pekerjaan</label><input type="text" name="pekerjaan_ayah" value="{{ old('pekerjaan_ayah', $ortu->pekerjaan_ayah ?? '') }}">
                             <label>Penghasilan</label><input type="text" name="penghasilan_ayah" value="{{ old('penghasilan_ayah', $ortu->penghasilan_ayah ?? '') }}">
-                            <label>Status Hidup</label><input type="text" name="status_hidup_ayah" value="{{ old('status_hidup_ayah', $ortu->status_hidup_ayah ?? '') }}">
+                            <label>Status Hidup</label>
+                                <select name="status_hidup_ayah" class="form-control">
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Masih Hidup" {{ old('status_hidup_ayah', $ortu->status_hidup_ayah ?? '') == 'Masih Hidup' ? 'selected' : '' }}>Masih Hidup</option>
+                                    <option value="Sudah Meninggal" {{ old('status_hidup_ayah', $ortu->status_hidup_ayah ?? '') == 'Sudah Meninggal' ? 'selected' : '' }}>Sudah Meninggal</option>
+                                </select>
                             <label>No. Telepon</label><input type="text" name="no_telp_ayah" value="{{ old('no_telp_ayah', $ortu->no_telp_ayah ?? '') }}">
                         </div>
                     </div>
@@ -296,7 +301,12 @@
                             <label>Pendidikan</label><input type="text" name="pendidikan_ibu" value="{{ old('pendidikan_ibu', $ortu->pendidikan_ibu ?? '') }}">
                             <label>Pekerjaan</label><input type="text" name="pekerjaan_ibu" value="{{ old('pekerjaan_ibu', $ortu->pekerjaan_ibu ?? '') }}">
                             <label>Penghasilan</label><input type="text" name="penghasilan_ibu" value="{{ old('penghasilan_ibu', $ortu->penghasilan_ibu ?? '') }}">
-                            <label>Status Hidup</label><input type="text" name="status_hidup_ibu" value="{{ old('status_hidup_ibu', $ortu->status_hidup_ibu ?? '') }}">
+                            <label>Status Hidup</label>
+                                <select name="status_hidup_ibu" class="form-control">
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Masih Hidup" {{ old('status_hidup_ibu', $ortu->status_hidup_ibu ?? '') == 'Masih Hidup' ? 'selected' : '' }}>Masih Hidup</option>
+                                    <option value="Sudah Meninggal" {{ old('status_hidup_ibu', $ortu->status_hidup_ibu ?? '') == 'Sudah Meninggal' ? 'selected' : '' }}>Sudah Meninggal</option>
+                                </select>
                             <label>No. Telepon</label><input type="text" name="no_telp_ibu" value="{{ old('no_telp_ibu', $ortu->no_telp_ibu ?? '') }}">
                         </div>
                     </div>
@@ -312,7 +322,12 @@
                             <label>Pendidikan</label><input type="text" name="pendidikan_wali" value="{{ old('pendidikan_wali', $ortu->pendidikan_wali ?? '') }}">
                             <label>Pekerjaan</label><input type="text" name="pekerjaan_wali" value="{{ old('pekerjaan_wali', $ortu->pekerjaan_wali ?? '') }}">
                             <label>Penghasilan</label><input type="text" name="penghasilan_wali" value="{{ old('penghasilan_wali', $ortu->penghasilan_wali ?? '') }}">
-                            <label>Status Hidup</label><input type="text" name="status_hidup_wali" value="{{ old('status_hidup_wali', $ortu->status_hidup_wali ?? '') }}">
+                            <label>Status Hidup</label>
+                                <select name="status_hidup_wali" class="form-control">
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Masih Hidup" {{ old('status_hidup_wali', $ortu->status_hidup_wali ?? '') == 'Masih Hidup' ? 'selected' : '' }}>Masih Hidup</option>
+                                    <option value="Sudah Meninggal" {{ old('status_hidup_wali', $ortu->status_hidup_wali ?? '') == 'Sudah Meninggal' ? 'selected' : '' }}>Sudah Meninggal</option>
+                                </select>
                             <label>No. Telepon</label><input type="text" name="no_telp_wali" value="{{ old('no_telp_wali', $ortu->no_telp_wali ?? '') }}">
                         </div>
                     </div>

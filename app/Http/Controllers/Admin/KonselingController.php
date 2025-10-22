@@ -9,10 +9,13 @@ use Illuminate\Http\Request;
 class KonselingController extends Controller
 {
     public function index()
-    {
-        $konselings = Konseling::orderBy('tanggal', 'desc')->get();
-        return view('admin.konseling.index', compact('konselings'));
-    }
+{
+    // Ambil semua data dari tabel konselings (pastikan nama model dan tabel sesuai)
+    $konselings = \App\Models\Konseling::orderBy('created_at', 'desc')->get();
+
+    // Kirim data ke view
+    return view('admin.konseling.index', compact('konselings'));
+}
 
     public function create()
     {
