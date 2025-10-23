@@ -92,7 +92,7 @@
                     <td>{{ $siswa->rombel }}</td>
                     <td>{{ $siswa->jurusan }}</td>
                     <td>
-                     <a href="{{ route('admin.kartupelajar.cetak', $siswa->nis) }}" target="_blank" class="btn btn-primary btn-sm">Cetak Kartu</a>
+                     <a href="{{ route('admin.kartupelajar.preview', $siswa->nis) }}" class="btn btn-sm btn-success"> Lihat Kartu</a>
                 </tr>
                 @endforeach
             </tbody>
