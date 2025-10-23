@@ -9,10 +9,40 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $siswas = Siswa::orderBy('nama_lengkap', 'asc')->paginate(10);
-        return view('admin.datasiswa.index', compact('siswas'));
+        $rombel = $request->input('rombel');
+        $jurusan = $request->input('jurusan');
+        $search  = $request->input('search');
+
+        // Query awal
+        $query = \App\Models\Siswa::query();
+
+        // Filter rombel
+        if ($rombel) {
+            $query->where('rombel', $rombel);
+        }
+
+        // Filter jurusan
+        if ($jurusan) {
+            $query->where('jurusan', $jurusan);
+        }
+
+        // Filter pencarian
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%{$search}%")
+                ->orWhere('nis', 'like', "%{$search}%");
+            });
+        }
+
+        // Ambil data dan pagination
+        $siswas = $query->orderBy('rombel')->paginate(10);
+
+        // Hitung jumlah siswa hasil filter
+        $jumlah = $query->count();
+
+        return view('admin.datasiswa.index', compact('siswas', 'rombel', 'jurusan', 'jumlah'));
     }
 
     public function create()
