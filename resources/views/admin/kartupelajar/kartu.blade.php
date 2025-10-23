@@ -1,251 +1,295 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta charset="utf-8">
-<style>
-@page {
-    size: 8.6cm 5.4cm;
-    margin: 0;
-}
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    font-weight: bold; 
-    font-size: 6px;
-    line-height: 1.1;
-    width: 8.6cm;
-}
+    <meta charset="UTF-8">
+    <title>Kartu Pelajar</title>
 
+    <style>
+    @page {
+        size: 8.6cm 5.4cm;
+        margin: 0;
+    }
 
-/* =======================
-   HALAMAN DEPAN
-======================= */
-.card {
-    width: 8.6cm;
-    height: 5.4cm;
-    border: 1px solid #000;
-    position: relative;
-    overflow: hidden;
-}
+    html, body {
+        width: 8.6cm;
+        height: 5.4cm;
+        margin: 0;
+        padding: 0;
+        background: white;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
 
-/* HEADER */
-.header {
-    background-color: #3aa0d8;
-    color: white;
-    text-align: center;
-    padding: 1px 20px;
-    font-size: 6.5px;
-    line-height: 1.1;
-    position: relative;
-}
-.header img.logo-left {
-    position: absolute;
-    left: 5px;
-    top: 3px;
-    width: 18px;
-    height: 18px;
-}
-.header img.logo-right {
-    position: absolute;
-    right: 5px;
-    top: 3px;
-    width: 18px;
-    height: 18px;
-}
-.header strong {
-    font-size: 7px;
-}
-.judul {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    font-size: 8px;
-    text-align: center;
-    padding: 1px 0;
-}
+    body {
+        font-family: 'ariel', sans-serif;
+    }
 
-/* ISI DEPAN */
-.content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-    padding: 3px 5px;
-    font: bold;
-}
+    .card, .back {
+        width: 8.6cm;
+        height: 5.4cm;
+        border: 1px solid #000;
+        background: white;
+        position: relative;
+        overflow: hidden;
+        page-break-after: always;
+    }
 
-/* FOTO DAN BARCODE */
-.foto-area {
-    width: 2cm;
-    text-align: center;
-    margin-right: 5px;
-}
-.foto-area .foto {
-    width: 2cm;
-    height: 2.1cm;
-    border: 1px solid #000;
-    margin-bottom: 1px;
-}
-.foto-area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.barcode {
-    transform: scale(0.7);
-    transform-origin: top center;
-    margin-top: 0;
-}
+    /* ===== HEADER ===== */
+    .header {
+        background-color: #3aa0d8;
+        color: white;
+        text-align: center;
+        padding: 2px 5px;
+        font-size: 4px;
+        line-height: 1.2;
+        position: relative;
+    }
 
-/* DATA SISWA */
-.data {
-    flex: 1;
-    font-size: 7.5px;
-    line-height: 1.05;
-    font: bold;
-}
-.data table {
-    width: 100%;
-    border-collapse: collapse;
-}
-.data td {
-    vertical-align: top;
-    padding: 0;
-}
+    .header strong {
+        font-size: 6px;
+    }
 
-/* FOOTER */
-.footer {
-    position: absolute;
-    bottom: 13px;
-    right: 8px;
-    text-align: right;
-    font-size: 7px;
-    line-height: 1.1;
-}
-.footer strong {
-    display: block;
-}
+    .logo-left,
+    .logo-right {
+        position: absolute;
+        top: 4px;
+        width: 36px;
+        height: 36px;
+    }
 
-/* JURUSAN */
-.jurusan {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #009c3b;
-    color: white;
-    font-size: 8px;
-    font-weight: bold;
-    text-align: center;
-    padding: 1px 0;
-}
+    .logo-left { left: 10px; }
+    .logo-right { right: 10px; }
 
-/* =======================
-   HALAMAN BELAKANG
-======================= */
-.card-back {
-    width: 8.6cm;
-    height: 5.4cm;
-    border: 1px solid #000;
-    position: relative;
-    overflow: hidden;
-    page-break-before: always;
-}
-.back-header {
-    background-color: #3aa0d8;
-    height: 10px;
-    width: 100%;
-}
-.back-content {
-    padding: 12px 15px;
-    font-size: 8px;
-    line-height: 1.3;
-}
-.back-content strong {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 3px;
-}
-.back-footer {
-    background-color: #3aa0d8;
-    height: 10px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-}
+    .header img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .aksara-jawa img {
+        width: 110px;
+        height: auto;
+        display: block;
+        margin: 2px auto;
+    }
+
+    .title {
+        background-color: #5ec2f3;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        font-size: 7px;
+        padding: 1px 0;
+    }
+
+    /* ===== ISI ===== */
+    .content {
+        display: flex;
+        padding: 3px 6px;
+        font-size: 7px;
+        align-items: flex-start;
+    }
+
+    .foto {
+        width: 1.9cm;
+        height: 2.5cm;
+        border: 1px solid #000;
+        text-align: center;
+        margin-right: 6px;
+        overflow: hidden;
+    }
+
+    .foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .barcode {
+        width: 1.9cm;
+        height: 0.6cm;
+        margin-top: 2px;
+        text-align: center;
+    }
+
+    .barcode img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .data {
+        flex: 1;
+        line-height: 1.1;
+        font-weight: bold;
+    }
+
+    .data table {
+        width: 100%;
+        font-size: 6.3px;
+    }
+
+    .data td {
+        padding: 0;
+        vertical-align: top;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+        position: absolute;
+         bottom: 12px;
+        left: 0;
+        width: 100%;
+        text-align: right;
+        font-size: 5.5px;
+        line-height: 1.3;
+    }
+
+    .footer strong {
+        display: block;
+       margin-top: 25px; 
+    }
+    .footer .nip {
+        font-weight: bold;
+        font-size: 6px;
+    }
+
+    .jurusan {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: #00a651;
+        color: white;
+        text-align: center;
+        font-size: 8px;
+        font-weight: bold;
+        padding: 2px 0;
+    }
+
+    /* ===== BELAKANG ===== */
+    .back-header {
+        background-color: #3aa0d8;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        font-size: 8px;
+        padding: 2px 0;
+    }
+
+    .rules {
+        padding: 6px 12px;
+        font-size: 8px;
+        line-height: 1.3;
+        text-align: justify;
+        margin-left: 4px;
+    }
+
+    .blue-line {
+        width: 100%;
+        height: 20px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: #2196F3;
+    }
+
+    @media print {
+        body {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .card, .back {
+            overflow: visible !important;
+        }
+        img {
+            display: block !important;
+            visibility: visible !important;
+        }
+    }
 </style>
+
+
 </head>
 <body>
 
-<!-- ================= HALAMAN DEPAN ================= -->
-<div class="card">
-    <div class="header">
-        <img src="file://{{ public_path('images/jogja.png') }}" class="logo-left" alt="Logo Jogja">
-        <img src="file://{{ public_path('images/skaduta_logo.png') }}" class="logo-right" alt="Logo SMK">
-        PEMERINTAH DAERAH ISTIMEWA YOGYAKARTA<br>
-        DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA<br>
-        <strong>SMK NEGERI 2 YOGYAKARTA</strong><br>
-        <span style="font-size:6px;">Jl. P. Mangkubumi / AM Sangaji 47 Yogyakarta Telp. (0274) 513480 Fax. (0274) 512589</span><br>
-        <span style="font-size:6px;">Pos-el: info@smk2-yk.sch.id | www.smk2-yk.sch.id</span>
+    {{-- 📄 HALAMAN DEPAN --}}
+    <div class="card">
+        <div class="header">
+            <div class="logo-left">
+                <img src="{{ asset('images/jogja.png') }}" alt="Logo Jogja">
+            </div>
+            <div class="logo-right">
+                <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
+            </div>
+
+            PEMERINTAH DAERAH DAERAH ISTIMEWA YOGYAKARTA<br>
+            DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA<br>
+            BALAI PENDIDIKAN MENENGAH KOTA YOGYAKARTA<br>
+            <strong>SMK NEGERI 2 YOGYAKARTA</strong><br>
+            <div class="aksara-jawa">
+                <img src="{{ asset('images/aksara_jawa.png') }}" alt="Aksara Jawa">
+            </div>
+            <span style="font-size:4px;">
+                Jl. P.Mangkubumi / AM.Sangaji 47 55233 Telp. (0274) 513490 Fax. (0274) 512639<br>
+                Pos-el: info@smk2-yk.sch.id | www.smk2-yk.sch.id
+            </span>
+        </div>
+
+        <div class="title">KARTU PELAJAR</div>
+
+        <div class="content">
+            <div>
+                <div class="foto">
+                    @if($siswa->foto)
+                        <img src="{{ asset('uploads/foto_siswa/'.$siswa->foto) }}" alt="Foto Siswa">
+                    @else
+                        <span style="font-size:7px;">Foto Siswa</span>
+                    @endif
+                </div>
+                <div class="barcode">
+                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($siswa->nis, 'C39', 1, 30) }}" alt="Barcode">
+                </div>
+            </div>
+
+            <div class="data">
+                <table>
+                    <tr><td>Nama</td><td>:</td><td>{{ strtoupper($siswa->nama_lengkap) }}</td></tr>
+                    <tr><td>NIPD</td><td>:</td><td>{{ $siswa->nis }}</td></tr>
+                    <tr><td>NISN</td><td>:</td><td>{{ $siswa->nisn }}</td></tr>
+                    <tr><td>Tempat, Tgl Lahir</td><td>:</td><td>{{ $siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($siswa->tanggal_lahir)->translatedFormat('d F Y') }}</td></tr>
+                    <tr><td>Jenis Kelamin</td><td>:</td><td>{{ $siswa->jenis_kelamin }}</td></tr>
+                    <tr><td>Agama</td><td>:</td><td>{{ $siswa->agama }}</td></tr>
+                    <tr><td>Nama Orang Tua</td><td>:</td><td>{{ $siswa->nama_ortu }}</td></tr>
+                    <tr><td>Alamat</td><td>:</td><td>{{ $siswa->alamat }}</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            Yogyakarta, Agustus 2025<br>
+            Kepala Sekolah<br>
+            <strong>Drs. Agus Waluyo, M.Eng.</strong>
+            <div class="nip">NIP. 196512271994121002</div>
+        </div>
+
+        <div class="jurusan">DESAIN KOMUNIKASI VISUAL</div>
     </div>
 
-    <div class="judul">KARTU PELAJAR</div>
-
-    <div class="content">
-        <table width="100%" style="border-collapse: collapse;">
-            <tr>
-                <!-- FOTO -->
-                <td style="width: 2.4cm; text-align: center; vertical-align: top;">
-                    <div style="width: 2.3cm; height: 2.8cm; border: 1px solid #000; margin-bottom: 2px;">
-                        @if($siswa->foto)
-                            <img src="file://{{ public_path('uploads/foto_siswa/'.$siswa->foto) }}" 
-                                alt="Foto Siswa"
-                                style="width: 100%; height: 100%; object-fit: cover;">
-                        @else
-                            <span style="font-size:7px;">Foto Siswa</span>
-                        @endif
-                    </div>
-                    <div style="transform:scale(0.75);transform-origin:top center;margin-top:1px;">
-                        {!! DNS1D::getBarcodeHTML($siswa->nis, 'C39', 0.6, 10) !!}
-                    </div>
-                </td>
-
-                <!-- DATA SISWA -->
-                <td style="vertical-align: top; padding-left: 5px; padding-right: 5px; text-align: left;">
-                    <table style="width: 100%; font-size: 7.5px; line-height: 1.05;">
-                        <tr><td><strong>Nama</strong></td><td>:</td><td>{{ $siswa->nama_lengkap }}</td></tr>
-                        <tr><td><strong>NIPD</strong></td><td>:</td><td>{{ $siswa->nis ?? '-' }}</td></tr>
-                        <tr><td><strong>NISN</strong></td><td>:</td><td>{{ $siswa->nisn ?? '-' }}</td></tr>
-                        <tr><td><strong>Tempat, Tgl Lahir</strong></td><td>:</td><td>{{ $siswa->tempat_lahir ?? '-' }}, {{ $siswa->tanggal_lahir ?? '-' }}</td></tr>
-                        <tr><td><strong>Jenis Kelamin</strong></td><td>:</td><td>{{ $siswa->jenis_kelamin ?? '-' }}</td></tr>
-                        <tr><td><strong>Agama</strong></td><td>:</td><td>{{ $siswa->agama ?? '-' }}</td></tr>
-                        <tr><td><strong>Nama Orang Tua</strong></td><td>:</td><td>{{ $siswa->nama_ortu ?? '-' }}</td></tr>
-                        <tr><td><strong>Alamat</strong></td><td>:</td><td>{{ $siswa->alamat ?? '-' }}</td></tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="footer">
-        Yogyakarta, Oktober 2025<br>
-        <strong>Drs. Agus Waluyo M.Eng.</strong>
-        NIP.196512271994121002
-    </div>
-    <div class="jurusan">DESAIN KOMUNIKASI VISUAL</div>
-</div>
-<div class="card-back">
-    <div class="back-header"></div>
-    <div class="back-content">
-        <strong>KETENTUAN</strong>
-        <ul style="margin: 0; padding-left: 12px;">
+    {{-- 📘 HALAMAN BELAKANG --}}
+    <div class="back">
+        <div class="back-header">KETENTUAN</div>
+        <div class="rules">
             <li>Kartu ini berlaku selama pemiliknya masih berstatus sebagai siswa SMK Negeri 2 Yogyakarta.</li>
-            <li>Kartu ini tidak boleh dipindahtangankan, kepemilikan, dipinjamkan atau digunakan oleh orang lain.</li>
-            <li>Apabila kehilangan atau menemukan kartu ini mohon segera menghubungi alamat/nomor telepon sekolah yang bersangkutan.</li>
-            <li>Penyalahgunaan kartu ini akan ditindak sesuai peraturan yang berlaku.</li>
-        </ul>
+            <li>Kartu ini tidak boleh dipindahtangankan, dipinjamkan, atau digunakan oleh orang lain.</li>
+            <li>Apabila kehilangan atau menemukan kartu ini mohon segera menghubungi pihak sekolah.</li>
+            <li>Pemegang kartu ini wajib menjaga kartu agar tetap bersih dan tidak rusak.</li>
+            <li>Penyalahgunaan kartu akan ditindak sesuai peraturan yang berlaku.</li>
+        </div>
+        <div class="blue-line"></div>
     </div>
-    <div class="back-footer"></div>
-</div>
+
 </body>
 </html>

@@ -59,12 +59,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::post('datasiswa/import', [SiswaImportController::class, 'import'])->name('datasiswa.import');
 
     // 🪪 Kartu Pelajar
-    Route::prefix('kartupelajar')->name('kartupelajar.')->group(function () {
-        Route::get('/', [KartuPelajarController::class, 'index'])->name('index');
-        Route::get('/print/{nis}', [KartuPelajarController::class, 'cetak'])->name('cetak');
-        Route::post('/print-mass', [KartuPelajarController::class, 'printMass'])->name('printMass');
-        Route::get('/search', [KartuPelajarController::class, 'search'])->name('search');
-    });
+Route::prefix('kartupelajar')->name('kartupelajar.')->group(function () {
+    Route::get('/', [KartuPelajarController::class, 'index'])->name('index');
+    Route::get('/preview/{nis}', [KartuPelajarController::class, 'cetak'])->name('preview');
+    Route::post('/print-mass', [KartuPelajarController::class, 'printMass'])->name('printMass');
+    Route::get('/search', [KartuPelajarController::class, 'search'])->name('search');
+    Route::get('/download-pdf/{nis}', [KartuPelajarController::class, 'downloadPDF'])->name('download.pdf');
+    Route::get('/frame/{nis}', [KartuPelajarController::class, 'previewFrame'])->name('frame');
+});
 
     // 💬 Konseling
     Route::get('konseling', [KonselingController::class, 'index'])->name('konseling.index');
