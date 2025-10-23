@@ -34,33 +34,113 @@
     </div>
 </div>
 
-<table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden;">
-    <thead style="background:#2c3e50; color:white;">
+<style>
+    /* =======================
+       TABEL DATA SISWA
+    ======================= */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        table-layout: fixed; /* penting agar kolom sejajar */
+    }
+
+    thead {
+        background: #2c3e50;
+        color: white;
+    }
+
+    th, td {
+        padding: 6px 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
+
+    th:nth-child(1) { width: 5%; text-align: center; }
+    th:nth-child(2) { width: 15%; }
+    th:nth-child(3) { width: 25%; }
+    th:nth-child(4) { width: 15%; }
+    th:nth-child(5) { width: 25%; }
+    th:nth-child(6) { width: 15%; text-align: center; }
+
+    tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    /* Aksi sejajar */
+    .aksi-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .aksi-container a, 
+    .aksi-container button {
+        font-size: 14px;
+        text-decoration: none;
+        border: none;
+        background: none;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+
+    .aksi-container a i,
+    .aksi-container button i {
+        margin-right: 4px;
+    }
+
+    .aksi-container a:hover,
+    .aksi-container button:hover {
+        opacity: 0.8;
+    }
+
+    /* Tombol warna aksi */
+    .aksi-lihat { color: #007bff; }
+    .aksi-edit { color: #ff9800; }
+    .aksi-hapus { color: #e74c3c; }
+</style>
+
+<table>
+    <thead>
         <tr>
-            <th style="padding:10px;">No</th>
-            <th style="padding:10px;">NIS</th>
-            <th style="padding:10px;">Nama Lengkap</th>
-            <th style="padding:10px;">Rombel</th>
-            <th style="padding:10px;">Kompetensi Keahlian</th>
-            <th style="padding:10px;">Aksi</th>
+            <th>No</th>
+            <th>NIS</th>
+            <th>Nama Lengkap</th>
+            <th>Rombel</th>
+            <th>Kompetensi Keahlian</th>
+            <th>Aksi</th>
         </tr>
     </thead>
    <tbody>
         @forelse($siswas as $i => $siswa)
-        <tr style="border-bottom:1px solid #ddd;">
-            <td style="padding:10px; text-align:center;">{{ $i + $siswas->firstItem() }}</td>
-            <td style="padding:10px;">{{ $siswa->nis }}</td>
-            <td style="padding:10px;">{{ $siswa->nama_lengkap }}</td>
-            <td style="padding:10px;">{{ $siswa->rombel }}</td>
-            <td style="padding:10px;">{{ $siswa->jurusan }}</td>
-            <td style="padding:10px; display:flex; gap:10px; align-items:center;">
-                <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" style="color:blue;"><i class="fas fa-eye"></i> Lihat</a>
-                <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" style="color:orange;"><i class="fas fa-edit"></i> Edit</a>
-                <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" style="border:none; background:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i> Hapus</button>
-                </form>
+        <tr>
+            <td style="text-align:center;">{{ $i + $siswas->firstItem() }}</td>
+            <td>{{ $siswa->nis }}</td>
+            <td>{{ $siswa->nama_lengkap }}</td>
+            <td>{{ $siswa->rombel }}</td>
+            <td>{{ $siswa->jurusan }}</td>
+            <td>
+                <div class="aksi-container">
+                    <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" class="aksi-lihat">
+                        <i class="fas fa-eye"></i> Lihat
+                    </a>
+                    <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="aksi-edit">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="aksi-hapus">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </form>
+                </div>
             </td>
         </tr>
         @empty
@@ -72,12 +152,9 @@
 {{-- Pagination tanpa "Showing..." --}}
 <div style="margin-top:20px; display:flex; justify-content:center;">
     <style>
-        /* --- Hilangkan teks "Showing 1 to 10 of ..." sepenuhnya --- */
         nav[role="navigation"] > div:first-child {
             display: none !important;
         }
-
-        /* --- Gaya pagination rapi dan simetris --- */
         nav[role="navigation"] {
             display: flex;
             justify-content: center;
@@ -85,15 +162,11 @@
             gap: 8px;
             margin-top: 15px;
         }
-
-        /* Ukuran ikon panah */
         nav[role="navigation"] svg {
             width: 16px !important;
             height: 16px !important;
             vertical-align: middle;
         }
-
-        /* Tombol pagination */
         .pagination a, 
         .pagination span {
             padding: 6px 12px;
@@ -104,21 +177,16 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-
         .pagination a:hover {
             background: #4B0082;
             color: #fff;
         }
-
-        /* Tombol aktif */
         .pagination .active span {
             background: #4B0082;
             color: white;
         }
     </style>
 
-    {{-- Gunakan pagination sederhana tanpa teks "Showing..." --}}
     {{ $siswas->appends(request()->query())->links('pagination::simple-tailwind') }}
 </div>
-
 @endsection

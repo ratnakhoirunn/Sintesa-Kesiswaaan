@@ -85,17 +85,14 @@
             <tbody id="table-rows">
                 @foreach($siswas as $i => $siswa)
                 <tr>
-                    <td class="checkbox-cell"><input class="row-check" data-id="{{ $siswa->id }}" type="checkbox"></td>
+                    <td class="checkbox-cell"><input class="row-check" data-id="{{ $siswa->nis }}" type="checkbox"></td>
                     <td>{{ $i + $siswas->firstItem() }}</td>
                     <td>{{ $siswa->nis }}</td>
                     <td>{{ $siswa->nama_lengkap }}</td>
                     <td>{{ $siswa->rombel }}</td>
                     <td>{{ $siswa->jurusan }}</td>
                     <td>
-                     <a href="{{ route('admin.kartupelajar.preview', $siswa->nis) }}" class="btn btn-sm btn-success">
-    Lihat Kartu
-</a>
-
+                     <a href="{{ route('admin.kartupelajar.preview', $siswa->nis) }}" class="btn btn-sm btn-success"> Lihat Kartu</a>
                 </tr>
                 @endforeach
             </tbody>
