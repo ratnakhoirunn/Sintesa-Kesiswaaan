@@ -196,15 +196,47 @@
                 </div>
 
                 <div class="form-row">
-                    <div>
-                        <label>Rombel</label>
-                        <input type="text" name="rombel" value="{{ old('rombel', $siswa->rombel) }}">
-                    </div>
-                    <div>
-                        <label>Jurusan</label>
-                        <input type="text" name="jurusan" value="{{ old('jurusan', $siswa->jurusan) }}">
-                    </div>
+                <div>
+                    <label>Rombel</label>
+                    <select name="rombel" class="form-select">
+                        <option value="">Pilih Rombel</option>
+                        @foreach ([
+                            'X DKV 1','X DKV 2','X DPIB 1','X DPIB 2','X DPIB 3',
+                            'X GEOMATIKA','X KGS','X MEKATRONIKA','X SIJA 1','X SIJA 2',
+                            'X TAV','X TITL 1','X TITL 2','X TITL 3','X TITL 4',
+                            'X TKR 1','X TKR 2','X TKR 3','X TKR 4',
+                            'X TP 1','X TP 2','X TP 3','X TP 4'
+                        ] as $rombel)
+                            <option value="{{ $rombel }}" {{ old('rombel', $siswa->rombel) == $rombel ? 'selected' : '' }}>
+                                {{ $rombel }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
+
+                <div>
+                    <label>Jurusan</label>
+                    <select name="jurusan" class="form-select">
+                        <option value="">Pilih Jurusan</option>
+                        @foreach ([
+                            'Desain Komunikasi Visual',
+                            'Desain Pemodelan dan Informasi Bangunan',
+                            'Teknik Geospasial',
+                            'Konstruksi Gedung dan Sanitasi',
+                            'Teknik Mekatronika',
+                            'Sistem Informasi Jaringan dan Aplikasi ( Pengembangan Perangkat Lunak dan Gim )',
+                            'Teknik Audio Video',
+                            'Teknik Instalasi Tenaga Listrik',
+                            'Teknik Kendaraan Ringan',
+                            'Teknik Pemesinan'
+                        ] as $jurusan)
+                            <option value="{{ $jurusan }}" {{ old('jurusan', $siswa->jurusan) == $jurusan ? 'selected' : '' }}>
+                                {{ $jurusan }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
                 <div class="form-row">
                     <div>
@@ -251,10 +283,50 @@
                             <label>Tinggi Badan</label><input type="number" name="tinggi_badan" value="{{ old('tinggi_badan', $detail->tinggi_badan ?? '') }}">
                             <label>Anak ke-</label><input type="number" name="anak_ke" value="{{ old('anak_ke', $detail->anak_ke ?? '') }}">
                             <label>Jumlah Saudara</label><input type="number" name="jumlah_saudara" value="{{ old('jumlah_saudara', $detail->jumlah_saudara ?? '') }}">
-                            <label>Tinggal Dengan</label><input type="text" name="tinggal_dengan" value="{{ old('tinggal_dengan', $detail->tinggal_dengan ?? '') }}">
+                            <label for="tinggal_dengan">Tinggal Dengan</label>
+                                <select name="tinggal_dengan" id="tinggal_dengan" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Bersama Orang Tua',
+                                        'Wali',
+                                        'Kost',
+                                        'Panti Asuhan',
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('tinggal_dengan', $detail->tinggal_dengan ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             <label>Jarak Rumah</label><input type="text" name="jarak_rumah" value="{{ old('jarak_rumah', $detail->jarak_rumah ?? '') }}">
-                            <label>Waktu Tempuh</label><input type="text" name="waktu_tempuh" value="{{ old('waktu_tempuh', $detail->waktu_tempuh ?? '') }}">
-                            <label>Transportasi</label><input type="text" name="transportasi" value="{{ old('transportasi', $detail->transportasi ?? '') }}">
+                            <label for="waktu_tempuh">Waktu Tempuh ke Sekolah</label>
+                                <select name="waktu_tempuh" id="waktu_tempuh" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        '5 menit',
+                                        '10 - 15 menit',
+                                        '25 - 30 menit',
+                                        'Lebih dari 45 Menit',
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('waktu_tempuh', $detail->waktu_tempuh ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            <label for="transportasi">Transportasi ke Sekolah</label>
+                                <select name="transportasi" id="transportasi" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Sepeda Motor ( Antar Jemput )',
+                                        'Jalan Kaki',
+                                        'Angkutan Umum',
+                                        'Mobil Pribadi',
+                                        'Motor Pribadi',
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('transportasi', $detail->transportasi ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
                         </div>
                     </div>
 
@@ -279,9 +351,45 @@
                             <label>Nama Ayah</label><input type="text" name="nama_ayah" value="{{ old('nama_ayah', $ortu->nama_ayah ?? '') }}">
                             <label>NIK</label><input type="text" name="nik_ayah" value="{{ old('nik_ayah', $ortu->nik_ayah ?? '') }}">
                             <label>Tahun Lahir</label><input type="text" name="tahun_lahir_ayah" value="{{ old('tahun_lahir_ayah', $ortu->tahun_lahir_ayah ?? '') }}">
-                            <label>Pendidikan</label><input type="text" name="pendidikan_ayah" value="{{ old('pendidikan_ayah', $ortu->pendidikan_ayah ?? '') }}">
-                            <label>Pekerjaan</label><input type="text" name="pekerjaan_ayah" value="{{ old('pekerjaan_ayah', $ortu->pekerjaan_ayah ?? '') }}">
-                            <label>Penghasilan</label><input type="text" name="penghasilan_ayah" value="{{ old('penghasilan_ayah', $ortu->penghasilan_ayah ?? '') }}">
+                            <label>Pendidikan</label>
+                                <select name="pendidikan_ayah" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Tidak Sekolah', 'SD', 'SMP', 'SMA/SMK Sederajat',
+                                         'D3', 'S1', 'S2', 'S3'
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('pendidikan_ayah', $ortu->pendidikan_ayah ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            <label>Pekerjaan</label>
+                                <select name="pekerjaan_ayah" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Pensiunan', 'PNS / TNI / Polri', 'Karyawan Swasta', 'Wiraswasta', 'Pedagang Kecil', 'Karyawan BUMN', 'Tidak Bekerja', 'Sudah Meninggal', 'Lainnya'
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('pekerjaan_ayah', $ortu->pekerjaan_ayah ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            <label>Penghasilan</label>
+                                <select name="penghasilan_ayah" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Tidak Berpenghasilan',
+                                        'Kurang Dari Rp. 500,000',
+                                        'Rp. 500,000 - Rp. 999,999',
+                                        'Rp. 1,000,000 - Rp. 1,999,999',
+                                        'Rp. 2,000,000 - Rp. 4,999,999',
+                                        'Rp. 5,000,000 - Rp. 20,000,000',
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('penghasilan_ayah', $ortu->penghasilan_ayah ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             <label>Status Hidup</label>
                                 <select name="status_hidup_ayah" class="form-control">
                                     <option value="">-- Pilih Status --</option>
@@ -298,9 +406,45 @@
                             <label>Nama Ibu</label><input type="text" name="nama_ibu" value="{{ old('nama_ibu', $ortu->nama_ibu ?? '') }}">
                             <label>NIK</label><input type="text" name="nik_ibu" value="{{ old('nik_ibu', $ortu->nik_ibu ?? '') }}">
                             <label>Tahun Lahir</label><input type="text" name="tahun_lahir_ibu" value="{{ old('tahun_lahir_ibu', $ortu->tahun_lahir_ibu ?? '') }}">
-                            <label>Pendidikan</label><input type="text" name="pendidikan_ibu" value="{{ old('pendidikan_ibu', $ortu->pendidikan_ibu ?? '') }}">
-                            <label>Pekerjaan</label><input type="text" name="pekerjaan_ibu" value="{{ old('pekerjaan_ibu', $ortu->pekerjaan_ibu ?? '') }}">
-                            <label>Penghasilan</label><input type="text" name="penghasilan_ibu" value="{{ old('penghasilan_ibu', $ortu->penghasilan_ibu ?? '') }}">
+                            <label>Pendidikan</label>
+                                <select name="pendidikan_ibu" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Tidak Sekolah', 'SD', 'SMP', 'SMA/SMK Sederajat',
+                                         'D3', 'S1', 'S2', 'S3'
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('pendidikan_ibu', $ortu->pendidikan_ibu ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            <label>Pekerjaan</label>
+                                <select name="pekerjaan_ibu" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Pensiunan', 'PNS / TNI / Polri', 'Karyawan Swasta', 'Wiraswasta', 'Pedagang Kecil', 'Karyawan BUMN', 'Tidak Bekerja', 'Sudah Meninggal', 'Lainnya'
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('pekerjaan_ibu', $ortu->pekerjaan_ibu ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            <label>Penghasilan</label>
+                                <select name="penghasilan_ibu" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Tidak Berpenghasilan',
+                                        'Kurang Dari Rp. 500,000',
+                                        'Rp. 500,000 - Rp. 999,999',
+                                        'Rp. 1,000,000 - Rp. 1,999,999',
+                                        'Rp. 2,000,000 - Rp. 4,999,999',
+                                        'Rp. 5,000,000 - Rp. 20,000,000',
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('penghasilan_ibu', $ortu->penghasilan_ibu ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             <label>Status Hidup</label>
                                 <select name="status_hidup_ibu" class="form-control">
                                     <option value="">-- Pilih Status --</option>
@@ -319,9 +463,45 @@
                             <label>Nama Wali</label><input type="text" name="nama_wali" value="{{ old('nama_wali', $ortu->nama_wali ?? '') }}">
                             <label>NIK</label><input type="text" name="nik_wali" value="{{ old('nik_wali', $ortu->nik_wali ?? '') }}">
                             <label>Tahun Lahir</label><input type="text" name="tahun_lahir_wali" value="{{ old('tahun_lahir_wali', $ortu->tahun_lahir_wali ?? '') }}">
-                            <label>Pendidikan</label><input type="text" name="pendidikan_wali" value="{{ old('pendidikan_wali', $ortu->pendidikan_wali ?? '') }}">
-                            <label>Pekerjaan</label><input type="text" name="pekerjaan_wali" value="{{ old('pekerjaan_wali', $ortu->pekerjaan_wali ?? '') }}">
-                            <label>Penghasilan</label><input type="text" name="penghasilan_wali" value="{{ old('penghasilan_wali', $ortu->penghasilan_wali ?? '') }}">
+                            <label>Pendidikan</label>
+                                <select name="pendidikan_wali" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Tidak Sekolah', 'SD', 'SMP', 'SMA/SMK Sederajat',
+                                         'D3', 'S1', 'S2', 'S3'
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('pendidikan_wali', $ortu->pendidikan_wali ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            <label>Pekerjaan</label>
+                                <select name="pekerjaan_wali" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Pensiunan', 'PNS / TNI / Polri', 'Karyawan Swasta', 'Wiraswasta', 'Pedagang Kecil', 'Karyawan BUMN', 'Tidak Bekerja', 'Sudah Meninggal', 'Lainnya'
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('pekerjaan_wali', $ortu->pekerjaan_wali ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            <label>Penghasilan</label>
+                                <select name="penghasilan_wali" class="form-select">
+                                    <option value="">Pilih</option>
+                                    @foreach ([
+                                        'Tidak Berpenghasilan',
+                                        'Kurang Dari Rp. 500,000',
+                                        'Rp. 500,000 - Rp. 999,999',
+                                        'Rp. 1,000,000 - Rp. 1,999,999',
+                                        'Rp. 2,000,000 - Rp. 4,999,999',
+                                        'Rp. 5,000,000 - Rp. 20,000,000',
+                                    ] as $option)
+                                        <option value="{{ $option }}" {{ old('penghasilan_wali', $ortu->penghasilan_wali ?? '') == $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             <label>Status Hidup</label>
                                 <select name="status_hidup_wali" class="form-control">
                                     <option value="">-- Pilih Status --</option>
