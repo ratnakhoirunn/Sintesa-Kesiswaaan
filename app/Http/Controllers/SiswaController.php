@@ -88,23 +88,28 @@ class SiswaController extends Controller
             'transportasi', 'nama_jalan', 'rt', 'rw', 'dusun', 'desa', 'kode_pos'
         ]);
 
+        // Ubah nilai kosong pada kolom angka jadi NULL
+        $numericFields = ['berat_badan', 'tinggi_badan', 'anak_ke', 'jumlah_saudara', 'jarak_rumah'];
+        foreach ($numericFields as $field) {
+            if (isset($detailData[$field]) && $detailData[$field] === '') {
+                $detailData[$field] = null;
+            }
+        }
+
         $detailData['nis'] = $siswa->nis; // foreign key pakai nis
         DetailSiswa::create($detailData);
 
         // === 5. Simpan ke Tabel Orang Tua ===
         $orangTuaData = $request->only([
-            // Ayah
             'nama_ayah','nik_ayah','tahun_lahir_ayah','pendidikan_ayah',
             'pekerjaan_ayah','penghasilan_ayah','status_hidup_ayah','no_telp_ayah',
-            // Ibu
             'nama_ibu','nik_ibu','tahun_lahir_ibu','pendidikan_ibu',
             'pekerjaan_ibu','penghasilan_ibu','status_hidup_ibu','no_telp_ibu',
-            // Wali
             'nama_wali','nik_wali','tahun_lahir_wali','pendidikan_wali',
             'pekerjaan_wali','penghasilan_wali','status_hidup_wali','no_telp_wali'
         ]);
 
-        $orangTuaData['nis'] = $siswa->nis; // foreign key pakai nis
+        $orangTuaData['nis'] = $siswa->nis;
         OrangTua::create($orangTuaData);
 
         return redirect()->route('admin.datasiswa.index')
