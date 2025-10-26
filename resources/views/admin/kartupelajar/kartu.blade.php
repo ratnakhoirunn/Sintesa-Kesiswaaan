@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Kartu Pelajar</title>
 
-    <style>
+     <style>
     @page {
         size: 8.6cm 5.4cm;
         margin: 0;
@@ -68,10 +68,11 @@
     }
 
     .aksara-jawa img {
-        width: 110px;
+        width: 100px;
         height: auto;
         display: block;
-        margin: 2px auto;
+        margin: 2px auto 0 auto;
+        margin-top: -3px;
     }
 
     .title {
@@ -137,37 +138,49 @@
         vertical-align: top;
     }
 
-    /* ===== FOOTER ===== */
-    .footer {
-        position: absolute;
-         bottom: 12px;
-        left: 0;
-        width: 100%;
-        text-align: right;
-        font-size: 5.5px;
-        line-height: 1.3;
-    }
+   /* ===== FOOTER ===== */
+.footer {
+    position: absolute;
+    bottom: 12px;
+    right: 10px; /* 🔹 geser footer ke kanan bawah */
+    width: fit-content; /* 🔹 biar lebarnya pas sesuai isi teks */
+    font-size: 5.5px;
+    line-height: 1.3;
+    text-align: left; /* 🔹 isi teks sejajar vertikal rata kiri */
+}
 
-    .footer strong {
-        display: block;
-       margin-top: 25px; 
-    }
-    .footer .nip {
-        font-weight: bold;
-        font-size: 6px;
-    }
+/* Nama Kepala Sekolah */
+.footer strong:first-of-type {
+    display: block;
+    margin-top: 25px; /* jarak antara jabatan dan nama */
+}
 
-    .jurusan {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        background-color: #00a651;
-        color: white;
-        text-align: center;
-        font-size: 8px;
-        font-weight: bold;
-        padding: 2px 0;
-    }
+/* NIP tanpa jarak tambahan */
+.footer strong:last-of-type {
+    display: block;
+    margin-top: 0;
+}
+
+/* Tambahan sedikit jarak dari tepi kanan */
+.footer div,
+.footer strong {
+    margin: 0;
+}
+
+/* ===== BARIS BAWAH: Nama Jurusan ===== */
+.jurusan {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #00a651;
+    color: white;
+    text-align: center;
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 0;
+}
+
+
 
     /* ===== BELAKANG ===== */
     .back-header {
@@ -209,10 +222,21 @@
             visibility: visible !important;
         }
     }
-</style>
 
-
-</head>
+    @media print {
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .card, .back {
+        overflow: visible !important;
+    }
+    img {
+        display: block !important;
+        visibility: visible !important;
+    }
+}
+</style> 
 <body>
 
     {{-- 📄 HALAMAN DEPAN --}}
@@ -269,11 +293,12 @@
         </div>
 
         <div class="footer">
-            Yogyakarta, Agustus 2025<br>
-            Kepala Sekolah<br>
-            <strong>Drs. Agus Waluyo, M.Eng.</strong>
-            <div class="nip">NIP. 196512271994121002</div>
+            <div>Yogyakarta, Agustus 2025<br>
+            Kepala Sekolah</div>
+            <strong>Drs. Agus Waluyo M.Eng.</strong>
+            <strong>NIP.196512271994121002</strong>
         </div>
+
 
         <div class="jurusan">DESAIN KOMUNIKASI VISUAL</div>
     </div>

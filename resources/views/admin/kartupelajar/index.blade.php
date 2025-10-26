@@ -48,13 +48,45 @@
     .form-search { flex-direction:column; align-items:stretch; gap:8px; }
 }
 </style>
+{{-- Pagination tanpa "Showing..." --}}
+<div style="margin-top:20px; display:flex; justify-content:center;">
+    <style>
+        nav[role="navigation"] > div:first-child {
+            display: none !important;
+        }
+        nav[role="navigation"] {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        nav[role="navigation"] svg {
+            width: 16px !important;
+            height: 16px !important;
+            vertical-align: middle;
+        }
+        .pagination a, 
+        .pagination span {
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            color: #4B0082;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .pagination a:hover {
+            background: #4B0082;
+            color: #fff;
+        }
+        .pagination .active span {
+            background: #4B0082;
+            color: white;
+        }
+    </style>
 
 <div class="kartu-wrap">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="margin:0; color:#1e3a67;">Manajemen Kartu Pelajar</h3>
-        
-    </div>
-
     <div class="search-box">
         <div class="search-input">
             <form id="form-search" action="{{ route('admin.kartupelajar.index') }}" method="GET" style="width:100%; display:flex; gap:8px;">

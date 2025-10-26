@@ -16,7 +16,7 @@ class SiswaController extends Controller
         $search  = $request->input('search');
 
         // Query awal
-        $query = \App\Models\Siswa::query();
+        $query = Siswa::query();
 
         // Filter rombel
         if ($rombel) {
@@ -209,4 +209,6 @@ class SiswaController extends Controller
         Siswa::where('nis', $nis)->delete();
         return redirect()->route('admin.datasiswa.index')->with('success', 'Data siswa berhasil dihapus.');
     }
+
+    
 }

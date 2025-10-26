@@ -10,7 +10,10 @@ return new class extends Migration
     {
         Schema::create('konselings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
+            // ubah siswa_id menjadi string dan referensikan ke nis
+            $table->string('siswa_nis');
+            $table->foreign('siswa_nis')->references('nis')->on('siswas')->onDelete('cascade');
+            
             $table->date('tanggal');
             $table->string('rombel');
             $table->string('jurusan');

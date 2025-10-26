@@ -386,14 +386,14 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.dokumensiswa') }}" 
+                    <a href="{{ route('admin.dokumensiswa.index') }}" 
                     class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
                         <i class="fas fa-file-alt"></i> Dokumen Siswa
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('admin.role') }}" 
+                    <a href="{{ route('admin.role.index') }}" 
                     class="{{ request()->is('admin/role*') ? 'active' : '' }}">
                         <i class="fas fa-user-cog"></i> Manajemen Role
                     </a>

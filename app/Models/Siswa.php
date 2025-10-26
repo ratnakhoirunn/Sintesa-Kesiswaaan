@@ -31,4 +31,13 @@ class Siswa extends Model
     {
         return $this->hasOne(OrangTua::class, 'nis', 'nis');
     }
+     public function getNamaPenggunaAttribute()
+    {
+        return $this->nama_lengkap;
+    }
+    public function dokumen()
+{
+    return $this->hasMany(DokumenSiswa::class, 'siswa_nis', 'nis');
+}
+
 }

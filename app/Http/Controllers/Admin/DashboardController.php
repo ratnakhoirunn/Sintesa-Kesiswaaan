@@ -98,4 +98,12 @@ class DashboardController extends Controller
     {
         return view('admin.konseling.index');
     }
+
+    /** ===============================
+     *  MANAJEMEN MANAJEMEN ROLE
+     *  =============================== */
+    public function role()
+    {
+        return view('admin.role.index'); 
+    }
 }

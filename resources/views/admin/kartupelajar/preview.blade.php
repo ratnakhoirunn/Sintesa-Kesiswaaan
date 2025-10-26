@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Kartu Pelajar')
-@section('page_title', 'Kartu Pelajar')
+@section('page_title', 'Preview Kartu Pelajar')
 
 @section('content')
 <style>
@@ -11,7 +11,6 @@
     .preview-container * {
         font-family: 'Poppins', sans-serif !important;
     }
-
 
     /* Container preview tengah */
     .preview-container {

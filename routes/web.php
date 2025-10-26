@@ -9,7 +9,8 @@ use App\Http\Controllers\Admin\KartuPelajarController;
 use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\Admin\KonselingController;
 use App\Http\Controllers\Admin\KeterlambatanController;
-
+use App\Http\Controllers\Admin\DokumenSiswaController;
+use App\Http\Controllers\Admin\RoleController;
 /*
 |--------------------------------------------------------------------------
 | 🏠 ROUTE UTAMA
@@ -82,9 +83,27 @@ Route::prefix('kartupelajar')->name('kartupelajar.')->group(function () {
     Route::post('keterlambatan/store', [KeterlambatanController::class, 'store'])->name('keterlambatan.store');
     Route::get('keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSurat'])->name('keterlambatan.cetak');
 
-    // 📄 Dokumen & Role
-    Route::get('dokumensiswa', [DashboardController::class, 'dokumenSiswa'])->name('dokumensiswa');
-    Route::get('role', [DashboardController::class, 'role'])->name('role');
+    // 📄 Role
+    Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+    Route::get('/role/create', [RoleController::class, 'create'])->name('role.create');
+    Route::post('/role', [RoleController::class, 'store'])->name('role.store');
+    Route::get('/role/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
+    Route::put('/role/{id}', [RoleController::class, 'update'])->name('role.update');
+    Route::delete('/role/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
+}); 
+
+    // Dokumen Siswa
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Dokumen Siswa CRUD
+    Route::resource('dokumensiswa', DokumenSiswaController::class)->names([
+        'index' => 'dokumensiswa.index',
+        'create' => 'dokumensiswa.create',
+        'store' => 'dokumensiswa.store',
+        'show' => 'dokumensiswa.show',
+        'edit' => 'dokumensiswa.edit',
+        'update' => 'dokumensiswa.update',
+        'destroy' => 'dokumensiswa.destroy',
+    ]);
 });
 
 /*
