@@ -78,10 +78,10 @@ Route::prefix('kartupelajar')->name('kartupelajar.')->group(function () {
     Route::delete('konseling/{id}', [KonselingController::class, 'destroy'])->name('konseling.destroy');
 
     // ⏰ Keterlambatan
-    Route::get('keterlambatan', [KeterlambatanController::class, 'index'])->name('keterlambatan.index');
-    Route::get('keterlambatan/create', [KeterlambatanController::class, 'create'])->name('keterlambatan.create');
-    Route::post('keterlambatan/store', [KeterlambatanController::class, 'store'])->name('keterlambatan.store');
-    Route::get('keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSurat'])->name('keterlambatan.cetak');
+     Route::get('/keterlambatan', [KeterlambatanController::class, 'index'])->name('keterlambatan.index');
+    Route::get('/keterlambatan/create', [KeterlambatanController::class, 'create'])->name('keterlambatan.create');
+    Route::post('/keterlambatan/store', [KeterlambatanController::class, 'store'])->name('keterlambatan.store');
+    Route::get('/keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSurat'])->name('keterlambatan.cetak');
 
     // 📄 Role
     Route::get('/role', [RoleController::class, 'index'])->name('role.index');
@@ -113,9 +113,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 */
 Route::prefix('siswa')->name('siswa.')->middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'dashboard'])->name('dashboard');
-    Route::get('/data', [DashboardSiswaController::class, 'dataSiswa'])->name('data');
+    Route::get('/datasiswa', [DashboardSiswaController::class, 'dataSiswa'])->name('datasiswa');
     Route::get('/orangtua', [DashboardSiswaController::class, 'dataOrangtua'])->name('orangtua');
     Route::get('/kartu', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartu');
     Route::get('/konseling', [DashboardSiswaController::class, 'konseling'])->name('konseling');
-    Route::get('/administrasi', [DashboardSiswaController::class, 'administrasi'])->name('administrasi');
+    Route::get('/dokumensiswa', [DashboardSiswaController::class, 'dokumenSiswa'])->name('dokumensiswa');
 });

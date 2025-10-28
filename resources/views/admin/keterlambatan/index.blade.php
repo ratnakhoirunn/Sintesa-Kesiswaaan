@@ -1,67 +1,205 @@
 @extends('layouts.admin')
 
 @section('title', 'Keterlambatan')
-@section('page_title', 'Manajemen Keterlambatan Siswa')
+@section('page_title', 'Keterlambatan')
 
 @section('content')
+<style>
+    /* === HEADER === */
+    .header-keterlambatan {
+        background-color: #123B6B;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 25px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .header-keterlambatan h4 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .tanggal-jam {
+        font-size: 14px;
+        text-align: right;
+    }
+
+    /* === FILTER + TOMBOL TAMBAH === */
+    .filter-wrapper {
+        background: #f8f9fa;
+        padding: 15px 25px;
+        border: 1px solid #ddd;
+        border-top: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .filter-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filter-form input[type="date"] {
+        border: 1px solid #ccc;
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    .filter-form button {
+        background-color: #123B6B;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .filter-form button:hover {
+        background-color: #0f2e52;
+    }
+
+    /* Tombol Tambah di kanan */
+    .btn-tambah {
+        border: 2px solid #123B6B;
+        color: #123B6B;
+        background-color: #fff;
+        padding: 8px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .btn-tambah:hover {
+        background-color: #123B6B;
+        color: #fff;
+    }
+
+    /* === TABLE === */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    thead {
+        background-color: #2c3e50;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 6px 10px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    th {
+        color: #ffff;
+        font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .btn-cetak {
+        background: none;
+        border: none;
+        color: #123B6B;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-cetak i {
+        color: #123B6B;
+    }
+
+    .text-muted {
+        font-style: italic;
+        color: #999;
+    }
+</style>
+
 <div class="card shadow-sm">
-    
 
-    <div class="filter-container" style="margin-bottom:20px;">
-    <div style="display:flex; gap:15px; margin-bottom: 20px; align-items: center;">
-        <a href="{{ route('admin.keterlambatan.create') }}" 
-           style="background:#1abc9c; color:white; border:none; padding:10px 15px; border-radius:8px; text-decoration:none;">
-            <i class="fas fa-plus"></i> Tambah Data 
-        </a>
+    {{-- Header --}}
+    <div class="header-keterlambatan">
+        <h4>Manajemen Keterlambatan Siswa</h4>
+        <div class="tanggal-jam" id="tanggal-jam">
+            {{-- Tanggal & jam oleh JavaScript --}}
+        </div>
     </div>
-</div>
 
-    <div class="card-body">
-        <!-- Filter tanggal -->
-        <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="mb-4 d-flex align-items-center">
-            <input type="date" name="tanggal" class="form-control me-2" value="{{ $tanggal ?? '' }}" style="max-width: 250px;">
-            <button class="btn btn-primary">
-                <i class="bi bi-search"></i> Tampilkan
-            </button>
+    {{-- Filter Tanggal + Tombol Tambah Data di kanan --}}
+    <div class="filter-wrapper">
+        <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="filter-form">
+            <i class="bi bi-calendar-date" style="font-size: 20px; color:#123B6B;"></i>
+            <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}">
+            <button type="submit">Tampilkan</button>
         </form>
 
-        @php
-            $keterlambatans = $keterlambatans ?? collect();
-        @endphp
+        <a href="{{ route('admin.keterlambatan.create') }}" class="btn-tambah">
+            + Tambah Data Keterlambatan
+        </a>
+    </div>
 
-        <!-- Tabel Data -->
-        <table class="table table-bordered table-striped align-middle">
-            <thead class="table-primary text-center">
+    {{-- Tabel Data --}}
+    <div class="p-3">
+        <p style="font-weight: 600; margin-top:10px;">Daftar pengajuan Surat Izin Terlambat (SIT) siswa</p>
+
+        <table>
+            <thead>
                 <tr>
-                    <th style="width:5%">No.</th>
-                    <th style="width:20%">Nama</th>
-                    <th style="width:15%">NIS</th>
-                    <th style="width:25%">Kedatangan (terlambat)</th>
-                    <th style="width:20%">Keterangan</th>
-                    <th style="width:15%">Aksi</th>
+                    <th style="width:5%;">No.</th>
+                    <th style="width:25%;">Nama</th>
+                    <th style="width:15%;">NIS</th>
+                    <th style="width:25%;">Kedatangan (terlambat)</th>
+                    <th style="width:20%;">Keterangan</th>
+                    <th style="width:10%;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($keterlambatans as $index => $item)
                     <tr>
-                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td>{{ $index + 1 }}</td>
                         <td>{{ $item->siswa->nama_lengkap ?? '-' }}</td>
-                        <td class="text-center">{{ $item->siswa->nis ?? '-' }}</td>
-                        <td class="text-center">{{ $item->jam_datang }} ({{ $item->menit_terlambat }} menit)</td>
+                        <td>{{ $item->siswa->nis ?? '-' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->jam_datang)->format('H.i') }} ({{ $item->menit_terlambat }} menit)</td>
                         <td>{{ $item->keterangan ?? '-' }}</td>
-                        <td class="text-center">
-                            <a href="{{ route('admin.keterlambatan.cetak', $item->id) }}" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-printer"></i> Cetak SIT
+                        <td>
+                            <a href="{{ route('admin.keterlambatan.cetak', $item->id) }}" class="btn-cetak">
+                                Cetak SIT <i class="bi bi-printer"></i>
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">Tidak ada data keterlambatan</td>
+                        <td colspan="6" class="text-muted">Tidak ada data keterlambatan</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    function updateDateTime() {
+        const now = new Date();
+        const hari = now.toLocaleDateString('id-ID', { weekday: 'long' });
+        const tanggal = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        const jam = now.toLocaleTimeString('id-ID', { hour12: false });
+        document.getElementById('tanggal-jam').innerHTML = `${hari}, ${tanggal}<br>${jam}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+</script>
 @endsection

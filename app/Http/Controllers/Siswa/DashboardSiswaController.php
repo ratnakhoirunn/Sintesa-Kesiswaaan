@@ -7,39 +7,33 @@ use Illuminate\Http\Request;
 
 class DashboardSiswaController extends Controller
 {
-    // Dashboard siswa
     public function dashboard()
     {
         return view('siswa.dashboard');
     }
 
-    // Data siswa
     public function dataSiswa()
     {
-        return view('siswa.data');
+        return view('siswa.datasiswa.index');
     }
 
-    // Data orang tua
     public function dataOrangtua()
     {
-        return view('siswa.orangtua');
+        return view('siswa.dataortu.index');
     }
 
-    // Kartu pelajar
     public function kartuPelajar()
     {
-        return view('siswa.kartu');
+        return view('siswa.kartupelajar.index');
     }
 
-    // Bimbingan konseling
     public function konseling()
     {
-        return view('siswa.konseling');
+        return view('siswa.konseling.index');
     }
 
-    // Administrasi siswa
-    public function administrasi()
+    public function dokumenSiswa()
     {
-        return view('siswa.administrasi');
+        return view('siswa.dokumensiswa.index');
     }
 }

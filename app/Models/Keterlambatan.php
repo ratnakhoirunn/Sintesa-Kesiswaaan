@@ -8,17 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Keterlambatan extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'siswa_id',
+        'nis',
+        'nama_siswa',
         'tanggal',
         'jam_datang',
         'menit_terlambat',
         'keterangan',
     ];
 
-    // relasi ke model Siswa
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
+        return $this->belongsTo(Siswa::class, 'nis', 'nis');
     }
 }
