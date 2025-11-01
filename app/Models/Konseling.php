@@ -10,10 +10,16 @@ class Konseling extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_siswa',
-        'kelas',
-        'jenis_konseling',
-        'deskripsi',
-        'tanggal',
-    ];
+    'siswa_nis',
+    'tanggal',
+    'rombel',
+    'status',
+    'catatan',
+];
+
+// relasi ke siswa
+public function siswa()
+{
+    return $this->belongsTo(Siswa::class, 'siswa_nis', 'nis');
+}
 }

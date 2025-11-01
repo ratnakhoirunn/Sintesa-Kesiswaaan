@@ -3,240 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <title>Kartu Pelajar</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
 
-     <style>
-    @page {
-        size: 8.6cm 5.4cm;
-        margin: 0;
-    }
-
-    html, body {
-        width: 8.6cm;
-        height: 5.4cm;
-        margin: 0;
-        padding: 0;
-        background: white;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    body {
-        font-family: 'ariel', sans-serif;
-    }
-
-    .card, .back {
-        width: 8.6cm;
-        height: 5.4cm;
-        border: 1px solid #000;
-        background: white;
-        position: relative;
-        overflow: hidden;
-        page-break-after: always;
-    }
-
-    /* ===== HEADER ===== */
-    .header {
-        background-color: #3aa0d8;
-        color: white;
-        text-align: center;
-        padding: 2px 5px;
-        font-size: 4px;
-        line-height: 1.2;
-        position: relative;
-    }
-
-    .header strong {
-        font-size: 6px;
-    }
-
-    .logo-left,
-    .logo-right {
-        position: absolute;
-        top: 4px;
-        width: 36px;
-        height: 36px;
-    }
-
-    .logo-left { left: 10px; }
-    .logo-right { right: 10px; }
-
-    .header img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        display: block;
-    }
-
-    .aksara-jawa img {
-        width: 100px;
-        height: auto;
-        display: block;
-        margin: 2px auto 0 auto;
-        margin-top: -3px;
-    }
-
-    .title {
-        background-color: #5ec2f3;
-        color: white;
-        text-align: center;
-        font-weight: bold;
-        font-size: 7px;
-        padding: 1px 0;
-    }
-
-    /* ===== ISI ===== */
-    .content {
-        display: flex;
-        padding: 3px 6px;
-        font-size: 7px;
-        align-items: flex-start;
-    }
-
-    .foto {
-        width: 1.9cm;
-        height: 2.5cm;
-        border: 1px solid #000;
-        text-align: center;
-        margin-right: 6px;
-        overflow: hidden;
-    }
-
-    .foto img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .barcode {
-        width: 1.9cm;
-        height: 0.6cm;
-        margin-top: 2px;
-        text-align: center;
-    }
-
-    .barcode img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        display: block;
-    }
-
-    .data {
-        flex: 1;
-        line-height: 1.1;
-        font-weight: bold;
-    }
-
-    .data table {
-        width: 100%;
-        font-size: 6.3px;
-    }
-
-    .data td {
-        padding: 0;
-        vertical-align: top;
-    }
-
-   /* ===== FOOTER ===== */
-.footer {
-    position: absolute;
-    bottom: 12px;
-    right: 10px; /* 🔹 geser footer ke kanan bawah */
-    width: fit-content; /* 🔹 biar lebarnya pas sesuai isi teks */
-    font-size: 5.5px;
-    line-height: 1.3;
-    text-align: left; /* 🔹 isi teks sejajar vertikal rata kiri */
-}
-
-/* Nama Kepala Sekolah */
-.footer strong:first-of-type {
-    display: block;
-    margin-top: 25px; /* jarak antara jabatan dan nama */
-}
-
-/* NIP tanpa jarak tambahan */
-.footer strong:last-of-type {
-    display: block;
-    margin-top: 0;
-}
-
-/* Tambahan sedikit jarak dari tepi kanan */
-.footer div,
-.footer strong {
-    margin: 0;
-}
-
-/* ===== BARIS BAWAH: Nama Jurusan ===== */
-.jurusan {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #00a651;
-    color: white;
-    text-align: center;
-    font-size: 8px;
-    font-weight: bold;
-    padding: 2px 0;
-}
-
-
-
-    /* ===== BELAKANG ===== */
-    .back-header {
-        background-color: #3aa0d8;
-        color: white;
-        text-align: center;
-        font-weight: bold;
-        font-size: 8px;
-        padding: 2px 0;
-    }
-
-    .rules {
-        padding: 6px 12px;
-        font-size: 8px;
-        line-height: 1.3;
-        text-align: justify;
-        margin-left: 4px;
-    }
-
-    .blue-line {
-        width: 100%;
-        height: 20px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        background-color: #2196F3;
-    }
-
-    @media print {
         body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10mm;
+            flex-wrap: wrap;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-        .card, .back {
-            overflow: visible !important;
-        }
-        img {
-            display: block !important;
-            visibility: visible !important;
-        }
-    }
 
-    @media print {
-    body {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-    .card, .back {
-        overflow: visible !important;
-    }
-    img {
-        display: block !important;
-        visibility: visible !important;
-    }
-}
-</style> 
+        .card, .back {
+            width: 8.6cm;
+            height: 5.4cm;
+            border: 1px solid #000;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background-color: #3aa0d8;
+            color: white;
+            text-align: center;
+            padding: 2px 5px;
+            font-size: 4px;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .header strong { font-size: 6px; }
+
+        .logo-left,
+        .logo-right {
+            position: absolute;
+            top: 4px;
+            width: 36px;
+            height: 36px;
+        }
+
+        .logo-left { left: 10px; }
+        .logo-right { right: 10px; }
+
+        .header img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .aksara-jawa img {
+            width: 100px;
+            height: auto;
+            display: block;
+            margin: 2px auto 0 auto;
+            margin-top: -3px;
+        }
+
+        .title {
+            background-color: #5ec2f3;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-size: 7px;
+            padding: 1px 0;
+        }
+
+        /* ===== ISI ===== */
+        .content {
+            display: flex;
+            padding: 3px 6px;
+            font-size: 7px;
+            align-items: flex-start;
+        }
+
+        .foto {
+            width: 1.9cm;
+            height: 2.5cm;
+            border: 1px solid #000;
+            text-align: center;
+            margin-right: 6px;
+            overflow: hidden;
+        }
+
+        .foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .barcode {
+            width: 1.9cm;
+            height: 0.6cm;
+            margin-top: 2px;
+            text-align: center;
+        }
+
+        .barcode img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .data {
+            flex: 1;
+            line-height: 1.1;
+            font-weight: bold;
+        }
+
+        .data table {
+            width: 100%;
+            font-size: 6.3px;
+        }
+
+        .data td {
+            padding: 0;
+            vertical-align: top;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            position: absolute;
+            bottom: 17px;
+            right: 10px;
+            font-size: 5.5px;
+            line-height: 1.3;
+            text-align: left;
+        }
+
+        .footer strong:first-of-type {
+            display: block;
+            margin-top: 32px;
+        }
+
+        .footer strong:last-of-type {
+            display: block;
+            margin-top: 0;
+        }
+
+        .jurusan {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #00a651;
+            color: white;
+            text-align: center;
+            font-size: 8px;
+            font-weight: bold;
+            padding: 2px 0;
+        }
+
+        /* ===== BELAKANG ===== */
+        .back-header {
+            background-color: #3aa0d8;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            font-size: 8px;
+            padding: 2px 0;
+        }
+
+        .rules {
+            padding: 6px 12px;
+            font-size: 8px;
+            line-height: 1.3;
+            text-align: justify;
+            margin-left: 4px;
+        }
+
+        .blue-line {
+            width: 100%;
+            height: 20px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: #2196F3;
+        }
+
+        @media print {
+            body {
+                justify-content: center;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
 <body>
 
     {{-- 📄 HALAMAN DEPAN --}}
@@ -248,7 +210,6 @@
             <div class="logo-right">
                 <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
             </div>
-
             PEMERINTAH DAERAH DAERAH ISTIMEWA YOGYAKARTA<br>
             DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA<br>
             BALAI PENDIDIKAN MENENGAH KOTA YOGYAKARTA<br>
@@ -299,8 +260,8 @@
             <strong>NIP.196512271994121002</strong>
         </div>
 
+        <div class="jurusan">{{ strtoupper($siswa->jurusan) }}</div>
 
-        <div class="jurusan">DESAIN KOMUNIKASI VISUAL</div>
     </div>
 
     {{-- 📘 HALAMAN BELAKANG --}}

@@ -23,6 +23,7 @@ class DashboardController extends Controller
         $totalAdmin = User::where('role', 'admin')->count();
         $totalKonseling = Konseling::count();
 
+
         // === Data untuk Chart: Jumlah siswa per jurusan ===
         // Ubah 'jurusan' jika nama kolom di tabel siswa kamu berbeda
         $chartData = Siswa::select('jurusan', DB::raw('COUNT(*) as total'))
@@ -35,9 +36,10 @@ class DashboardController extends Controller
             'totalSiswa',
             'totalAdmin',
             'totalKonseling',
-            'chartData'
+            'chartData',
         ));
     }
+
 
     public function siswaDashboard()
     {

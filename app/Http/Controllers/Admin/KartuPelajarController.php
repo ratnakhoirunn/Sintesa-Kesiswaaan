@@ -8,30 +8,43 @@ use App\Models\Siswa;
 use Milon\Barcode\Facades\DNS1D;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
 class KartuPelajarController extends Controller
 {
     // 🧭 Daftar siswa
-    public function index(Request $request)
-    {
-        $q = $request->query('q');
-        $query = Siswa::query();
+   public function index(Request $request)
+{
+    $q = $request->query('q');
+    $rombel = $request->query('rombel'); // ✅ ambil rombel dari request
 
-        if ($q) {
-            $query->where(function ($w) use ($q) {
-                $w->where('nama_lengkap', 'like', "%{$q}%")
-                    ->orWhere('nis', 'like', "%{$q}%")
-                    ->orWhere('nisn', 'like', "%{$q}%")
-                    ->orWhere('rombel', 'like', "%{$q}%")
-                    ->orWhere('jurusan', 'like', "%{$q}%");
-            });
-        }
+    $query = Siswa::query();
 
-        $siswas = $query->orderBy('nama_lengkap')
-                        ->paginate(10)
-                        ->withQueryString();
-
-        return view('admin.kartupelajar.index', compact('siswas', 'q'));
+    // ✅ Filter pencarian
+    if ($q) {
+        $query->where(function ($w) use ($q) {
+            $w->where('nama_lengkap', 'like', "%{$q}%")
+                ->orWhere('nis', 'like', "%{$q}%")
+                ->orWhere('nisn', 'like', "%{$q}%")
+                ->orWhere('rombel', 'like', "%{$q}%")
+                ->orWhere('jurusan', 'like', "%{$q}%");
+        });
     }
+
+    // ✅ Filter rombel (kelas)
+    if ($rombel) {
+        $query->where('rombel', $rombel);
+    }
+
+    $siswas = $query->orderBy('nama_lengkap')
+                    ->paginate(30)
+                    ->withQueryString();
+
+    // ✅ Untuk dropdown rombel di view
+    $rombels = Siswa::select('rombel')->distinct()->orderBy('rombel')->get();
+
+    return view('admin.kartupelajar.index', compact('siswas', 'q', 'rombel', 'rombels'));
+}
+
 
     // 🔍 Pencarian cepat (ajax)
     public function search(Request $request)
@@ -57,17 +70,12 @@ class KartuPelajarController extends Controller
 
     // 🧾 CETAK MASSAL (HTML)
     public function printMass(Request $request)
-    {
-        $ids = $request->input('ids');
-
-        if ($ids && is_array($ids)) {
-            $siswas = Siswa::whereIn('id', $ids)->get();
-        } else {
-            $siswas = Siswa::orderBy('nama_lengkap')->limit(200)->get();
-        }
-
-        return view('admin.kartupelajar.kartu_massal', compact('siswas'));
-    }
+{
+    $nisList = explode(',', $request->nis_list);
+    $siswas = Siswa::whereIn('nis', $nisList)->get();
+    
+    return view('admin.kartupelajar.preview', compact('siswas'));
+}
 
     public function downloadPDF($nis)
 {
