@@ -12,14 +12,14 @@ return new class extends Migration
             $table->id();
 
             // karena siswa pakai NIS sebagai primary key:
-            $table->string('siswa_nis'); // foreign key ke kolom 'nis' di tabel siswas
+            $table->string('nis'); // foreign key ke kolom 'nis' di tabel siswas
 
             $table->string('jenis_dokumen');
             $table->string('file_path')->nullable();
             $table->timestamps();
 
-            // relasi ke tabel siswas.nis
-            $table->foreign('siswa_nis')
+            // relasi ke tabel nis
+            $table->foreign('nis')
                   ->references('nis')
                   ->on('siswas')
                   ->onDelete('cascade');

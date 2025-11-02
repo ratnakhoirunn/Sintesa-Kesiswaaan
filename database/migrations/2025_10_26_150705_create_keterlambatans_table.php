@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('keterlambatans', function (Blueprint $table) {
             $table->id();
             $table->string('nis'); // gunakan NIS, bukan siswa_id
+            $table->string('nama_siswa');
             $table->date('tanggal');
             $table->time('jam_datang');
             $table->integer('menit_terlambat');

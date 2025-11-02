@@ -35,9 +35,9 @@ class Siswa extends Model
     {
         return $this->nama_lengkap;
     }
-    public function dokumen()
+    public function dokumenSiswa()
 {
-    return $this->hasMany(DokumenSiswa::class, 'siswa_nis', 'nis');
+    return $this->hasMany(DokumenSiswa::class, 'nis', 'nis');
 }
 
 }

@@ -10,13 +10,13 @@ class DokumenSiswa extends Model
     use HasFactory;
 
     protected $fillable = [
-        'siswa_nis',
+        'nis',
         'jenis_dokumen',
         'file_path',
     ];
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_nis', 'nis');
+        return $this->belongsTo(Siswa::class, 'nis', 'nis');
     }
 }

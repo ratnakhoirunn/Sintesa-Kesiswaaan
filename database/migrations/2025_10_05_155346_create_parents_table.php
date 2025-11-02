@@ -8,11 +8,15 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('orang_tuas', function (Blueprint $table) {
             $table->id();
-            $table->string('nis'); // foreign key baru
-            $table->foreignId('siswa_id')
-                  ->constrained('siswas') 
+
+            // 🔹 Relasi ke tabel siswas menggunakan NIS
+            $table->string('nis');
+            $table->foreign('nis')
+                  ->references('nis')
+                  ->on('siswas')
                   ->onDelete('cascade');
-            // Data Ayah
+
+            // 🔹 Data Ayah
             $table->string('nama_ayah')->nullable();
             $table->string('nik_ayah')->nullable();
             $table->string('tahun_lahir_ayah')->nullable();
@@ -22,7 +26,7 @@ return new class extends Migration {
             $table->string('status_hidup_ayah')->nullable();
             $table->string('no_telp_ayah')->nullable();
 
-            // Data Ibu
+            // 🔹 Data Ibu
             $table->string('nama_ibu')->nullable();
             $table->string('nik_ibu')->nullable();
             $table->string('tahun_lahir_ibu')->nullable();
@@ -32,7 +36,7 @@ return new class extends Migration {
             $table->string('status_hidup_ibu')->nullable();
             $table->string('no_telp_ibu')->nullable();
 
-            // Data Wali
+            // 🔹 Data Wali
             $table->string('nama_wali')->nullable();
             $table->string('nik_wali')->nullable();
             $table->string('tahun_lahir_wali')->nullable();
@@ -42,17 +46,15 @@ return new class extends Migration {
             $table->string('status_hidup_wali')->nullable();
             $table->string('no_telp_wali')->nullable();
 
-            $table->foreign('nis')->references('nis')->on('siswas')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     public function down(): void {
-        // Hapus foreign key sebelum menghapus tabel untuk menghindari potensi error
-        Schema::table('orang_tua', function (Blueprint $table) {
-            $table->dropForeign(['siswa_id']);
+        Schema::table('orang_tuas', function (Blueprint $table) {
+            $table->dropForeign(['nis']);
         });
-        
-        Schema::dropIfExists('orang_tua');
+
+        Schema::dropIfExists('orang_tuas');
     }
 };

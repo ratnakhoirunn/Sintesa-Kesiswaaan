@@ -36,11 +36,11 @@ class SiswaController extends Controller
             });
         }
 
-        // Ambil data dan pagination
-        $siswas = $query->orderBy('rombel')->paginate(10);
-
         // Hitung jumlah siswa hasil filter
         $jumlah = $query->count();
+
+        // Ambil data dan pagination
+        $siswas = $query->orderBy('rombel')->paginate(10);
 
         return view('admin.datasiswa.index', compact('siswas', 'rombel', 'jurusan', 'jumlah'));
     }

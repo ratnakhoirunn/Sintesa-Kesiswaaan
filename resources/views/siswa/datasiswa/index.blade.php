@@ -7,6 +7,6 @@
 <div style="background:#fff; padding:20px; border-radius:10px;">
     <h4>Informasi Pribadi</h4>
     <hr>
-    <p>stop, aku muak!</p>
+    <p>ini gimana lagi cokk</p>
 </div>
 @endsection
