@@ -80,14 +80,21 @@
         border-collapse: collapse;
         margin-top: 10px;
     }
+
+    
     th, td {
         padding: 10px;
         text-align: left;
     }
     thead {
-        background: #f5f5f5;
+        background: #2c3e50;
         border-bottom: 2px solid #eee;
     }
+
+    thead th {
+    color: #fff; /* ✅ hanya header putih */
+    font-weight: 600;
+}
     tbody tr:nth-child(even) {
         background: #fafafa;
     }

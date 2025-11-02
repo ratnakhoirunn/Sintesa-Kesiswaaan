@@ -51,70 +51,73 @@ class SiswaController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // === 1. Validasi Data Siswa ===
-        $validatedSiswa = $request->validate([
-            'nis' => 'required|unique:siswas,nis',
-            'nisn' => 'nullable|string|max:20',
-            'nama_lengkap' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'no_whatsapp' => 'nullable|string|max:20',
-            'jenis_kelamin' => 'required|string',
-            'rombel' => 'nullable|string',
-            'jurusan' => 'nullable|string',
-            'tempat_lahir' => 'nullable|string',
-            'tanggal_lahir' => 'nullable|date',
-            'agama' => 'nullable|string',
-            'nama_ortu' => 'nullable|string',
-            'alamat' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+{
+    // === 1. Validasi Data Siswa ===
+    $validatedSiswa = $request->validate([
+        'nis' => 'required|unique:siswas,nis',
+        'nisn' => 'nullable|string|max:20',
+        'nama_lengkap' => 'required|string|max:255',
+        'email' => 'nullable|email|max:255',
+        'no_whatsapp' => 'nullable|string|max:20',
+        'jenis_kelamin' => 'required|string',
+        'rombel' => 'nullable|string',
+        'jurusan' => 'nullable|string',
+        'tempat_lahir' => 'nullable|string',
+        'tanggal_lahir' => 'nullable|date',
+        'agama' => 'nullable|string',
+        'nama_ortu' => 'nullable|string',
+        'alamat' => 'nullable|string',
+        'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        // === 2. Upload Foto (Jika Ada) ===
-        if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $fileName = time().'_'.$file->getClientOriginalName();
-            $file->move(public_path('uploads/foto_siswa'), $fileName);
-            $validatedSiswa['foto'] = $fileName;
-        }
-
-        // === 3. Simpan ke Tabel Siswa ===
-        $siswa = Siswa::create($validatedSiswa);
-
-        // === 4. Simpan ke Tabel Detail Siswa ===
-        $detailData = $request->only([
-            'hobi', 'cita_cita', 'berat_badan', 'tinggi_badan', 'anak_ke',
-            'jumlah_saudara', 'tinggal_dengan', 'jarak_rumah', 'waktu_tempuh',
-            'transportasi', 'nama_jalan', 'rt', 'rw', 'dusun', 'desa', 'kode_pos'
-        ]);
-
-        // Ubah nilai kosong pada kolom angka jadi NULL
-        $numericFields = ['berat_badan', 'tinggi_badan', 'anak_ke', 'jumlah_saudara', 'jarak_rumah'];
-        foreach ($numericFields as $field) {
-            if (isset($detailData[$field]) && $detailData[$field] === '') {
-                $detailData[$field] = null;
-            }
-        }
-
-        $detailData['nis'] = $siswa->nis; // foreign key pakai nis
-        DetailSiswa::create($detailData);
-
-        // === 5. Simpan ke Tabel Orang Tua ===
-        $orangTuaData = $request->only([
-            'nama_ayah','nik_ayah','tahun_lahir_ayah','pendidikan_ayah',
-            'pekerjaan_ayah','penghasilan_ayah','status_hidup_ayah','no_telp_ayah',
-            'nama_ibu','nik_ibu','tahun_lahir_ibu','pendidikan_ibu',
-            'pekerjaan_ibu','penghasilan_ibu','status_hidup_ibu','no_telp_ibu',
-            'nama_wali','nik_wali','tahun_lahir_wali','pendidikan_wali',
-            'pekerjaan_wali','penghasilan_wali','status_hidup_wali','no_telp_wali'
-        ]);
-
-        $orangTuaData['nis'] = $siswa->nis;
-        OrangTua::create($orangTuaData);
-
-        return redirect()->route('admin.datasiswa.index')
-            ->with('success', 'Data siswa dan biodata lengkap berhasil disimpan.');
+    // === 2. Upload Foto (Jika Ada) ===
+    if ($request->hasFile('foto')) {
+        $file = $request->file('foto');
+        $fileName = time().'_'.$file->getClientOriginalName();
+        $file->move(public_path('uploads/foto_siswa'), $fileName);
+        $validatedSiswa['foto'] = $fileName;
     }
+
+    // ✅ Tambahkan password default = NIS (bcrypt)
+    $validatedSiswa['password'] = bcrypt($request->nis);
+
+    // === 3. Simpan ke Tabel Siswa ===
+    $siswa = Siswa::create($validatedSiswa);
+
+    // === 4. Simpan ke Tabel Detail Siswa ===
+    $detailData = $request->only([
+        'hobi', 'cita_cita', 'berat_badan', 'tinggi_badan', 'anak_ke',
+        'jumlah_saudara', 'tinggal_dengan', 'jarak_rumah', 'waktu_tempuh',
+        'transportasi', 'nama_jalan', 'rt', 'rw', 'dusun', 'desa', 'kode_pos'
+    ]);
+
+    $numericFields = ['berat_badan', 'tinggi_badan', 'anak_ke', 'jumlah_saudara', 'jarak_rumah'];
+    foreach ($numericFields as $field) {
+        if (isset($detailData[$field]) && $detailData[$field] === '') {
+            $detailData[$field] = null;
+        }
+    }
+
+    $detailData['nis'] = $siswa->nis;
+    DetailSiswa::create($detailData);
+
+    // === 5. Simpan ke Tabel Orang Tua ===
+    $orangTuaData = $request->only([
+        'nama_ayah','nik_ayah','tahun_lahir_ayah','pendidikan_ayah',
+        'pekerjaan_ayah','penghasilan_ayah','status_hidup_ayah','no_telp_ayah',
+        'nama_ibu','nik_ibu','tahun_lahir_ibu','pendidikan_ibu',
+        'pekerjaan_ibu','penghasilan_ibu','status_hidup_ibu','no_telp_ibu',
+        'nama_wali','nik_wali','tahun_lahir_wali','pendidikan_wali',
+        'pekerjaan_wali','penghasilan_wali','status_hidup_wali','no_telp_wali'
+    ]);
+
+    $orangTuaData['nis'] = $siswa->nis;
+    OrangTua::create($orangTuaData);
+
+    return redirect()->route('admin.datasiswa.index')
+        ->with('success', 'Data siswa dan biodata lengkap berhasil disimpan. Password awal = NIS.');
+}
+
 
     public function show($nis)
     {
@@ -214,6 +217,8 @@ class SiswaController extends Controller
         Siswa::where('nis', $nis)->delete();
         return redirect()->route('admin.datasiswa.index')->with('success', 'Data siswa berhasil dihapus.');
     }
+
+ 
 
     
 }

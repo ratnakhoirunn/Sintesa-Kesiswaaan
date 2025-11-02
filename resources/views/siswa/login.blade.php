@@ -147,7 +147,8 @@
                 <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK N 2" style="width: 120px; height: auto; display: inline-block;">
             </div>
 
-            <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem; font-weight: 500;">Login Admin Untuk Melanjutkan</p>
+            <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem; font-weight: 500;">Login Siswa Untuk Melanjutkan</p>
+
 
             {{-- Status Sesi (Bisa dihapus jika tidak digunakan) --}}
             @if (session('status'))
@@ -156,7 +157,8 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}">
+           <form method="POST" action="{{ route('siswa.login') }}">
+
                 @csrf
 
                {{-- Input Admin (NIP/NIS) --}}
@@ -164,9 +166,8 @@
                         <label for="username" style="display: block; margin-bottom: 0.3rem; font-weight: 500;">Admin</label>
                         <div class="input-wrapper">
                             <span class="input-icon">👤</span> 
-                            <input id="username" class="input-field-custom" type="text" name="username" 
-                                    value="{{ old('username') }}" required autofocus autocomplete="username" 
-                                    placeholder="Masukkan username">
+                            <input id="nis" class="input-field-custom" type="text" name="nis" value="{{ old('nis') }}" required autofocus autocomplete="nis" placeholder="Masukkan NIS">
+
                         </div>
                         @error('username')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -192,11 +193,9 @@
                         Log In
                     </button>
                 </div>
-
                 <div style="text-align:center;margin-top:10px;">
-    <a href="/siswa/login" style="color:#1e3a67;font-weight:500;">Login sebagai Siswa</a>
-</div>
-
+                    <a href="/login" style="color:#1e3a67;font-weight:500;">Login sebagai Admin</a>
+                </div>
             </form>
         </div>
     </div>
