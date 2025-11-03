@@ -61,7 +61,7 @@
                         <option value="Konstruksi Gedung dan Sanitasi" {{ request('jurusan') == 'Konstruksi Gedung dan Sanitasi' ? 'selected' : '' }}>Konstruksi Gedung dan Sanitasi</option>
                         <option value="Teknik Mekatronika" {{ request('jurusan') == 'Teknik Mekatronika' ? 'selected' : '' }}>Teknik Mekatronika</option>
                         <option value="Sistem Informasi Jaringan dan Aplikasi ( Pengembangan Perangkat Lunak dan Gim )" {{ request('jurusan') == 'Sistem Informasi Jaringan dan Aplikasi ( Pengembangan Perangkat Lunak dan Gim )' ? 'selected' : '' }}>Sistem Informasi Jaringan dan Aplikasi ( Pengembangan Perangkat Lunak dan Gim )</option>
-                        <option value="Teknik Audio Video" {{ request('jurusan') == 'Teknik Audio Video' ? 'selected' : '' }}>TTeknik Audio Video</option>
+                        <option value="Teknik Audio Video" {{ request('jurusan') == 'Teknik Audio Video' ? 'selected' : '' }}>Teknik Audio Video</option>
                         <option value="Teknik Instalasi Tenaga Listrik" {{ request('jurusan') == 'Teknik Instalasi Tenaga Listrik' ? 'selected' : '' }}>Teknik Instalasi Tenaga Listrik</option>
                         <option value="Teknik Kendaraan Ringan" {{ request('jurusan') == 'Teknik Kendaraan Ringan' ? 'selected' : '' }}>Teknik Kendaraan Ringan</option>
                         <option value="Teknik Pemesinan" {{ request('jurusan') == 'Teknik Pemesinan' ? 'selected' : '' }}>Teknik Pemesinan</option>

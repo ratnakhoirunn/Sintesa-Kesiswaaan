@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SINTESA - Login Admin SMK N 2 Yogyakarta</title>
+    <title>SINTESA - Login Admin SMKN 2 Yogyakarta</title>
     <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
     
     {{-- Memuat aset CSS & JS dari Laravel Vite/Mix --}}
@@ -139,7 +139,7 @@
             <p style="text-align: left; margin-bottom: 0.5rem; font-size: 1rem;">Selamat Datang di</p>
             
             <div class="header-text" style="margin-bottom: 1rem;">
-                <span class="text-sintesa">SINTESA</span> SMK N 2 YOGYAKARTA
+                <span class="text-sintesa">SINTESA</span> SMKN 2 YOGYAKARTA
             </div>
             
             {{-- Logo Tengah --}}
@@ -163,7 +163,7 @@
 
                {{-- Input Admin (NIP/NIS) --}}
                     <div class="mb-4">
-                        <label for="username" style="display: block; margin-bottom: 0.3rem; font-weight: 500;">Admin</label>
+                        <label for="username" style="display: block; margin-bottom: 0.3rem; font-weight: 500;">Siswa</label>
                         <div class="input-wrapper">
                             <span class="input-icon">👤</span> 
                             <input id="nis" class="input-field-custom" type="text" name="nis" value="{{ old('nis') }}" required autofocus autocomplete="nis" placeholder="Masukkan NIS">

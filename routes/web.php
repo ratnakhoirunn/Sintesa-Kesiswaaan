@@ -53,7 +53,7 @@ Route::middleware('auth')->get('/logout', [LoginController::class, 'logout'])->n
 | 🎓 LOGIN SISWA (Tampilan & Proses Login)
 |--------------------------------------------------------------------------
 */
-Route::get('/siswa/login', [SiswaAuthController::class, 'loginPage'])->name('siswa.login');
+Route::get('/siswa/login', [SiswaAuthController::class, 'showLoginForm'])->name('siswa.login');
 Route::post('/siswa/login', [SiswaAuthController::class, 'login'])->name('siswa.login.submit');
 Route::post('/siswa/logout', [SiswaAuthController::class, 'logout'])->name('siswa.logout');
 
@@ -119,7 +119,7 @@ Route::prefix('siswa')->name('siswa.')->middleware(['web', 'auth:siswa'])->group
     Route::get('/orangtua', [DashboardSiswaController::class, 'dataOrangtua'])->name('orangtua');
     Route::get('/kartu', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartu');
     Route::get('/konseling', [DashboardSiswaController::class, 'konseling'])->name('konseling');
-    Route::get('/dokumensiswa', [DashboardSiswaController::class, 'dokumenSiswa'])->name('dokumensiswa');
+    Route::get('/dokumenSiswa', [DashboardSiswaController::class, 'dokumenSiswa'])->name('dokumenSiswa');
 });
 
 
