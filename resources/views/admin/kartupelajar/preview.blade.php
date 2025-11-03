@@ -186,28 +186,67 @@ body {
     </div>
 
     <div class="preview-container noprint">
-        {{-- ✅ Preview layar --}}
-        @if(isset($siswas))
-            @foreach($siswas as $siswa)
-                <iframe class="preview-frame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
-                <hr style="width:100%; max-width:750px; border:1px dashed #ccc;">
-            @endforeach
+    {{-- ✅ Preview layar --}}
+    @if(isset($siswas))
+        {{-- === CETAK MASSAL === --}}
+        @foreach($siswas as $siswa)
+            <iframe class="preview-frame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
+            <hr style="width:100%; max-width:750px; border:1px dashed #ccc;">
+        @endforeach
 
-            <div style="margin-top: 10px; text-align:center;">
-                <button onclick="window.print()" class="btn-custom btn-cetak">🖨 Cetak Semua</button>
-                <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
+        <div style="margin-top: 10px; text-align:center;">
+            <button onclick="window.print()" class="btn-custom btn-cetak">🖨 Cetak Semua</button>
+            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
+            <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
+        </div>
+
+    @else
+        {{-- === CETAK SATUAN === --}}
+        <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
+
+        <div style="margin-top: 10px; text-align:center;">
+            <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">🖨 Cetak</button>
+            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="btn-custom btn-edit">✏ Edit</a>
+            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
+            <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
+        </div>
+    @endif
+
+    <!-- ✅ Form Edit Data Kartu -->
+<div id="footerFormContainer" style="display:none; margin-top:20px; text-align:center;">
+    <form id="footerForm" onsubmit="return updateFrameFooter();" style="display:inline-block; background:#f0f4ff; padding:20px; border-radius:8px; text-align:left;">
+        <h4 style="color:#17375d; margin-bottom:10px;">Edit Data Kartu</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <label>Bulan:</label>
+                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}" required style="padding:5px 10px; border-radius:6px;">
             </div>
-
-        @else
-            <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
-
-            <div style="margin-top: 10px; text-align:center;">
-                <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">🖨 Cetak</button>
-                <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="btn-custom btn-edit">✏ Edit</a>
-                <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
+            <div>
+                <label>Tahun:</label>
+                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}" required style="padding:5px 10px; border-radius:6px;">
             </div>
-        @endif
-    </div>
+            <div>
+                <label>Nama Kepala Sekolah:</label>
+                <input type="text" name="nama_kepsek" id="nama_kepsek" placeholder="Drs. Agus Waluyo, M.Eng." required style="padding:5px 10px; border-radius:6px;">
+            </div>
+            <div>
+                <label>NIP:</label>
+                <input type="text" name="nip" id="nip" placeholder="196512271994121002" required style="padding:5px 10px; border-radius:6px;">
+            </div>
+            <div>
+                <label>Gambar Cap & TTD Kepala Sekolah:</label>
+                <input type="file" id="cap_kepsek" accept="image/*" style="padding:5px 10px; border-radius:6px;">
+            </div>
+        </div>
+
+        <div style="margin-top: 10px; text-align:center;">
+            <button type="submit" class="btn-custom btn-cetak">💾 Simpan Perubahan</button>
+            <button type="button" class="btn-custom btn-batal" onclick="toggleFooterForm()">Batal</button>
+        </div>
+    </form>
+</div>
+
+</div>
 
     {{-- ✅ Area cetak massal --}}
     @if(isset($siswas))
@@ -224,4 +263,48 @@ body {
 
 </div>
 
+    <script>
+function toggleFooterForm() {
+    const form = document.getElementById('footerFormContainer');
+    form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+}
+
+function updateFrameFooter() {
+    const bulan = document.getElementById('bulan').value;
+    const tahun = document.getElementById('tahun').value;
+    const nama_kepsek = document.getElementById('nama_kepsek').value;
+    const nip = document.getElementById('nip').value;
+    const fileInput = document.getElementById('cap_kepsek');
+    const file = fileInput.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const cap_kepsek = encodeURIComponent(e.target.result);
+            refreshFrames(bulan, tahun, nama_kepsek, nip, cap_kepsek);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        refreshFrames(bulan, tahun, nama_kepsek, nip, '');
+    }
+
+    toggleFooterForm();
+    alert('✅ Data kartu berhasil diperbarui!');
+    return false;
+}
+
+function refreshFrames(bulan, tahun, nama_kepsek, nip, cap_kepsek) {
+    const previewFrames = document.querySelectorAll('.preview-frame');
+    const printFrames = document.querySelectorAll('#printArea iframe');
+
+    [...previewFrames, ...printFrames].forEach(frame => {
+        const baseSrc = frame.src.split('?')[0];
+        frame.src = `${baseSrc}?bulan=${encodeURIComponent(bulan)}&tahun=${encodeURIComponent(tahun)}&nama_kepsek=${encodeURIComponent(nama_kepsek)}&nip=${encodeURIComponent(nip)}&cap_kepsek=${cap_kepsek}`;
+    });
+}
+</script>
+
 @endsection
+
+
+

@@ -141,11 +141,14 @@
             line-height: 1.3;
             text-align: left;
         }
-
-        .footer strong:first-of-type {
-            display: block;
-            margin-top: 32px;
-        }
+        
+       .footer strong:first-of-type {
+        display: block;
+        margin-top: -10px !important; /* ✅ ini yang kamu ubah */
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
 
         .footer strong:last-of-type {
             display: block;
@@ -164,6 +167,21 @@
             padding: 2px 0;
         }
 
+        .ttd-single {
+    position: relative;
+    margin-top: -8px;
+    margin-bottom: -4px;
+    text-align: center; /* ✅ ubah dari right → center agar gambar di tengah */
+}
+
+.ttd-single .ttd-cap {
+    width: 60px;
+    opacity: 0.9;
+    display: inline-block;
+    transform: translateY(0) rotate(-3deg); /* hapus geser kiri, tetap sedikit miring */
+}
+
+        
         /* ===== BELAKANG ===== */
         .back-header {
             background-color: #3aa0d8;
@@ -253,12 +271,27 @@
             </div>
         </div>
 
-        <div class="footer">
-            <div>Yogyakarta, Agustus 2025<br>
-            Kepala Sekolah</div>
-            <strong>Drs. Agus Waluyo M.Eng.</strong>
-            <strong>NIP.196512271994121002</strong>
-        </div>
+    <div class="footer">
+    <div>
+        Yogyakarta, {{ request('bulan') ?? 'Agustus' }} {{ request('tahun') ?? date('Y') }}<br>
+        Kepala Sekolah
+    </div>
+
+    <div class="ttd-single">
+    @php
+        // kalau ada gambar cap_kepsek dari request (hasil upload base64), pakai itu
+        // kalau tidak ada, pakai gambar default dari folder images
+        $capKepsek = request('cap_kepsek') ?: asset('images/ttd_cap_kepsek.png');
+    @endphp
+    <img src="{{ $capKepsek }}" alt="Cap & TTD Kepala Sekolah" class="ttd-cap">
+</div>
+
+
+    <strong>{{ request('nama_kepsek') ?? 'Drs. Agus Waluyo, M.Eng.' }}</strong>
+    <div class="nip">NIP. {{ request('nip') ?? '196512271994121002' }}</div>
+</div>
+
+
 
         <div class="jurusan">{{ strtoupper($siswa->jurusan) }}</div>
 

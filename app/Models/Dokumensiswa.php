@@ -9,6 +9,8 @@ class DokumenSiswa extends Model
 {
     use HasFactory;
 
+    protected $table = 'dokumen_siswas';
+
     protected $fillable = [
         'nis',
         'jenis_dokumen',

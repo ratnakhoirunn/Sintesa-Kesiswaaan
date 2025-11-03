@@ -17,7 +17,7 @@ class DokumenSiswaController extends Controller
         $totalDokumenWajib = 5; // jumlah jenis dokumen wajib
 
         // Ambil semua siswa beserta dokumennya
-        $query = \App\Models\Siswa::with('dokumenSiswa');
+        $query = Siswa::with('dokumenSiswa');
 
         // Filter pencarian
         if ($search) {
@@ -32,7 +32,7 @@ class DokumenSiswaController extends Controller
 
         // Hitung total dokumen yang sudah diunggah per siswa
         foreach ($siswa as $s) {
-            $uploadedCount = \App\Models\DokumenSiswa::where('nis', $s->nis)
+            $uploadedCount = DokumenSiswa::where('nis', $s->nis)
                             ->whereNotNull('file_path')
                             ->count();
             $s->dokumen_siswa_count = $uploadedCount;

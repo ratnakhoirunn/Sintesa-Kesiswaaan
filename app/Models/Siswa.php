@@ -46,7 +46,7 @@ class Siswa extends Authenticatable
     // Relasi Dokumen
     public function dokumen()
     {
-        return $this->hasMany(DokumenSiswa::class, 'siswa_nis', 'nis');
+        return $this->hasMany(DokumenSiswa::class, 'nis', 'nis');
     }
 
     // Custom attribute nama pengguna
