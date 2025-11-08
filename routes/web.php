@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\DokumenSiswaController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\SiswaImportController;
+use App\Http\Controllers\Siswa\PasswordController;
+use App\Http\Controllers\Siswa\ForgotPasswordController;
 
 
 /*
@@ -112,11 +114,16 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::get('/dashboard', [DashboardSiswaController::class, 'dashboard'])->name('dashboard');
     Route::get('/datasiswa', [DashboardSiswaController::class, 'dataSiswa'])->name('datasiswa');
     Route::get('/orangtua', [DashboardSiswaController::class, 'dataOrangtua'])->name('orangtua');
-     Route::get('/kartu-pelajar', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartupelajar.index');
+    Route::get('/kartu-pelajar', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartupelajar.index');
     Route::get('/kartu-pelajar/frame/{nis}', [DashboardSiswaController::class, 'frame'])->name('kartupelajar.frame');
     Route::get('/konseling', [DashboardSiswaController::class, 'konseling'])->name('konseling.index');
     Route::get('/keterlambatan', [DashboardSiswaController::class, 'keterlambatan'])->name('keterlambatan.index');
     Route::get('/dokumensiswa', [DashboardSiswaController::class, 'dokumenSiswa'])->name('dokumensiswa');
+
+    Route::get('/ubah-password', [PasswordController::class, 'edit'])->name('password.edit');
+    Route::post('/ubah-password', [PasswordController::class, 'update'])->name('password.update');
+    Route::get('/lupa-password', [ForgotPasswordController::class, 'showForm'])->name('password.form');
+    Route::post('/lupa-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
 });
 
 

@@ -382,11 +382,16 @@
                     </ul>
                 </li>
             
-
                 <li>
                     <a href="{{ route('siswa.dokumensiswa') }}" 
                        class="{{ request()->is('siswa/dokumensiswa*') ? 'active' : '' }}">
                         <i class="fas fa-book"></i> Dokumen Siswa
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('siswa.password.edit') }}">
+                        <i class="fas fa-key"></i> Ubah Password
                     </a>
                 </li>
             </ul>
@@ -403,7 +408,9 @@
         <div class="navbar">
             <h2>@yield('page_title', 'Dashboard Siswa')</h2>
             <div class="user-profile">
-                <img src="{{ asset('images/profil2.jpg') }}" alt="Profil Siswa">
+                <img 
+                    src="{{ $siswa->foto ? asset('uploads/foto_siswa/' . $siswa->foto) : asset('images/icon pelajar.jpeg') }}" 
+                    alt="Foto Siswa" />
             </div>
         </div>
 

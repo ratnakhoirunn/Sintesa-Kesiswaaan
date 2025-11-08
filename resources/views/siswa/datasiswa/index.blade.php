@@ -1,5 +1,6 @@
 @extends('layouts.siswa')
 @section('title', 'Data Siswa')
+@section('page_title', 'Data Siswa')
 @section('content')
 
 <style>
