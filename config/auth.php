@@ -6,14 +6,11 @@ return [
     |--------------------------------------------------------------------------
     | Authentication Defaults
     |--------------------------------------------------------------------------
-    |
-    | Default guard tetap "web" (untuk admin) tetapi siswa sudah punya guard sendiri
-    |
     */
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'web'),
-        'passwords' => 'users',
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
     /*
@@ -23,23 +20,14 @@ return [
     */
 
     'guards' => [
-
-        // 👨‍💼 Admin Guard
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
 
-        // 🎓 Siswa Guard
-        'siswa' => [
+        'siswa' => [ // guard khusus siswa
             'driver' => 'session',
-            'provider' => 'siswas',
-        ],
-
-        // API (biarkan default)
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+            'provider' => 'siswa',
         ],
     ],
 
@@ -50,15 +38,12 @@ return [
     */
 
     'providers' => [
-
-        // Admin
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // ✅ Siswa Provider
-        'siswas' => [
+        'siswa' => [
             'driver' => 'eloquent',
             'model' => App\Models\Siswa::class,
         ],
@@ -73,14 +58,7 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-
-        'siswas' => [
-            'provider' => 'siswas',
-            'table' => 'password_reset_tokens',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
@@ -92,6 +70,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'password_timeout' => 10800,
+    'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
 ];

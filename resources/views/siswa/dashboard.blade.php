@@ -5,98 +5,210 @@
 @section('content')
 
 <style>
-    .dashboard-container {
-        display: flex;
-        flex-wrap: wrap;
+    body {
+        background-color: #f5f7fa;
+    }
+
+    /* ====== Header Biru Sambutan ====== */
+    .welcome-card {
+        background-color: #17375d;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .welcome-card h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .welcome-card p {
+        margin-top: 6px;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    /* ====== Grid Kartu ====== */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
         gap: 20px;
     }
 
-    .dashboard-card {
+    /* ====== Card Style dengan header biru ====== */
+    .card-box {
         background: #ffffff;
-        border: 2px solid #17375d;
         border-radius: 10px;
-        padding: 20px;
-        flex: 1;
-        min-width: 250px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+        transition: transform 0.2s ease;
     }
 
-    .dashboard-card h4 {
-        margin-top: 0;
-        color: #17375d;
+    .card-box:hover {
+        transform: translateY(-3px);
+    }
+
+    .card-header {
+        background-color: #17375d;
+        color: white;
         font-weight: 600;
-        border-bottom: 2px solid #17375d;
-        padding-bottom: 5px;
-        margin-bottom: 10px;
+        font-size: 15px;
+        padding: 10px 15px;
+        text-align: left;
     }
 
+    .card-content {
+        padding: 15px;
+        text-align: center;
+        background: #fff;
+    }
+
+    /* ====== Barcode ====== */
+    .barcode-box {
+        background: #f1f4ff;
+        border-radius: 8px;
+        padding: 12px 5px;
+        margin-top: 8px;
+    }
+
+    /* ====== Progress Bar ====== */
     .progress-bar {
         background: #e9ecef;
-        border-radius: 10px;
+        border-radius: 8px;
         height: 10px;
         overflow: hidden;
+        margin: 10px 0;
     }
 
     .progress {
         background: #007bff;
         height: 10px;
         width: 90%;
+        border-radius: 8px;
+    }
+
+    /* ====== Status Aktif ====== */
+    .status-circle {
+        background: #e6f5e9;
+        color: #28a745;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        margin: 10px auto;
+    }
+
+    /* ====== Tombol Cetak Kartu ====== */
+    .btn-cetak {
+        background-color: #17375d;
+        color: white;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.2s ease;
+    }
+
+    .btn-cetak:hover {
+        background-color: #0f2740;
+    }
+
+    /* ====== Jadwal Konseling ====== */
+    .jadwal-box {
+        background: #fff;
         border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+        margin-top: 20px;
     }
 
-    .status-aktif {
-        color: green;
-        font-weight: bold;
-        font-size: 1.1em;
-    }
-
-    .status-aktif i {
-        margin-right: 5px;
+    .jadwal-header {
+        background: #17375d;
+        color: white;
+        font-weight: 600;
+        padding: 12px 15px;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
-        text-align: left;
     }
 
     table th, table td {
-        padding: 8px;
+        padding: 10px;
         border-bottom: 1px solid #ddd;
+        text-align: left;
+        font-size: 14px;
     }
 
     table th {
-        background: #17375d;
-        color: white;
+        background: #f7f9fc;
+        color: #17375d;
+        font-weight: 600;
     }
 </style>
 
 <div class="welcome-card">
-    <h1>Selamat Datang, Ratna Khoirun Nisa</h1>
-    <p>Desain Komunikasi Visual</p>
+    <h2>Selamat Datang, {{ $siswa->nama_lengkap }}</h2>
+    <p>{{ $siswa->jurusan }}</p>
 </div>
 
-<div class="dashboard-container">
-    <div class="dashboard-card">
-        <h4>Barcode</h4>
-        <img src="{{ asset('images/barcode.png') }}" alt="Barcode" style="width:100%; max-width:200px;">
-    </div>
-
-    <div class="dashboard-card">
-        <h4>Status Kelengkapan Data</h4>
-        <div class="progress-bar">
-            <div class="progress"></div>
+<div class="dashboard-grid">
+    {{-- Barcode --}}
+    <div class="card-box">
+        <div class="card-header">Barcode</div>
+        <div class="card-content">
+            <div class="barcode-box">
+                {!! DNS1D::getBarcodeHTML(Auth::guard('siswa')->user()->nis, 'C128', 2, 40) !!}
+            </div>
+            <p style="margin-top:8px; font-weight:bold;">{{ Auth::guard('siswa')->user()->nis }}</p>
         </div>
-        <p style="margin-top:5px;">90%</p>
     </div>
 
-    <div class="dashboard-card">
-        <h4>Status di Semester - Ganjil T.A. 2025/2026</h4>
-        <p class="status-aktif"><i class="fa fa-check-circle"></i> Aktif</p>
+    {{-- Status Kelengkapan Data --}}
+    <div class="card-box">
+        <div class="card-header">Status Kelengkapan Data</div>
+        <div class="card-content">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <p style="font-weight:600; color:#007bff;">90%</p>
+        </div>
     </div>
 
-    <div class="dashboard-card" style="flex:2;">
-        <h4>Jadwal Konseling Anda</h4>
+    {{-- Cetak Kartu Pelajar --}}
+    <div class="card-box">
+        <div class="card-header">Cetak Kartu Pelajar</div>
+        <div class="card-content">
+            <button class="btn-cetak" onclick="window.location.href='{{ route('siswa.kartupelajar.index') }}'">
+                🖨 Cetak Kartu
+            </button>
+        </div>
+    </div>
+
+    {{-- Status Aktif --}}
+    <div class="card-box">
+        <div class="card-header">Status di Semester - Ganjil T.A. 2025/2026</div>
+        <div class="card-content">
+            <div class="status-circle">
+                <i class="fa fa-check"></i>
+            </div>
+            <p style="font-weight:600; color:#28a745;">Aktif</p>
+        </div>
+    </div>
+</div>
+
+{{-- Jadwal Konseling --}}
+<div class="jadwal-box">
+    <div class="jadwal-header">Jadwal Konseling Anda</div>
+    <div style="padding:15px;">
         <table>
             <thead>
                 <tr>
@@ -114,4 +226,5 @@
         </table>
     </div>
 </div>
+
 @endsection

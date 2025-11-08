@@ -52,12 +52,15 @@
             font-weight: 600;
         }
 
-        .sidebar .profile {
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            margin-bottom: 20px;
-        }
+       .sidebar .profile {
+        display: flex;
+        flex-direction: column; /* ⬅️ susun vertikal */
+        align-items: center; /* ⬅️ tengah horizontal */
+        text-align: center; /* ⬅️ teks di tengah */
+        padding: 0 20px;
+        margin-bottom: 20px;
+}
+
         .sidebar .profile img {
             width: 50px;
             height: 50px;
@@ -66,14 +69,17 @@
             border: 2px solid #fff;
         }
         .sidebar .profile .info h4 {
-            margin: 0;
-            font-size: 1rem;
-        }
-        .sidebar .profile .info p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.7);
-        }
+        margin: 10px 0 2px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+}
+
+.sidebar .profile .info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+}
 
         .sidebar nav ul {
             list-style: none;
@@ -83,23 +89,54 @@
         .sidebar nav ul li {
             margin-bottom: 5px;
         }
-        .sidebar nav ul li a {
+       .sidebar nav ul li a {
+        display: flex;
+        align-items: center; /* ✅ pastikan ini ada */
+        gap: 10px; /* ✅ tambahkan agar jarak icon dan teks lebih seimbang */
+        padding: 12px 20px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.95rem;
+        line-height: 1; /* ✅ tambahkan agar teks tidak turun */
+        transition: background-color 0.3s;
+}
+
+        .sidebar nav ul li a i {
+            font-size: 1rem; /* ✅ lebih kecil sedikit dari teks */
+            line-height: 1;  /* ✅ biar sejajar vertikal */
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: background-color 0.3s;
-        }
-        .sidebar nav ul li a i {
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
+}
+
         .sidebar nav ul li a:hover,
         .sidebar nav ul li a.active {
             background-color: #0d2a4a;
             border-left: 4px solid #4a90e2;
+        }
+
+        .sidebar nav ul li.dropdown .dropdown-toggle {
+            position: relative;
+        }
+        .sidebar nav ul li.dropdown .dropdown-toggle i.fa-caret-down {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+        }
+        .sidebar nav ul li.dropdown .dropdown-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #0d2a4a; /* Warna submenu */
+            display: none; /* Sembunyikan secara default */
+        }
+        .sidebar nav ul li.dropdown.active .dropdown-menu {
+            display: block; /* Tampilkan jika dropdown aktif */
+        }
+        .sidebar nav ul li.dropdown .dropdown-menu li a {
+            padding-left: 45px; /* Indentasi submenu */
+            font-size: 0.9rem;
         }
 
         .sidebar .logout {
@@ -272,6 +309,8 @@
             height: 1rem;
             margin-top: -3px;
         }
+
+        
     </style>
 </head>
 <body>
@@ -282,10 +321,17 @@
         </div>
 
         <div class="profile">
-            <img src="{{ asset('images/profil2.jpg') }}" alt="Siswa">
+            <img 
+                    src="{{ $siswa->foto ? asset('uploads/foto_siswa/' . $siswa->foto) : asset('images/icon pelajar.jpeg') }}" 
+                    alt="Foto Siswa" 
+                    style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;"
+                />
+
             <div class="info">
-                <h4>{{ Auth::user()->name ?? 'Siswa' }}</h4>
-                <p>Siswa</p>
+                <h4>{{ Auth::guard('siswa')->user()->nama_lengkap ?? 'Siswa' }}</h4>
+                <p>{{ Auth::guard('siswa')->user()->role ?? 'Siswa' }}</p>
+
+
             </div>
         </div>
 
@@ -309,16 +355,34 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('siswa.kartu') }}" class="{{ request()->is('siswa/kartupelajar') ? 'active' : '' }}">
-                        <i class="fas fa-id-card"></i> Kartu Pelajar
-                    </a>
+                    <a href="{{ route('siswa.kartupelajar.index') }}" 
+                        class="{{ request()->is('siswa/kartu-pelajar') ? 'active' : '' }}">
+                            <i class="fas fa-id-card"></i> Kartu Pelajar
+                        </a>
                 </li>
-                <li>
-                    <a href="{{ route('siswa.konseling') }}" 
-                       class="{{ request()->is('siswa/konseling*') ? 'active' : '' }}">
-                        <i class="fas fa-comments"></i> Bimbingan Konseling
+
+                <li class="dropdown {{ request()->is('siswa/konseling*') || request()->is('siswa/keterlambatan*') ? 'open' : '' }}">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i>
                     </a>
+                    <ul class="dropdown-menu" style="{{ request()->is('siswa/konseling*') || request()->is('admin/keterlambatan*') ? 'display:block;' : '' }}">
+                        <li>
+                           <a href="{{ route('siswa.konseling.index') }}" 
+                                class="{{ request()->is('siswa/konseling*') ? 'active' : '' }}">
+                                Konseling
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="{{ route('siswa.keterlambatan.index') }}" 
+                            class="{{ request()->is('siswa/keterlambatan*') ? 'active' : '' }}">
+                                Keterlambatan
+                            </a>
+                        </li>
+                    </ul>
                 </li>
+            
+
                 <li>
                     <a href="{{ route('siswa.dokumensiswa') }}" 
                        class="{{ request()->is('siswa/dokumensiswa*') ? 'active' : '' }}">
@@ -345,5 +409,30 @@
 
         @yield('content')
     </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dropdownToggles = document.querySelectorAll('.sidebar nav ul li.dropdown > .dropdown-toggle');
+
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault(); // biar gak langsung redirect
+
+                const parentLi = this.parentElement;
+
+                // Tutup dropdown lain jika ingin hanya satu terbuka
+                document.querySelectorAll('.sidebar nav ul li.dropdown').forEach(li => {
+                    if (li !== parentLi) {
+                        li.classList.remove('active');
+                    }
+                });
+
+                // Toggle dropdown yang diklik
+                parentLi.classList.toggle('active');
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

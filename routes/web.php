@@ -2,20 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Controller Admin
-use App\Http\Controllers\LoginController;
+// Controller Utama
+use App\Http\Controllers\AuthController; // Ganti LoginController ke AuthController
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\SiswaController;
-use App\Http\Controllers\SiswaImportController;
 use App\Http\Controllers\Admin\KartuPelajarController;
 use App\Http\Controllers\Admin\KonselingController;
 use App\Http\Controllers\Admin\KeterlambatanController;
 use App\Http\Controllers\Admin\DokumenSiswaController;
 use App\Http\Controllers\Admin\RoleController;
-
-// Controller Siswa
 use App\Http\Controllers\Siswa\DashboardSiswaController;
-use App\Http\Controllers\Siswa\SiswaAuthController;
+use App\Http\Controllers\SiswaImportController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,54 +21,53 @@ use App\Http\Controllers\Siswa\SiswaAuthController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    if (!auth()->check()) {
-        return redirect()->route('login');
+    // kalau login sebagai admin/guru/bk (guard web)
+    if (auth()->check()) {
+        $role = auth()->user()->role;
+        if (in_array($role, ['admin', 'guru', 'bk'])) {
+            return redirect()->route('admin.dashboard');
+        }
     }
 
-    if (auth()->user()->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    } elseif (auth()->user()->role === 'siswa') {
+    // kalau login sebagai siswa (guard siswa)
+    if (auth('siswa')->check()) {
         return redirect()->route('siswa.dashboard');
     }
 
+    // kalau belum login sama sekali
     return redirect()->route('login');
 });
 
 /*
 |--------------------------------------------------------------------------
-| 🔐 LOGIN ADMIN & LOGOUT
+| 🔐 LOGIN & LOGOUT
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login.process');
+    // Tampilkan form login
+    Route::get('/login', function () {return view('login');})->name('login');
+
+    // Proses login (gabungan users dan siswas)
+      Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 });
 
-Route::middleware('auth')->get('/logout', [LoginController::class, 'logout'])->name('logout');
+// Logout
+Route::middleware('auth')->get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| 🎓 LOGIN SISWA (Tampilan & Proses Login)
+| 🧑‍💼 ADMIN / GURU / BK AREA
 |--------------------------------------------------------------------------
 */
-Route::get('/siswa/login', [SiswaAuthController::class, 'showLoginForm'])->name('siswa.login');
-Route::post('/siswa/login', [SiswaAuthController::class, 'login'])->name('siswa.login.submit');
-Route::post('/siswa/logout', [SiswaAuthController::class, 'logout'])->name('siswa.logout');
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,guru,bk'])->group(function () {
 
-/*
-|--------------------------------------------------------------------------
-| 🧑‍💼 ADMIN AREA
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
-
-    // 🏠 Dashboard Admin
+    // 🏠 Dashboard
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
 
-    // 👨‍🎓 Data Siswa (CRUD)
+     // 👨‍🎓 Data Siswa (CRUD)
     Route::resource('datasiswa', SiswaController::class);
 
-    // 📤 Import Siswa
+    // 📤 Import Data Siswa
     Route::get('datasiswa/import', [SiswaImportController::class, 'showImportForm'])->name('datasiswa.import.form');
     Route::post('datasiswa/import', [SiswaImportController::class, 'import'])->name('datasiswa.import');
 
@@ -108,19 +105,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 
 /*
 |--------------------------------------------------------------------------
-| 🎓 SISWA AREA (Protected Halaman Siswa)
+| 🎓 SISWA AREA (Dashboard & Halaman Siswa)
 |--------------------------------------------------------------------------
 */
-Route::prefix('siswa')->name('siswa.')->middleware(['web', 'auth:siswa'])->group(function () {
+Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'dashboard'])->name('dashboard');
     Route::get('/datasiswa', [DashboardSiswaController::class, 'dataSiswa'])->name('datasiswa');
-    Route::get('/ganti-password', [DashboardSiswaController::class, 'gantiPassword'])->name('password.form');
-    Route::post('/ganti-password', [DashboardSiswaController::class, 'updatePassword'])->name('password.update');
     Route::get('/orangtua', [DashboardSiswaController::class, 'dataOrangtua'])->name('orangtua');
-    Route::get('/kartu', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartu');
-    Route::get('/konseling', [DashboardSiswaController::class, 'konseling'])->name('konseling');
-    Route::get('/dokumenSiswa', [DashboardSiswaController::class, 'dokumenSiswa'])->name('dokumenSiswa');
+     Route::get('/kartu-pelajar', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartupelajar.index');
+    Route::get('/kartu-pelajar/frame/{nis}', [DashboardSiswaController::class, 'frame'])->name('kartupelajar.frame');
+    Route::get('/konseling', [DashboardSiswaController::class, 'konseling'])->name('konseling.index');
+    Route::get('/keterlambatan', [DashboardSiswaController::class, 'keterlambatan'])->name('keterlambatan.index');
+    Route::get('/dokumensiswa', [DashboardSiswaController::class, 'dokumenSiswa'])->name('dokumensiswa');
 });
+
 
 
 

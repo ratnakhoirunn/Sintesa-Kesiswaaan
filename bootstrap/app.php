@@ -40,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
          * Pastikan semua middleware custom ada di App\Http\Middleware
          */
         $middleware->alias([
+            'siswa' => \App\Http\Middleware\SiswaMiddleware::class,
             'auth'     => \App\Http\Middleware\Authenticate::class,
             'role'     => \App\Http\Middleware\RoleMiddleware::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,

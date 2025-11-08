@@ -31,6 +31,17 @@ class Siswa extends Authenticatable
         'password',
     ];
 
+    public function getAuthIdentifierName()
+    {
+        return 'nis';
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+
     // Relasi Detail Siswa
     public function detailSiswa()
     {
