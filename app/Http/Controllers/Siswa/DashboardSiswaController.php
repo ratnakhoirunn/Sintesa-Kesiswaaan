@@ -62,7 +62,11 @@ class DashboardSiswaController extends Controller
 
     public function keterlambatan()
     {
-        return view('siswa.keterlambatan.index');
+       // Ambil data siswa dari guard siswa yang sedang login
+        $siswa = Auth::guard('siswa')->user();
+
+        // Kirim ke view
+        return view('siswa.keterlambatan.index', compact('siswa'));
     }
 
     public function dokumenSiswa()

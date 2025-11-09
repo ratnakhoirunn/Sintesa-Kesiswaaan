@@ -15,7 +15,7 @@ use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\SiswaImportController;
 use App\Http\Controllers\Siswa\PasswordController;
 use App\Http\Controllers\Siswa\ForgotPasswordController;
-
+use App\Http\Controllers\Siswa\KeterlambatanSiswaController ;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +97,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,guru,bk'
     Route::get('/keterlambatan/create', [KeterlambatanController::class, 'create'])->name('keterlambatan.create');
     Route::post('/keterlambatan/store', [KeterlambatanController::class, 'store'])->name('keterlambatan.store');
     Route::get('/keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSurat'])->name('keterlambatan.cetak');
+    Route::put('/admin/keterlambatan/{id}/status', [KeterlambatanController::class, 'updateStatus'])->name('keterlambatan.updateStatus');
 
     // 📄 Roles
     Route::resource('role', RoleController::class);
@@ -117,7 +118,9 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::get('/kartu-pelajar', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartupelajar.index');
     Route::get('/kartu-pelajar/frame/{nis}', [DashboardSiswaController::class, 'frame'])->name('kartupelajar.frame');
     Route::get('/konseling', [DashboardSiswaController::class, 'konseling'])->name('konseling.index');
-    Route::get('/keterlambatan', [DashboardSiswaController::class, 'keterlambatan'])->name('keterlambatan.index');
+    Route::get('/keterlambatan', [KeterlambatanSiswaController::class, 'index'])->name('keterlambatan.index');
+    Route::post('/keterlambatan/ajukan', [KeterlambatanSiswaController::class, 'ajukan'])->name('keterlambatan.ajukan');
+    Route::get('/keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSIT'])->name('siswa.cetak');
     Route::get('/dokumensiswa', [DashboardSiswaController::class, 'dokumenSiswa'])->name('dokumensiswa');
 
     Route::get('/ubah-password', [PasswordController::class, 'edit'])->name('password.edit');

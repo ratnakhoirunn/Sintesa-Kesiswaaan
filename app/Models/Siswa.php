@@ -23,7 +23,7 @@ class Siswa extends Authenticatable
         'nis', 'nisn', 'nama_lengkap', 'email', 'no_whatsapp',
         'rombel', 'jurusan', 'tempat_lahir', 'tanggal_lahir',
         'jenis_kelamin', 'agama', 'nama_ortu', 'alamat', 'foto', 
-        'password' // ✅ penting untuk login siswa
+        'password','is_default_password',// ✅ penting untuk login siswa
     ];
 
     // Sembunyikan password di output

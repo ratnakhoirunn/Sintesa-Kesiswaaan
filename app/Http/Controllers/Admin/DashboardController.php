@@ -16,28 +16,54 @@ class DashboardController extends Controller
     /** ===============================
      *  DASHBOARD ADMIN & SISWA
      *  =============================== */
-    public function adminDashboard()
+    public function adminDashboard(Request $request)
     {
         // Ambil data statistik untuk dashboard admin
         $totalSiswa = Siswa::count();
         $totalAdmin = User::where('role', 'admin')->count();
         $totalKonseling = Konseling::count();
 
+ // Ambil filter angkatan dari query string (?angkatan=2025)
+    $filterTahun = $request->get('angkatan');
 
-        // === Data untuk Chart: Jumlah siswa per jurusan ===
-        // Ubah 'jurusan' jika nama kolom di tabel siswa kamu berbeda
-        $chartData = Siswa::select('jurusan', DB::raw('COUNT(*) as total'))
-            ->groupBy('jurusan')
-            ->orderBy('jurusan')
-            ->get();
+    // Ambil daftar angkatan unik dari 2 digit depan NIS dan ubah jadi format tahun penuh
+    $angkatanList = Siswa::selectRaw('LEFT(nis, 2) as kode')
+        ->distinct()
+        ->get()
+        ->map(function ($item) {
+            return 2000 + (int)$item->kode; // contoh: 25 => 2025
+        })
+        ->sort()
+        ->values();
 
-        // Kirim semua data ke view dashboard
-        return view('admin.dashboard', compact(
-            'totalSiswa',
-            'totalAdmin',
-            'totalKonseling',
-            'chartData',
-        ));
+    // Hitung statistik umum
+    $totalSiswa = Siswa::count();
+    $totalAdmin = User::where('role', 'admin')->count();
+    $totalKonseling = Konseling::count();
+
+    // === Data untuk Chart: Jumlah siswa per jurusan ===
+    $query = Siswa::select('jurusan', DB::raw('COUNT(*) as total'));
+
+    // Jika filter angkatan dipilih, ubah tahun jadi dua digit dan filter
+    if ($filterTahun) {
+        $kodeTahun = substr($filterTahun, -2); // contoh: 2025 -> 25
+        $query->whereRaw('LEFT(nis, 2) = ?', [$kodeTahun]);
+    }
+
+    $chartData = $query
+        ->groupBy('jurusan')
+        ->orderBy('jurusan')
+        ->get();
+
+    // Kirim data ke view dashboard
+    return view('admin.dashboard', compact(
+        'totalSiswa',
+        'totalAdmin',
+        'totalKonseling',
+        'chartData',
+        'angkatanList',
+        'filterTahun'
+    ));
     }
 
 

@@ -44,21 +44,27 @@ class AuthController extends Controller
         // ===============================
         // Login untuk SISWA
         // ===============================
-        if ($role === 'siswa') {
-            $siswa = Siswa::where('nis', $request->username)->first();
-            
-            if ($siswa && Hash::check($request->password, $siswa->password)) {
-                // login siswa dengan guard siswa
-                Auth::guard('siswa')->login($siswa);
+       if ($role === 'siswa') {
+    $siswa = Siswa::where('nis', $request->username)->first();
+    
+    if ($siswa && Hash::check($request->password, $siswa->password)) {
+        // Login siswa
+        Auth::guard('siswa')->login($siswa);
+        $request->session()->regenerate();
 
-                // regenerate session supaya guard siswa dikenali
-                $request->session()->regenerate();
+        // Cek apakah password masih default
+        if (Hash::check('siswa123', $siswa->password)) {
+            session(['default_password' => true]);
+        } else {
+            session()->forget('default_password');
+        }
 
-                return redirect()->route('siswa.dashboard');
-            }
+        return redirect()->route('siswa.dashboard');
+    }
 
     return back()->withErrors(['login_error' => 'NIS atau password salah.']);
 }
+
 
         // Jika role tidak dikenali
         return back()->withErrors(['login_error' => 'Role tidak valid.']);

@@ -43,6 +43,15 @@
         <div class="left-grid-column">
             <div class="chart-card">
                 <h3>Grafik Siswa Per Jurusan</h3>
+                 <div class="mb-3">
+                    <label for="filterTahun" class="block text-sm font-medium text-gray-700">Filter Angkatan</label>
+                    <select id="filterTahun" class="border border-gray-300 rounded-lg p-2 mt-1">
+                        <option value="">Semua</option>
+                        @foreach($angkatanList as $angkatan)
+                            <option value="{{ $angkatan }}">{{ $angkatan }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="chart-container">
                     <canvas id="siswaPerJurusanChart"></canvas>
                 </div>
@@ -134,5 +143,11 @@
                 }
             }
         });
+
+         // Event listener untuk filter tahun
+    document.getElementById('filterTahun').addEventListener('change', function() {
+        let selected = this.value;
+        window.location.href = `?angkatan=${selected}`;
+    });
     </script>
 @endsection

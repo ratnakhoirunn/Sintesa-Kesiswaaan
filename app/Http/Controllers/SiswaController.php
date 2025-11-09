@@ -78,8 +78,8 @@ class SiswaController extends Controller
         $validatedSiswa['foto'] = $fileName;
     }
 
-    // ✅ Tambahkan password default = NIS (bcrypt)
-    $validatedSiswa['password'] = bcrypt($request->nis);
+ // ✅ Tambahkan password default = 'siswa123'
+    $validatedSiswa['password'] = bcrypt('siswa123');
 
     // === 3. Simpan ke Tabel Siswa ===
     $siswa = Siswa::create($validatedSiswa);
@@ -115,7 +115,7 @@ class SiswaController extends Controller
     OrangTua::create($orangTuaData);
 
     return redirect()->route('admin.datasiswa.index')
-        ->with('success', 'Data siswa dan biodata lengkap berhasil disimpan. Password awal = NIS.');
+        ->with('success', 'Data siswa dan biodata lengkap berhasil disimpan. Password awal = siswa123.');
 }
 
 
@@ -217,8 +217,6 @@ class SiswaController extends Controller
         Siswa::where('nis', $nis)->delete();
         return redirect()->route('admin.datasiswa.index')->with('success', 'Data siswa berhasil dihapus.');
     }
-
- 
 
     
 }

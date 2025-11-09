@@ -127,6 +127,27 @@
         font-style: italic;
         color: #999;
     }
+    .btn-status {
+        border: none;
+        padding: 6px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .btn-pending { background: #f1c40f; color: white; }
+    .btn-proses { background: #3498db; color: white; }
+    .btn-terima { background: #27ae60; color: white; }
+    .btn-cetak {
+        background: none;
+        border: none;
+        color: #123B6B;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
 </style>
 
 <div class="card shadow-sm">
@@ -175,11 +196,20 @@
                         <td>{{ $item->siswa->nis ?? '-' }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->jam_datang)->format('H.i') }} ({{ $item->menit_terlambat }} menit)</td>
                         <td>{{ $item->keterangan ?? '-' }}</td>
-                        <td>
+                       <td>
+                            <form action="{{ route('admin.keterlambatan.updateStatus', $item->id) }}" method="POST" style="display:flex; gap:4px; justify-content:center;">
+                                @csrf
+                                @method('PUT')
+                                <button name="status" value="pending" class="btn-status btn-pending">Pending</button>
+                                <button name="status" value="proses" class="btn-status btn-proses">Proses</button>
+                                <button name="status" value="terima" class="btn-status btn-terima">Terima</button>
+                            </form>
+
                             <a href="{{ route('admin.keterlambatan.cetak', $item->id) }}" class="btn-cetak">
-                                Cetak SIT <i class="bi bi-printer"></i>
+                                <i class="bi bi-printer"></i> Cetak
                             </a>
                         </td>
+                        
                     </tr>
                 @empty
                     <tr>

@@ -310,6 +310,99 @@
             margin-top: -3px;
         }
 
+        /* 🔔 Animasi masuk lembut */
+@keyframes slideDown {
+    0% { transform: translateY(-20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.alert-password {
+    background: #fffbe6;
+    border-left: 6px solid #facc15;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    animation: slideDown 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.alert-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.alert-icon {
+    font-size: 28px;
+    color: #d97706;
+    flex-shrink: 0;
+}
+
+.alert-text h4 {
+    margin: 0;
+    font-weight: 700;
+    color: #92400e;
+}
+
+.alert-text p {
+    margin: 4px 0 8px;
+    color: #78350f;
+    font-size: 0.95rem;
+}
+
+.alert-button {
+    display: inline-block;
+    background: #facc15;
+    color: #78350f;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.alert-button:hover {
+    background: #fbbf24;
+    transform: scale(1.05);
+}
+
+.alert-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #92400e;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.alert-close:hover {
+    color: #000;
+}
+
+.alert-success {
+    background-color: #e6ffed;
+    border-left: 5px solid #22c55e;
+    color: #166534;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.alert-success i {
+    color: #22c55e;
+}
+
         
     </style>
 </head>
@@ -413,6 +506,36 @@
                     alt="Foto Siswa" />
             </div>
         </div>
+         
+        @if(Auth::guard('siswa')->check() && Auth::guard('siswa')->user()->is_default_password)
+<div id="alert-password" class="alert-password">
+    <div class="alert-content">
+        <div class="alert-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="alert-text">
+            <h4>Peringatan Keamanan!</h4>
+            <p>Kamu masih menggunakan password default <strong>(siswa123)</strong>.<br>
+            Segera ubah password untuk menjaga keamanan akunmu.</p>
+            <a href="{{ route('siswa.password.edit') }}" class="alert-button">Ganti Password Sekarang</a>
+        </div>
+        <button class="alert-close" onclick="closeAlert()">×</button>
+    </div>
+</div>
+
+@endif
+
+@if(session('success'))
+<div class="alert-success">
+    <div class="alert-content">
+        <i class="fas fa-check-circle"></i>
+        <span>{{ session('success') }}</span>
+    </div>
+</div>
+@endif
+
+
+
 
         @yield('content')
     </div>
@@ -439,6 +562,20 @@
             });
         });
     });
+
+    function closeAlert() {
+    const alertBox = document.getElementById('alert-password');
+    alertBox.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    alertBox.style.opacity = '0';
+    alertBox.style.transform = 'translateY(-10px)';
+    setTimeout(() => alertBox.remove(), 400);
+}
+
+// Opsional: auto-hide setelah 10 detik
+setTimeout(() => {
+    const alertBox = document.getElementById('alert-password');
+    if (alertBox) closeAlert();
+}, 10000);
 </script>
 
 </body>

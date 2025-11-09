@@ -82,4 +82,13 @@ class KeterlambatanController extends Controller
 
         return $pdf->stream('Surat_Keterlambatan_' . $data->siswa->nama_lengkap . '.pdf');
     }
+    public function updateStatus(Request $request, $id)
+{
+    $keterlambatan = Keterlambatan::findOrFail($id);
+    $keterlambatan->status = $request->status;
+    $keterlambatan->save();
+
+    return back()->with('success', 'Status pengajuan berhasil diperbarui!');
+}
+
 }
