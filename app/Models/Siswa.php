@@ -70,4 +70,10 @@ class Siswa extends Authenticatable
     {
         return $this->hasMany(DokumenSiswa::class, 'nis', 'nis');
     }  
+
+    public function konselings()
+{
+    return $this->hasMany(\App\Models\Konseling::class, 'nis', 'nis');
+}
+
 }

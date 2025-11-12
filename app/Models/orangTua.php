@@ -22,8 +22,9 @@ class OrangTua extends Model
      * Relasi ke tabel siswa
      * OrangTua milik satu Siswa (foreign key: nis)
      */
-    public function siswa()
-    {
-        return $this->belongsTo(Siswa::class, 'nis', 'nis');
-    }
+   public function siswa()
+{
+    return $this->belongsTo(Siswa::class, 'nis', 'nis');
+}
+
 }

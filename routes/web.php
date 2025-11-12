@@ -17,6 +17,7 @@ use App\Http\Controllers\Siswa\PasswordController;
 use App\Http\Controllers\Siswa\ForgotPasswordController;
 use App\Http\Controllers\Siswa\KeterlambatanSiswaController ;
 use App\Http\Controllers\Siswa\DokumenController;
+use App\Http\Controllers\Siswa\KonselingsiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +93,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,guru,bk'
     Route::put('konseling/{id}', [KonselingController::class, 'update'])->name('konseling.update');
     Route::delete('konseling/{id}', [KonselingController::class, 'destroy'])->name('konseling.destroy');
     Route::get('/konseling/{id}', [KonselingController::class, 'show'])->name('konseling.show');
+     Route::put('konseling/{id}/proses', [KonselingController::class, 'proses'])->name('konseling.proses');
 
     // ⏰ Keterlambatan
     Route::get('/keterlambatan', [KeterlambatanController::class, 'index'])->name('keterlambatan.index');
@@ -116,15 +118,26 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::get('/dashboard', [DashboardSiswaController::class, 'dashboard'])->name('dashboard');
     Route::get('/datasiswa', [DashboardSiswaController::class, 'dataSiswa'])->name('datasiswa');
     Route::get('/orangtua', [DashboardSiswaController::class, 'dataOrangtua'])->name('orangtua');
+
+    //Kartu Pelajar Siswa 
     Route::get('/kartu-pelajar', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartupelajar.index');
     Route::get('/kartu-pelajar/frame/{nis}', [DashboardSiswaController::class, 'frame'])->name('kartupelajar.frame');
-    Route::get('/konseling', [DashboardSiswaController::class, 'konseling'])->name('konseling.index');
+
+    // Konseling Siswa
+    Route::get('/konseling', [KonselingsiswaController::class, 'index'])->name('konseling.index');
+    Route::get('/konseling/create', [KonselingsiswaController::class, 'create'])->name('konseling.create');
+    Route::post('/konseling', [KonselingsiswaController::class, 'store'])->name('konseling.store');
+    Route::get('/konseling/{id}', [KonselingsiswaController::class, 'show'])->name('konseling.show');
+    Route::get('/konseling/{id}/edit', [KonselingsiswaController::class, 'edit'])->name('konseling.edit');
+
+    //Keterlambatan Siswa 
     Route::get('/keterlambatan', [KeterlambatanSiswaController::class, 'index'])->name('keterlambatan.index');
     Route::post('/keterlambatan/ajukan', [KeterlambatanSiswaController::class, 'ajukan'])->name('keterlambatan.ajukan');
     Route::get('/keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSIT'])->name('siswa.cetak');
     Route::get('/dokumensiswa', [DokumenController::class, 'index'])->name('dokumensiswa');
     Route::post('/dokumensiswa/upload/{id}', [DokumenController::class, 'upload'])->name('dokumensiswa.upload');
 
+    //Ubah dan Lupa Password Siswa 
     Route::get('/ubah-password', [PasswordController::class, 'edit'])->name('password.edit');
     Route::post('/ubah-password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/lupa-password', [ForgotPasswordController::class, 'showForm'])->name('password.form');

@@ -80,6 +80,13 @@
     border-radius: 6px;
     margin-bottom: 15px;
 }
+
+.forgot-password {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 </style>
 
 <div class="password-container">
@@ -121,7 +128,6 @@
         </div>
 
         <button type="submit" class="btn-primary">Simpan Perubahan</button>
-        
         <div class="forgot-password">
             <a href="{{ route('siswa.password.form') }}">Lupa Password?</a>
         </div>
@@ -133,7 +139,7 @@
 <script>
 function togglePassword(inputId, iconId) {
     const input = document.getElementById(inputId);
-    const icon = document.getElementById(iconId);
+    const icon = document.getElementById(iconId); 
     if (input.type === "password") {
         input.type = "text";
         icon.classList.remove("fa-eye");

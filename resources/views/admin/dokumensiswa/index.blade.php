@@ -43,12 +43,6 @@
             </div>
         </form>
 
-        <!-- Tombol kanan -->
-        <div class="button-group">
-            <a href="{{ route('admin.dokumensiswa.create') }}" class="btn-tambah">
-                <i class="fas fa-plus"></i> Tambah Data Siswa
-            </a>
-        </div>
     </div>
 </div>
 

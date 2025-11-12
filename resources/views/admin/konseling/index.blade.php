@@ -152,49 +152,82 @@
     </div>
 
     <div class="p-4">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Siswa</th>
-                    <th>Rombel</th>
-                    <th>Deskripsi</th>
-                    <th>Tanggal</th>
-                    <th style="text-align:center;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($konselings as $index => $item)
-                <tr>
-                    <td style="text-align:center;">{{ $index + 1 }}</td>
-                    <td>{{ $item->siswa->nama_lengkap ?? '-' }}</td>
-                    <td>{{ $item->rombel }}</td>
-                    <td>{{ $item->catatan }}</td>
-                    <td style="text-align:center;">{{ $item->tanggal }}</td>
-                    <td class="aksi" style="text-align:center;">
-                        <a href="{{ route('admin.konseling.show', $item->id) }}" class="lihat">
-                            <i class="fas fa-eye"></i> Lihat
-                        </a>
-                        <a href="{{ route('admin.konseling.edit', $item->id) }}" class="edit">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <form action="{{ route('admin.konseling.destroy', $item->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="hapus" style="background:none;border:none;cursor:pointer;"
-                                onclick="return confirm('Yakin ingin menghapus data ini?')">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="7" class="no-data">Belum ada data konseling</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Siswa</th>
+                <th>Kelas</th>
+                <th>Nama Ortu</th>
+                <th>Topik</th>
+                <th>Tanggal</th>
+                <th>Status</th>
+                <th style="text-align:center;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+    @forelse($konselings as $index => $item)
+        <tr>
+            <td style="text-align:center;">{{ $index + 1 }}</td>
+            <td>{{ $item->nama_siswa }}</td>
+            <td>{{ $item->kelas }}</td>
+            <td>{{ $item->nama_ortu }}</td>
+            <td>{{ $item->topik }}</td>
+            <td>{{ $item->tanggal }}</td>
+            <td>
+                @if ($item->status == 'Menunggu')
+                    <span class="badge bg-warning text-dark">Menunggu</span>
+                @elseif ($item->status == 'Disetujui')
+                    <span class="badge bg-success">Disetujui</span>
+                @else
+                    <span class="badge bg-danger">Ditolak</span>
+                @endif
+            </td>
+            <td class="aksi" style="text-align:center;">
+                {{-- Tombol lihat & edit --}}
+                <a href="{{ route('admin.konseling.show', $item->id) }}" class="lihat">
+                    <i class="fas fa-eye"></i> Lihat
+                </a>
+                <a href="{{ route('admin.konseling.edit', $item->id) }}" class="edit">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+
+                {{-- Tombol hapus --}}
+                <form action="{{ route('admin.konseling.destroy', $item->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="hapus" style="background:none;border:none;cursor:pointer;"
+                        onclick="return confirm('Yakin ingin menghapus data ini?')">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
+                </form>
+
+                {{-- Tombol proses (Setujui / Tolak) --}}
+                @if ($item->status == 'Menunggu')
+                    <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="Disetujui">
+                        <button type="submit" class="btn btn-success btn-sm" style="margin:2px;">Setujui</button>
+                    </form>
+
+                    <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="Ditolak">
+                        <button type="submit" class="btn btn-danger btn-sm" style="margin:2px;">Tolak</button>
+                    </form>
+                @endif
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="8" class="text-center">Belum ada data konseling</td>
+        </tr>
+    @endforelse
+</tbody>
+
+    </table>
+</div>
 </div>
 @endsection

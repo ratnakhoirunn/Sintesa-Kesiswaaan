@@ -153,6 +153,59 @@
         color: #17375d;
         font-weight: 600;
     }
+
+    .jadwal-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+.jadwal-header {
+    background-color: #123B6B;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-bottom: 1px solid #0f2e58;
+}
+
+.jadwal-box table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.jadwal-box th, .jadwal-box td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.jadwal-box th {
+    background: #f4f6f8;
+}
+
+.status-menunggu {
+    background-color: #fff8e1;
+    color: #b58900;
+    padding: 3px 10px;
+    border-radius: 10px;
+}
+
+.status-proses {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    padding: 3px 10px;
+    border-radius: 10px;
+}
+
+.status-selesai {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 3px 10px;
+    border-radius: 10px;
+}
+
 </style>
 
 <div class="welcome-card">
@@ -205,23 +258,40 @@
     </div>
 </div>
 
-{{-- Jadwal Konseling --}}
+{{-- Riwayat Konseling --}}
 <div class="jadwal-box">
-    <div class="jadwal-header">Jadwal Konseling Anda</div>
+    <div class="jadwal-header">Riwayat Konseling</div>
     <div style="padding:15px;">
         <table>
             <thead>
                 <tr>
-                    <th>Tanggal</th>
-                    <th>Waktu</th>
-                    <th>Konselor</th>
+                    <th>Tanggal Pengajuan</th>
+                    <th>Topik Konseling</th>
+                    <th>Kegiatan Layanan</th>
+                    <th>Status</th>
+                    <th>Tanggapan Admin</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td>10 Mei 2024</td><td>10:00</td><td>Siti Aminah</td></tr>
-                <tr><td>10 Mei 2024</td><td>14:00</td><td>Budi Santoso</td></tr>
-                <tr><td>11 Mei 2024</td><td>10:00</td><td>Joko Susilo</td></tr>
-                <tr><td>11 Mei 2024</td><td>13:00</td><td>Ani Wijaya</td></tr>
+                @forelse ($konselings as $konseling)
+                    <tr>
+                        <td>{{ \Carbon\Carbon::parse($konseling->tanggal)->format('d M Y') }}</td>
+                        <td>{{ $konseling->topik }}</td>
+                        <td>{{ $konseling->kegiatan_layanan ?? '-' }}</td>
+                        <td>
+                            <span class="status 
+                                {{ $konseling->status == 'Menunggu' ? 'status-menunggu' : 
+                                   ($konseling->status == 'Diproses' ? 'status-proses' : 'status-selesai') }}">
+                                {{ $konseling->status }}
+                            </span>
+                        </td>
+                        <td>{{ $konseling->tanggapan_admin ?? 'Belum ada tanggapan' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" style="text-align:center;">Belum ada pengajuan konseling.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

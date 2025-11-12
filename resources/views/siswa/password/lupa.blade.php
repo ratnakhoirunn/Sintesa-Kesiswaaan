@@ -59,6 +59,7 @@
         <div class="text-center mt-4">
             <a href="{{ route('login') }}" class="text-[#1e3a8a] hover:underline text-sm">Kembali ke Login</a>
         </div>
+        
     </form>
 </div>
 
