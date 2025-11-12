@@ -121,6 +121,10 @@
         </div>
 
         <button type="submit" class="btn-primary">Simpan Perubahan</button>
+        
+        <div class="forgot-password">
+            <a href="{{ route('siswa.password.form') }}">Lupa Password?</a>
+        </div>
     </form>
 </div>
 

@@ -75,6 +75,6 @@ class DashboardSiswaController extends Controller
         $siswa = Auth::guard('siswa')->user();
 
         // Kirim ke view
-        return view('siswa.dokumensiswa.index', compact('siswa'));
+        return view('siswa.dokumen.index', compact('siswa'));
     }
 }

@@ -51,7 +51,7 @@ class DokumenSiswaController extends Controller
         // Daftar dokumen wajib
         $wajib = [
             'Kartu Keluarga',
-            'Akte Kelahiran',
+            'Akta Kelahiran',
             'KPSPKH',
             'KIP',
             'Pas Foto'
@@ -73,7 +73,7 @@ class DokumenSiswaController extends Controller
 
         $dokumenWajib = [
             'Kartu Keluarga',
-            'Akte Kelahiran',
+            'Akta Kelahiran',
             'Ijazah',
             'KTP Orang Tua',
             'Pas Foto',
@@ -104,7 +104,11 @@ class DokumenSiswaController extends Controller
                 Storage::delete('public/' . $dokumen->file_path);
             }
 
-            $filePath = $request->file('file')->store('dokumen_siswa', 'public');
+            $filePath = $request->file('file')->storeAs(
+                'dokumen_siswa/' . $nis,
+                time() . '_' . $request->file('file')->getClientOriginalName(),
+                'public'
+            );
 
             if ($dokumen) {
                 $dokumen->update(['file_path' => $filePath]);

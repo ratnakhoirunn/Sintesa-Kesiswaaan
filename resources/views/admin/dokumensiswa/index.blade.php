@@ -25,7 +25,7 @@
                     <select name="dokumen" id="dokumen" class="filter-select">
                         <option value="">Semua</option>
                         <option value="kartu_keluarga" {{ request('dokumen') == 'kartu_keluarga' ? 'selected' : '' }}>Kartu Keluarga</option>
-                        <option value="akte_kelahiran" {{ request('dokumen') == 'akte_kelahiran' ? 'selected' : '' }}>Akte Kelahiran</option>
+                        <option value="akta_kelahiran" {{ request('dokumen') == 'akta_kelahiran' ? 'selected' : '' }}>Akta Kelahiran</option>
                         <option value="ijazah" {{ request('dokumen') == 'KPSPKH' ? 'selected' : '' }}>KPSPKH</option>
                         <option value="ktp_orang_tua" {{ request('dokumen') == 'KIP' ? 'selected' : '' }}>KIP</option>
                         <option value="pas_foto" {{ request('dokumen') == 'pas_foto' ? 'selected' : '' }}>Pas Foto</option>

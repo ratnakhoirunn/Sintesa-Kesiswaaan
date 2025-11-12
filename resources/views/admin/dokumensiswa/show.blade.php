@@ -37,14 +37,14 @@
                     <tr style="border-bottom:1px solid #e0e0e0;">
                         <td style="padding:10px 15px;">{{ $jenis_dokumen }}</td>
                         <td style="text-align:center;">
-                            @if ($file)
+                            @if ($file && $file->file_path)
                                 <span class="badge-status bg-success">Sudah Diunggah</span>
                             @else
                                 <span class="badge-status bg-danger">Belum Diunggah</span>
                             @endif
                         </td>
                         <td style="text-align:center;">
-                            @if ($file)
+                            @if ($file && $file->file_path)
                                 <a href="{{ asset('storage/'.$file->file_path) }}" target="_blank" class="btn-aksi lihat">
                                     <i class="fas fa-eye"></i> Lihat File
                                 </a>
