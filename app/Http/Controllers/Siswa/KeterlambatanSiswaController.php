@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Keterlambatan;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KeterlambatanSiswaController extends Controller
 {
@@ -51,11 +52,20 @@ class KeterlambatanSiswaController extends Controller
         return back()->with('success', 'Pengajuan SIT berhasil dikirim. Menunggu persetujuan admin.');
     }
 
-    public function cetakSIT($id)
-{
-    $data = Keterlambatan::where('id', $id)->where('status', 'diterima')->firstOrFail();
+public function cetakSIT($id)
+{   
+    // Ambil data dulu
+    $data = Keterlambatan::where('id', $id)
+                ->where('status', 'terima')
+                ->firstOrFail();
 
-    return view('siswa.keterlambatan.cetak_sit', compact('data'));
+    // Load PDF setelah data ada
+    $pdf = Pdf::loadView('siswa.keterlambatan.cetak_sit', compact('data'))
+              ->setPaper('A4', 'portrait');
+
+    // Return PDF tampil di browser
+    return $pdf->stream('SIT.pdf');
 }
+
 
 }

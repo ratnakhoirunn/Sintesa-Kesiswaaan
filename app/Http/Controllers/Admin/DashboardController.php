@@ -39,7 +39,8 @@ class DashboardController extends Controller
     // Hitung statistik umum
     $totalSiswa = Siswa::count();
     $totalAdmin = User::where('role', 'admin')->count();
-    $totalKonseling = Konseling::count();
+    $konselingMenunggu = Konseling::where('status', 'Menunggu')->count();
+
 
     // === Data untuk Chart: Jumlah siswa per jurusan ===
     $query = Siswa::select('jurusan', DB::raw('COUNT(*) as total'));
@@ -62,7 +63,8 @@ class DashboardController extends Controller
         'totalKonseling',
         'chartData',
         'angkatanList',
-        'filterTahun'
+        'filterTahun',
+        'konselingMenunggu',
     ));
     }
 

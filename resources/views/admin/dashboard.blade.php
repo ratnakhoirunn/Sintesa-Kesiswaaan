@@ -5,9 +5,10 @@
 
 @section('content')
     <div class="welcome-card">
-        <h1>Selamat Datang, Admin</h1>
-        <p>Kelola Data Siswa SMKN 2 Yogyakarta</p>
-    </div>
+    <h1>Selamat Datang, {{ ucfirst(str_replace('_', ' ', auth('guru')->user()->role)) }}</h1>
+    <p>Kelola Data Siswa SMKN 2 Yogyakarta</p>
+</div>
+
 
     <div class="info-cards">
         <div class="info-card">
@@ -108,16 +109,66 @@
                 transition: width 0.4s ease;
             }
             </style>
+<div class="konseling-action-card">
+    <h3>Tindakan Konseling</h3>
 
-            <div class="konseling-action-card">
-                <h3>Tindakan Konseling</h3>
-                <div class="notification-item">
-                    <i class="fas fa-bell"></i>
-                    <span>Jadwal Konseling Menunggu<br>5 Permintaan Masuk</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <a href="{{ route('admin.konseling.index') }}" 
+       class="notification-item fancy-notif">
+
+        <i class="fas fa-bell"></i>
+
+        <span>
+            Jadwal Konseling Menunggu<br>
+            {{ $konselingMenunggu }} Permintaan Masuk
+        </span>
+
+    </a>
+</div>
+
+<style>
+/* === STYLE KEREN UNTUK NOTIF === */
+
+.fancy-notif {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background: #fff7d6;
+    border: 1px solid #ffdd85;
+    padding: 15px 18px;
+    border-radius: 12px;
+
+    text-decoration: none;
+    color: #5a4600;
+
+    transition: all .25s ease-in-out;
+    animation: notif-shake 1.2s ease infinite;
+}
+
+.fancy-notif i {
+    color: #ffbb33;
+    font-size: 24px;
+}
+
+/* Hover effect */
+.fancy-notif:hover {
+    background: #ffe9a9;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* === Animasi Getar Halus (Elegan) === */
+@keyframes notif-shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-2px); }
+    40% { transform: translateX(2px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+    100% { transform: translateX(0); }
+}
+</style>
+
+
 
     {{-- Script ChartJS --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

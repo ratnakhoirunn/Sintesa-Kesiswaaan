@@ -26,7 +26,7 @@
         text-align: right;
     }
 
-    /* === FILTER + TOMBOL TAMBAH === */
+    /* === FILTER === */
     .filter-wrapper {
         background: #f8f9fa;
         padding: 15px 25px;
@@ -43,28 +43,7 @@
         gap: 10px;
     }
 
-    .filter-form input[type="date"] {
-        border: 1px solid #ccc;
-        padding: 8px 10px;
-        border-radius: 6px;
-        font-size: 14px;
-    }
-
-    .filter-form button {
-        background-color: #123B6B;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-    .filter-form button:hover {
-        background-color: #0f2e52;
-    }
-
-    /* Tombol Tambah di kanan */
+    /* Tombol Tambah */
     .btn-tambah {
         border: 2px solid #123B6B;
         color: #123B6B;
@@ -100,7 +79,7 @@
     }
 
     th {
-        color: #ffff;
+        color: white;
         font-weight: 600;
     }
 
@@ -108,126 +87,205 @@
         background-color: #f9f9f9;
     }
 
-    .btn-cetak {
-        background: none;
+    /* === AKSI === */
+    .lihat { color: #007bff; font-weight: 600; margin-right: 8px; }
+    .edit { color: #ff9800; font-weight: 600; margin-right: 8px; }
+    .hapus { color: #e74c3c; font-weight: 600; }
+
+    .lihat:hover { color: #0056b3; }
+    .edit:hover { color: #e07b00; }
+    .hapus:hover { color: #c0392b; }
+
+    .lihat i, .edit i { margin-right: 3px; }
+
+    /* === TOMBOL KONFIRMASI === */
+    .btn-approve {
+        background: #28a745;
+        color: white;
         border: none;
-        color: #123B6B;
-        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        margin: 2px;
         font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
+        transition: .2s;
     }
 
-    .btn-cetak i {
-        color: #123B6B;
+    .btn-approve:hover {
+        background: #218838;
     }
 
-    .text-muted {
-        font-style: italic;
-        color: #999;
+    .btn-reject {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        margin: 2px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: .2s;
     }
+
+    .btn-reject:hover {
+        background: #c82333;
+    }
+
+    .konfirmasi-wrapper {
+    display: flex;
+    gap: 8px; 
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-approve, .btn-reject {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-approve {
+    background: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: #218838;
+}
+
+.btn-reject {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-reject:hover {
+    background: #c82333;
+}
+
 </style>
 
-
 {{-- Header --}}
-    <div class="header-keterlambatan">
-        <h4>Manajemen Konseling Siswa</h4>
-        <div class="tanggal-jam" id="tanggal-jam">
-            {{-- Tanggal & jam oleh JavaScript --}}
-        </div>
-    </div>
+<div class="header-keterlambatan">
+    <h4>Manajemen Konseling Siswa</h4>
+    <div class="tanggal-jam" id="tanggal-jam"></div>
+</div>
 
-    {{-- Filter Tanggal + Tombol Tambah Data di kanan --}}
-    <div class="filter-wrapper">
-        <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="filter-form">
-            <i class="bi bi-calendar-date" style="font-size: 20px; color:#123B6B;"></i>
-            <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}">
-            <button type="submit">Tampilkan</button>
-        </form>
+{{-- Filter --}}
+<div class="filter-wrapper">
+    <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="filter-form">
+        <i class="bi bi-calendar-date" style="font-size: 20px; color:#123B6B;"></i>
+        <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}">
+        <button type="submit">Tampilkan</button>
+    </form>
 
-        <a href="{{ route('admin.konseling.create') }}" class="btn-tambah">
-            + Tambah Data Konseling
-        </a>
-    </div>
+    <a href="{{ route('admin.konseling.create') }}" class="btn-tambah">
+        + Tambah Data Konseling
+    </a>
+</div>
 
-    <div class="p-4">
-    <table class="table">
-        <thead>
+<div class="p-4">
+<table class="table">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama Siswa</th>
+            <th>Kelas</th>
+            <th>Nama Ortu</th>
+            <th>Topik</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+            <th>Konfirmasi</th> 
+        </tr>
+    </thead>
+
+    <tbody>
+        @forelse($konselings as $index => $item)
             <tr>
-                <th>No</th>
-                <th>Nama Siswa</th>
-                <th>Kelas</th>
-                <th>Nama Ortu</th>
-                <th>Topik</th>
-                <th>Tanggal</th>
-                <th>Status</th>
-                <th style="text-align:center;">Aksi</th>
+                <td>{{ $index + 1 }}</td>
+                <td style="text-align:left;">{{ $item->nama_siswa }}</td>
+                <td>{{ $item->kelas }}</td>
+                <td>{{ $item->nama_ortu }}</td>
+                <td>{{ $item->topik }}</td>
+                <td>{{ $item->tanggal }}</td>
+
+                <td>
+                    @if ($item->status == 'Menunggu')
+                        <span class="badge bg-warning text-dark">Menunggu</span>
+                    @elseif ($item->status == 'Disetujui')
+                        <span class="badge bg-success">Disetujui</span>
+                    @else
+                        <span class="badge bg-danger">Ditolak</span>
+                    @endif
+                </td>
+
+                {{-- Aksi --}}
+                <td>
+                    <a href="{{ route('admin.konseling.show', $item->id) }}" class="lihat">
+                        <i class="fas fa-eye"></i> Lihat
+                    </a>
+                    <a href="{{ route('admin.konseling.edit', $item->id) }}" class="edit">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <form action="{{ route('admin.konseling.destroy', $item->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="hapus" style="background:none;border:none;cursor:pointer;"
+                            onclick="return confirm('Yakin ingin menghapus data ini?')">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </form>
+                </td>
+
+                {{-- Konfirmasi --}}
+                <td>
+    @if ($item->status == 'Menunggu')
+        <div class="konfirmasi-wrapper">
+            <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="Disetujui">
+                <button type="submit" class="btn-approve">
+                    <i class="fas fa-check"></i> Setujui
+                </button>
+            </form>
+
+            <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="status" value="Ditolak">
+                <button type="submit" class="btn-reject">
+                    <i class="fas fa-times"></i> Tolak
+                </button>
+            </form>
+        </div>
+    @else
+        <span style="color:#555; font-weight:600;">-</span>
+    @endif
+</td>
+
             </tr>
-        </thead>
-        <tbody>
-    @forelse($konselings as $index => $item)
-        <tr>
-            <td style="text-align:center;">{{ $index + 1 }}</td>
-            <td>{{ $item->nama_siswa }}</td>
-            <td>{{ $item->kelas }}</td>
-            <td>{{ $item->nama_ortu }}</td>
-            <td>{{ $item->topik }}</td>
-            <td>{{ $item->tanggal }}</td>
-            <td>
-                @if ($item->status == 'Menunggu')
-                    <span class="badge bg-warning text-dark">Menunggu</span>
-                @elseif ($item->status == 'Disetujui')
-                    <span class="badge bg-success">Disetujui</span>
-                @else
-                    <span class="badge bg-danger">Ditolak</span>
-                @endif
-            </td>
-            <td class="aksi" style="text-align:center;">
-                {{-- Tombol lihat & edit --}}
-                <a href="{{ route('admin.konseling.show', $item->id) }}" class="lihat">
-                    <i class="fas fa-eye"></i> Lihat
-                </a>
-                <a href="{{ route('admin.konseling.edit', $item->id) }}" class="edit">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
-
-                {{-- Tombol hapus --}}
-                <form action="{{ route('admin.konseling.destroy', $item->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="hapus" style="background:none;border:none;cursor:pointer;"
-                        onclick="return confirm('Yakin ingin menghapus data ini?')">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
-                </form>
-
-                {{-- Tombol proses (Setujui / Tolak) --}}
-                @if ($item->status == 'Menunggu')
-                    <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="Disetujui">
-                        <button type="submit" class="btn btn-success btn-sm" style="margin:2px;">Setujui</button>
-                    </form>
-
-                    <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="Ditolak">
-                        <button type="submit" class="btn btn-danger btn-sm" style="margin:2px;">Tolak</button>
-                    </form>
-                @endif
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="8" class="text-center">Belum ada data konseling</td>
-        </tr>
-    @endforelse
-</tbody>
-
-    </table>
+        @empty
+            <tr>
+                <td colspan="9" class="text-center">Belum ada data konseling</td>
+            </tr>
+        @endforelse
+    </tbody>
+</table>
 </div>
-</div>
+
 @endsection

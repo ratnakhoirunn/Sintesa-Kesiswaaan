@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 // Controller Utama
-use App\Http\Controllers\AuthController; // Ganti LoginController ke AuthController
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\Admin\KartuPelajarController;
@@ -11,34 +11,45 @@ use App\Http\Controllers\Admin\KonselingController;
 use App\Http\Controllers\Admin\KeterlambatanController;
 use App\Http\Controllers\Admin\DokumenSiswaController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserPasswordController;
+
+use App\Http\Controllers\bk\DashboardBKController;
+
 use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\SiswaImportController;
 use App\Http\Controllers\Siswa\PasswordController;
 use App\Http\Controllers\Siswa\ForgotPasswordController;
-use App\Http\Controllers\Siswa\KeterlambatanSiswaController ;
+use App\Http\Controllers\Siswa\KeterlambatanSiswaController;
 use App\Http\Controllers\Siswa\DokumenController;
 use App\Http\Controllers\Siswa\KonselingsiswaController;
 
 /*
 |--------------------------------------------------------------------------
-| 🏠 ROUTE UTAMA
+| 🏠 ROUTE ROOT
 |--------------------------------------------------------------------------
+| Mengarahkan user berdasarkan guard & role
 */
 Route::get('/', function () {
-    // kalau login sebagai admin/guru/bk (guard web)
-    if (auth()->check()) {
-        $role = auth()->user()->role;
-        if (in_array($role, ['admin', 'guru', 'bk'])) {
-            return redirect()->route('admin.dashboard');
-        }
+
+    // Jika login melalui guard guru
+    if (auth('guru')->check()) {
+
+        $role = auth('guru')->user()->role;
+
+        return match ($role) {
+            'admin'      => redirect()->route('admin.dashboard'),
+            'guru_bk'    => redirect()->route('bk.dashboard'),
+            'kesiswaan'  => redirect()->route('kesiswaan.dashboard'),
+            default      => redirect()->route('guru.dashboard'),
+        };
     }
 
-    // kalau login sebagai siswa (guard siswa)
+    // Jika login siswa
     if (auth('siswa')->check()) {
         return redirect()->route('siswa.dashboard');
     }
 
-    // kalau belum login sama sekali
+    // Belum login
     return redirect()->route('login');
 });
 
@@ -48,29 +59,32 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-    // Tampilkan form login
-    Route::get('/login', function () {return view('login');})->name('login');
 
-    // Proses login (gabungan users dan siswas)
-      Route::post('/login', [AuthController::class, 'login'])->name('login.process');
+    Route::get('/login', function () {
+        return view('login');
+    })->name('login');
+
+    Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 });
 
-// Logout
-Route::middleware('auth')->get('/logout', [AuthController::class, 'logout'])->name('logout');
+// Logout universal
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| 🧑‍💼 ADMIN / GURU / BK AREA
+| 🧑‍💼 ADMIN
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,guru,bk'])->group(function () {
+Route::prefix('admin')->name('admin.')
+    ->middleware(['auth:guru', 'role:admin,guru_bk,kesiswaan'])
+    ->group(function () {
 
-    // 🏠 Dashboard
+    // Dashboard Admin
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
 
-     // 👨‍🎓 Data Siswa (CRUD)
+    // CRUD Data Siswa untuk ADMIN
     Route::resource('datasiswa', SiswaController::class);
-
+    
     // 📤 Import Data Siswa
     Route::get('datasiswa/import', [SiswaImportController::class, 'showImportForm'])->name('datasiswa.import.form');
     Route::post('datasiswa/import', [SiswaImportController::class, 'import'])->name('datasiswa.import');
@@ -107,7 +121,57 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,guru,bk'
 
     // 📁 Dokumen Siswa
     Route::resource('dokumensiswa', DokumenSiswaController::class);
+
+    //Ubah Password Siswa
+    Route::prefix('password')->name('password.')->group(function () {
+
+    Route::get('/', [UserPasswordController::class, 'index'])
+        ->name('index');
+
+    Route::get('/edit/{type}/{id}', [UserPasswordController::class, 'edit'])
+        ->name('edit');
+
+    Route::post('/update/{type}/{id}', [UserPasswordController::class, 'update'])
+        ->name('update');
+    Route::post('/update-self', [UserPasswordController::class, 'updateSelf'])->name('updateSelf');
+
 });
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| 👨‍🏫 BK AREA (Guru BK)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('bk')->name('bk.')
+    ->middleware(['auth:guru', 'role:guru_bk'])
+    ->group(function () {
+
+    // Dashboard BK
+    Route::get('/dashboard', [DashboardBKController::class, 'index'])
+        ->name('dashboard');
+
+    // Konseling (BK mengelola pengajuan siswa)
+    Route::resource('konseling', KonselingController::class);
+
+    Route::put('/konseling/{id}/proses',
+        [KonselingController::class, 'proses']
+    )->name('konseling.proses');
+
+    //Keterlambatan (BK Mengelola Pengajuan Keterlambatan)
+    Route::resource('keterlambatan', Keterlambatancontroller::class);
+
+    Route::put('/keterlambatan/{id}/proses',
+        [KeterlambatanController::class, 'proses']
+    )->name('keterlambatan.proses');
+
+    // Dokumen siswa (read only)
+    Route::get('/dokumen', [DokumenSiswaController::class, 'index'])
+        ->name('dokumen.index');
+
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -133,7 +197,10 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     //Keterlambatan Siswa 
     Route::get('/keterlambatan', [KeterlambatanSiswaController::class, 'index'])->name('keterlambatan.index');
     Route::post('/keterlambatan/ajukan', [KeterlambatanSiswaController::class, 'ajukan'])->name('keterlambatan.ajukan');
-    Route::get('/keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSIT'])->name('siswa.cetak');
+    Route::get('/cetak-sit/{id}', [KeterlambatanSiswaController::class, 'cetakSIT'])->name('cetak.sit');
+
+
+    //Dokumen Siswa
     Route::get('/dokumensiswa', [DokumenController::class, 'index'])->name('dokumensiswa');
     Route::post('/dokumensiswa/upload/{id}', [DokumenController::class, 'upload'])->name('dokumensiswa.upload');
 
@@ -143,7 +210,3 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::get('/lupa-password', [ForgotPasswordController::class, 'showForm'])->name('password.form');
     Route::post('/lupa-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
 });
-
-
-
-

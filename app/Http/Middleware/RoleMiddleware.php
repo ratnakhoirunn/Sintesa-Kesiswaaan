@@ -8,22 +8,27 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-   public function handle(Request $request, Closure $next, ...$roles)
-{
-    // Cek guard siswa dulu
-    $guard = Auth::guard('siswa')->check() ? 'siswa' : 'web';
+    public function handle(Request $request, Closure $next, ...$roles)
+    {
+        // Tentukan guard aktif
+        $guard = Auth::guard('guru')->check() ? 'guru' :
+                 (Auth::guard('siswa')->check() ? 'siswa' : null);
 
-    $user = Auth::guard($guard)->user();
+        if (!$guard) {
+            return redirect()->route('login');
+        }
 
-    if (!$user) {
-        return redirect('/login');
+        $user = Auth::guard($guard)->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Cek role
+        if (isset($user->role) && !in_array($user->role, $roles)) {
+            return redirect()->route('login');
+        }
+
+        return $next($request);
     }
-
-    // Kalau role tidak sesuai
-    if (isset($user->role) && !in_array($user->role, $roles)) {
-        return redirect('/login')->withErrors(['akses' => 'Akses ditolak']);
-    }
-
-    return $next($request);
-}
 }

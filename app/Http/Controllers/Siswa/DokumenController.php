@@ -77,9 +77,10 @@ class DokumenController extends Controller
 
 
         // Update path file
-        $dokumen->update([
-            'file_path' => $path,
-        ]);
+     $dokumen->update([
+        'file_path' => $filePath,
+]);
+
 
         return back()->with('success', 'File berhasil diunggah!');
     }

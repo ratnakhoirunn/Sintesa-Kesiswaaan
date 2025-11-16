@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Konseling; // ✅ pastikan ini ada
+use App\Models\DokumenSiswa;
+
 
 class DashboardSiswaController extends Controller
 {
@@ -69,11 +71,13 @@ class DashboardSiswaController extends Controller
         return view('siswa.keterlambatan.index', compact('siswa'));
     }
 
-    public function dokumenSiswa()
-    {
-        $siswa = Auth::guard('siswa')->user();
+    public function DokumenSiswa()
+{
+    $siswa = Auth::guard('siswa')->user();
 
-        // Kirim ke view
-        return view('siswa.dokumen.index', compact('siswa'));
-    }
+    $dokumens = DokumenSiswa::where('nis', $siswa->nis)->get();
+
+    return view('siswa.dokumen.index', compact('siswa', 'dokumens'));
+}
+
 }

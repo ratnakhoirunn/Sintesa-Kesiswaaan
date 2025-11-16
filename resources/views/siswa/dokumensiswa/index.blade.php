@@ -144,6 +144,50 @@
     .text-muted {
         font-size: 0.9rem;
     }
+
+    /* Container tombol */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Style umum tombol */
+.action-buttons a,
+.action-buttons label {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important; /* hilangkan garis bawah */
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    height: 34px; /* bikin semua tinggi sama */
+}
+
+/* Tombol lihat */
+.btn-view {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: white !important;
+}
+
+/* Tombol ganti */
+.btn-ganti {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: white !important;
+}
+
+/* Tombol upload */
+.btn-upload {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+}
+
 </style>
 
 @section('content')
@@ -182,23 +226,42 @@
                             @endif
                         </td>
 
-                        {{-- Tombol Upload/Ganti File --}}
-                        <td class="text-end pe-3" style="width: 160px;">
-                            <form action="{{ route('siswa.dokumensiswa.upload', $dokumen->id) }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="file" name="file" id="fileInput{{ $dokumen->id }}" class="d-none" onchange="this.form.submit()">
+                       <td class="text-end pe-3" style="width: 250px;">
+    <div class="action-buttons">
 
-                                @if($dokumen->file_path)
-                                    <label for="fileInput{{ $dokumen->id }}" class="btn btn-success btn-sm px-3">
-                                        Ganti File
-                                    </label>
-                                @else
-                                    <label for="fileInput{{ $dokumen->id }}" class="btn btn-danger btn-sm px-3">
-                                        Upload File
-                                    </label>
-                                @endif
-                            </form>
-                        </td>
+        {{-- Tombol Lihat --}}
+        @if($dokumen->file_path)
+            <a href="{{ asset('storage/' . $dokumen->file_path) }}"
+               target="_blank"
+               class="btn-view">
+               Lihat
+            </a>
+        @endif
+
+        {{-- Upload/Ganti --}}
+        <form action="{{ route('siswa.dokumensiswa.upload', $dokumen->id) }}"
+              method="POST" enctype="multipart/form-data" class="d-inline">
+            @csrf
+
+            <input type="file" name="file"
+                   id="fileInput{{ $dokumen->id }}"
+                   class="d-none"
+                   onchange="this.form.submit()">
+
+            @if($dokumen->file_path)
+                <label for="fileInput{{ $dokumen->id }}" class="btn-ganti">
+                    Ganti File
+                </label>
+            @else
+                <label for="fileInput{{ $dokumen->id }}" class="btn-upload">
+                    Upload File
+                </label>
+            @endif
+        </form>
+
+    </div>
+</td>
+
                     </tr>
                     @endforeach
                 </tbody>

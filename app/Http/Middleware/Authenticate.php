@@ -10,20 +10,23 @@ class Authenticate
 {
     public function handle(Request $request, Closure $next, $guard = null)
     {
-        if (!Auth::guard($guard)->check()) {
-            return redirect($this->redirectTo($request));
-        }
-
-        return $next($request);
-    }
-
-    protected function redirectTo($request)
-    {
-        if (! $request->expectsJson()) {
-            if ($request->is('siswa/*')) {
-                return route('login'); // bisa kamu ubah ke route siswa.login kalau ada halaman login terpisah
+        if ($guard) {
+            if (!Auth::guard($guard)->check()) {
+                return redirect()->route('login');
             }
-            return route('login');
+
+            Auth::shouldUse($guard);
+            return $next($request);
         }
+
+        // Jika tidak spesifik guard, cek semua
+        foreach (['guru', 'siswa'] as $g) {
+            if (Auth::guard($g)->check()) {
+                Auth::shouldUse($g);
+                return $next($request);
+            }
+        }
+
+        return redirect()->route('login');
     }
 }

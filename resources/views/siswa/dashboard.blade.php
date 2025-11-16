@@ -4,6 +4,10 @@
 
 @section('content')
 
+@php
+use App\Models\DokumenSiswa;
+@endphp
+
 <style>
     body {
         background-color: #f5f7fa;
@@ -206,6 +210,25 @@
     border-radius: 10px;
 }
 
+/* Progress Bar Wrapper */
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #e9ecef;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Progress Fill */
+.progress {
+    height: 100%;
+    background: #0d6efd;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+
+
 </style>
 
 <div class="welcome-card">
@@ -216,7 +239,7 @@
 <div class="dashboard-grid">
     {{-- Barcode --}}
     <div class="card-box">
-        <div class="card-header">Barcode</div>
+        <div class="card-header">Barcode NIS</div>
         <div class="card-content">
             <div class="barcode-box">
                 {!! DNS1D::getBarcodeHTML(Auth::guard('siswa')->user()->nis, 'C128', 2, 40) !!}
@@ -225,16 +248,35 @@
         </div>
     </div>
 
-    {{-- Status Kelengkapan Data --}}
-    <div class="card-box">
-        <div class="card-header">Status Kelengkapan Data</div>
-        <div class="card-content">
-            <div class="progress-bar">
-                <div class="progress"></div>
-            </div>
-            <p style="font-weight:600; color:#007bff;">90%</p>
+ {{-- Ambil data dokumen langsung di blade --}}
+@php
+    $nis = Auth::guard('siswa')->user()->nis;
+
+    // Ambil dokumen siswa
+    $dokumens = DokumenSiswa::where('nis', $nis)->get();
+
+    // Hitung progress
+    $total = $dokumens->count();
+    $uploaded = $dokumens->whereNotNull('file_path')->count();
+    $percent = $total > 0 ? round(($uploaded / $total) * 100) : 0;
+@endphp
+
+<div class="card-box"
+     onclick="window.location='{{ route('siswa.dokumensiswa') }}'"
+     style="cursor:pointer;">
+    
+    <div class="card-header">Status Kelengkapan Data</div>
+
+    <div class="card-content">
+        <div class="progress-bar">
+            <div class="progress" style="width: {{ $percent }}%;"></div>
         </div>
+
+        <p style="font-weight:600; color:#007bff; margin-top:8px;">
+            {{ $percent }}%
+        </p>
     </div>
+</div>
 
     {{-- Cetak Kartu Pelajar --}}
     <div class="card-box">

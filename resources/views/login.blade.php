@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -92,6 +92,26 @@
             .form-side { flex: 100%; }
             .login-container { justify-content: center; }
         }
+
+ .password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.password-toggle svg {
+    width: 22px;
+    height: 22px;
+    stroke: #1e3a67;
+}
+
+
     </style>
 </head>
 <body class="antialiased">
@@ -127,21 +147,6 @@
             <form method="POST" action="{{ route('login.process') }}">
                 @csrf
 
-                {{-- Pilihan Role --}}
-                <div class="mb-4">
-                    <label for="role" style="display: block; margin-bottom: 0.3rem; font-weight: 500;">Pilih Role</label>
-                    <select id="role" name="role" class="input-field-custom" required style="padding-left: 1rem;">
-                        <option value="">-- Pilih Role --</option>
-                        <option value="admin">Admin</option>
-                        <option value="guru">Guru</option>
-                        <option value="kesiswaan">Kesiswaan</option>
-                        <option value="siswa">Siswa</option>
-                    </select>
-                    @error('role')
-                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 {{-- Input NIP/NIS --}}
                 <div class="mb-4">
                     <label for="username" style="display: block; margin-bottom: 0.3rem; font-weight: 500;">NIP / NIS</label>
@@ -157,17 +162,43 @@
                 </div>
 
                 {{-- Input Password --}}
-                <div class="mt-4">
-                    <label for="password" style="display: block; margin-bottom: 0.3rem; font-weight: 500;">Password</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🔒</span>
-                        <input id="password" class="input-field-custom" type="password" name="password" 
-                            required autocomplete="current-password" placeholder="Masukkan Password">
-                    </div>
-                    @error('password')
-                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+      <div class="mt-4">
+    <label for="password" style="display: block; margin-bottom: 0.3rem; font-weight: 500;">Password</label>
+    <div class="input-wrapper" style="position: relative;">
+        <span class="input-icon">🔒</span>
+
+        <input id="password" 
+               class="input-field-custom" 
+               type="password" 
+               name="password" 
+               required autocomplete="current-password" 
+               placeholder="Masukkan Password">
+
+        <!-- SVG Toggle -->
+        <span class="password-toggle" id="togglePassword">
+            <!-- default: eye open -->
+            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12s-3.75 7.5-9.75 7.5S2.25 12 2.25 12z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+
+            <!-- eye closed -->
+            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                 stroke-width="2" style="display:none;">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 3l18 18M10.73 5.08A9.72 9.72 0 0112 4.5c6 0 9.75 7.5 9.75 7.5a18.7 18.7 0 01-3.63 4.78M6.13 6.16A18.8 18.8 0 002.25 12s3.75 7.5 9.75 7.5c1.1 0 2.15-.23 3.13-.67" />
+            </svg>
+        </span>
+    </div>
+
+    @error('password')
+        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+    @enderror
+</div>
+
+
                 
                 <div class="flex items-center justify-end mt-4">
                     <button type="submit" class="login-button-custom">
@@ -178,5 +209,26 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const pass = document.getElementById('password');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
+
+    if (pass.type === "password") {
+        pass.type = "text";
+        eyeOpen.style.display = "none";
+        eyeClosed.style.display = "block";
+    } else {
+        pass.type = "password";
+        eyeOpen.style.display = "block";
+        eyeClosed.style.display = "none";
+    }
+});
+</script>
+
+
+
 </body>
 </html>

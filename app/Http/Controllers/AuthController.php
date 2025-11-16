@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\Guru;
 use App\Models\Siswa;
 
 class AuthController extends Controller
@@ -14,45 +14,39 @@ class AuthController extends Controller
      * 🔹 Proses login untuk semua role
      */
     public function login(Request $request)
-    {
-        $request->validate([
-            'role' => 'required',
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+{
+    $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
 
-        $role = $request->role;
-
-        // ===============================
-        // Login untuk ADMIN / GURU / BK
-        // ===============================
-        if (in_array($role, ['admin', 'guru', 'bk'])) {
-            $user = User::where('username', $request->username)->first();
-
-            if ($user && Hash::check($request->password, $user->password)) {
-                Auth::login($user);
-
-                // Redirect sesuai role
-                if (in_array($user->role, ['admin', 'guru', 'bk'])) {
-                    return redirect()->route('admin.dashboard');
-                }
-            }
-
-            return back()->withErrors(['login_error' => 'Username atau password salah.']);
-        }
-
-        // ===============================
-        // Login untuk SISWA
-        // ===============================
-       if ($role === 'siswa') {
-    $siswa = Siswa::where('nis', $request->username)->first();
+    // Cek di tabel guru (berdasarkan NIP)
+    $guru = Guru::where('nip', $request->username)->first();
+    if ($guru && Hash::check($request->password, $guru->password)) {
+        Auth::guard('guru')->login($guru);
+        $request->session()->regenerate();
+        
     
+        // Arahkan sesuai role
+        switch ($guru->role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'guru_bk':
+                return redirect()->route('bk.dashboard');
+            case 'kesiswaan':
+                return redirect()->route('kesiswaan.dashboard');
+            default:
+                return redirect()->route('guru.dashboard');
+        }
+    }
+
+    // Cek di tabel siswa (berdasarkan NIS)
+    $siswa = Siswa::where('nis', $request->username)->first();
     if ($siswa && Hash::check($request->password, $siswa->password)) {
-        // Login siswa
         Auth::guard('siswa')->login($siswa);
         $request->session()->regenerate();
 
-        // Cek apakah password masih default
+        // Cek apakah password default
         if (Hash::check('siswa123', $siswa->password)) {
             session(['default_password' => true]);
         } else {
@@ -62,30 +56,23 @@ class AuthController extends Controller
         return redirect()->route('siswa.dashboard');
     }
 
-    return back()->withErrors(['login_error' => 'NIS atau password salah.']);
+    // Kalau gak cocok dua-duanya
+    return back()->withErrors(['login_error' => 'NIP/NIS atau password salah.']);
 }
-
-
-        // Jika role tidak dikenali
-        return back()->withErrors(['login_error' => 'Role tidak valid.']);
-    }
 
     /**
      * 🔹 Logout untuk semua role
      */
     public function logout(Request $request)
     {
-        // Logout untuk siswa
+        if (Auth::guard('guru')->check()) {
+            Auth::guard('guru')->logout();
+        }
+
         if (Auth::guard('siswa')->check()) {
             Auth::guard('siswa')->logout();
         }
 
-        // Logout untuk admin/guru/bk
-        if (Auth::check()) {
-            Auth::logout();
-        }
-
-        // Hapus semua session
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

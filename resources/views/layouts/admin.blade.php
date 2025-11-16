@@ -326,6 +326,33 @@
             /* Penyesuaian vertikal agar ikon sejajar dengan teks (opsional) */
             margin-top: -3px; 
         }
+
+        .profile-admin {
+    text-align: center;
+    padding: 15px 10px;
+    color: white;
+}
+
+.profile-admin-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-bottom: 8px;
+}
+
+.profile-admin-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.profile-admin-role {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
     </style>
 </head>
 <body>
@@ -334,72 +361,159 @@
             <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
             <h3>Sintesa SMKN 2 Yogyakarta</h3>
         </div>
-        <div class="profile">
-            <img src="{{ asset('images/profil2.jpg') }}" alt="Admin Profile">
-            <div class="info">
-                <h4>Admin</h4>
-                <p>Administrator</p>
-            </div>
-        </div>
-        <nav>
-            <ul>
-                <li>
-                    <a href="{{ route('admin.dashboard') }}" 
+      <div class="profile-admin">
+    <img 
+        src="{{ auth('guru')->user()->foto 
+                ? asset('uploads/foto_guru/' . auth('guru')->user()->foto) 
+                : asset('images/profil_admin_tem.jfif') }}" 
+        alt="Foto Guru"
+        class="profile-admin-img"
+    />
+
+    <h4 class="profile-admin-name">
+        {{ auth('guru')->user()->nama ?? 'Guru' }}
+    </h4>
+
+    <p class="profile-admin-role">
+        {{ ucfirst(str_replace('_', ' ', auth('guru')->user()->role)) }}
+    </p>
+</div>
+
+       <nav>
+    <ul>
+
+        {{-- ===================================
+              MENU UNTUK ADMIN
+        =================================== --}}
+        @if(auth('guru')->user()->role == 'admin')
+            
+            <li>
+                <a href="{{ route('admin.dashboard') }}" 
                     class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                </li>
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
 
-                <li>
-                    <a href="{{ route('admin.datasiswa.index') }}" 
+            <li>
+                <a href="{{ route('admin.datasiswa.index') }}" 
                     class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}">
-                        <i class="fas fa-users"></i> Data Siswa
-                    </a>
-                </li>
+                    <i class="fas fa-users"></i> Data Siswa
+                </a>
+            </li>
 
-                <li>
-                    <a href="{{ route('admin.kartupelajar.index') }}" 
+            <li>
+                <a href="{{ route('admin.kartupelajar.index') }}" 
                     class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}">
-                        <i class="fas fa-id-card"></i> Kartu Pelajar
-                    </a>
-                </li>
+                    <i class="fas fa-id-card"></i> Kartu Pelajar
+                </a>
+            </li>
 
-                <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'open' : '' }}">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu" style="{{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'display:block;' : '' }}">
-                        <li>
-                           <a href="{{ route('admin.konseling.index') }}" 
-                                class="{{ request()->is('admin/konseling*') ? 'active' : '' }}">
-                                Konseling
-                            </a>
+            <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'open' : '' }}">
+                <a href="#" class="dropdown-toggle">
+                    <i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu" style="{{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'display:block;' : '' }}">
+                    <li>
+                        <a href="{{ route('admin.konseling.index') }}" 
+                            class="{{ request()->is('admin/konseling*') ? 'active' : '' }}">
+                            Konseling
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.keterlambatan.index') }}" 
+                        class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
+                            Keterlambatan
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.keterlambatan.index') }}" 
-                            class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
-                                Keterlambatan
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="{{ route('admin.dokumensiswa.index') }}" 
+            <li>
+                <a href="{{ route('admin.dokumensiswa.index') }}" 
                     class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
-                        <i class="fas fa-file-alt"></i> Dokumen Siswa
-                    </a>
-                </li>
+                    <i class="fas fa-file-alt"></i> Dokumen Siswa
+                </a>
+            </li>
 
-                <li>
-                    <a href="{{ route('admin.role.index') }}" 
+            <li>
+                <a href="{{ route('admin.role.index') }}" 
                     class="{{ request()->is('admin/role*') ? 'active' : '' }}">
-                        <i class="fas fa-user-cog"></i> Manajemen Role
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                    <i class="fas fa-user-cog"></i> Manajemen Role
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('admin.password.index') }}" 
+                    class="{{ request()->is('admin/password*') ? 'active' : '' }}">
+                    <i class="fas fa-key"></i> Kelola Password
+                </a>
+            </li>
+
+        @endif
+
+
+
+        {{-- ===================================
+              MENU UNTUK GURU BK
+        =================================== --}}
+        @if(auth('guru')->user()->role == 'guru_bk')
+
+            <li>
+                <a href="{{ route('bk.dashboard') }}"
+                    class="{{ request()->is('bk/dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard BK
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('bk.konseling.index') }}"
+                    class="{{ request()->is('bk/konseling*') ? 'active' : '' }}">
+                    <i class="fas fa-comments"></i> Kelola Konseling
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('bk.keterlambatan.index') }}"
+                    class="{{ request()->is('bk/keterlambatan*') ? 'active' : '' }}">
+                    <i class="fas fa-clock"></i> Kelola Keterlambatan
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('bk.dokumen.index') }}"
+                    class="{{ request()->is('bk/dokumen*') ? 'active' : '' }}">
+                    <i class="fas fa-file-alt"></i> Dokumen Siswa
+                </a>
+            </li>
+
+        @endif
+
+
+
+        {{-- ===================================
+              MENU UNTUK GURU BIASA
+        =================================== --}}
+        @if(auth('guru')->user()->role == 'guru_biasa')
+
+            <li>
+                <a href="{{ route('guru.dashboard') }}"
+                    class="{{ request()->is('guru/dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard Guru
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('guru.datasiswa.index') }}"
+                    class="{{ request()->is('guru/datasiswa*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i> Data Siswa
+                </a>
+            </li>
+
+        @endif
+
+    </ul>
+</nav>
+
 
         <div class="logout">
             <a href="{{ route('logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a>
@@ -410,7 +524,7 @@
         <div class="navbar">
             <h2>@yield('page_title', 'Dashboard Admin')</h2>
             <div class="user-profile">
-                <img src="{{ asset('images/profil2.jpg') }}" alt="Admin Profile">
+                <img src="{{ asset('images/profil_admin_tem.jfif') }}" alt="Admin Profile">
             </div>
         </div>
 

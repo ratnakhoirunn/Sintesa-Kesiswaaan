@@ -19,17 +19,16 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-
-        'siswa' => [ // guard khusus siswa
-            'driver' => 'session',
-            'provider' => 'siswa',
-        ],
+   'guards' => [
+    'guru' => [
+        'driver' => 'session',
+        'provider' => 'guru',
     ],
+    'siswa' => [
+        'driver' => 'session',
+        'provider' => 'siswa',
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -38,16 +37,15 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-        ],
-
-        'siswa' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Siswa::class,
-        ],
+    'guru' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Guru::class,
     ],
+    'siswa' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Siswa::class,
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------

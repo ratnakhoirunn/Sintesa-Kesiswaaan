@@ -521,19 +521,20 @@ tbody tr:hover {
                     <td>{{ \Carbon\Carbon::parse($data->jam_datang)->format('H:i') }}</td>
                     <td class="text-left">{{ $data->keterangan }}</td>
                     <td>
-    @if ($data->status == 'diterima')
-        <a href="{{ route('siswa.cetak.sit', $data->id) }}"
-            class="status-badge status-diterima"
-            style="text-decoration:none; cursor:pointer; display:inline-block;">
-            Cetak SIT
-        </a>
-    @else
-        <span class="status-badge 
-            {{ $data->status == 'pending' ? 'status-pending' :
-               ($data->status == 'diproses' ? 'status-diproses' : 'status-diterima') }}">
-            {{ ucfirst($data->status) }}
-        </span>
-    @endif
+   @if ($data->status == 'terima')
+    <a href="{{ route('siswa.cetak.sit', $data->id) }}"
+        class="status-badge status-diterima"
+        style="text-decoration:none; cursor:pointer; display:inline-block;">
+        Cetak SIT
+    </a>
+@else
+    <span class="status-badge 
+        {{ $data->status == 'pending' ? 'status-pending' :
+           ($data->status == 'diproses' ? 'status-diproses' : 'status-diterima') }}">
+        {{ ucfirst($data->status) }}
+    </span>
+@endif
+
 </td>
 
 
