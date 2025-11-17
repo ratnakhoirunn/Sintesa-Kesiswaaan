@@ -31,6 +31,10 @@ class Siswa extends Authenticatable
         'password',
     ];
 
+    protected $casts = [
+        'akses_edit' => 'boolean',
+    ];
+
     public function getAuthIdentifierName()
     {
         return 'nis';

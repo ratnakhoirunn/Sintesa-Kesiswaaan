@@ -44,6 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth'     => \App\Http\Middleware\Authenticate::class,
             'role'     => \App\Http\Middleware\RoleMiddleware::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+            'cekAksesEdit' => \App\Http\Middleware\CekAksesEditSiswa::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

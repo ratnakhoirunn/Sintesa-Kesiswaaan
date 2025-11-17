@@ -45,7 +45,7 @@
 
         <div class="footer">
             <p>Yogyakarta, {{ now()->format('d F Y') }}</p>
-            <p>Wali Kelas</p>
+            <p>Guru BK</p>
             <br><br>
             <p><strong>________________________</strong></p>
         </div>

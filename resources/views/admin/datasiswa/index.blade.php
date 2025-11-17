@@ -177,6 +177,19 @@
     .aksi-lihat { color: #007bff; }
     .aksi-edit { color: #ff9800; }
     .aksi-hapus { color: #e74c3c; }
+
+    /*tombol toggle */
+    .aksi-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .aksi-toggle:hover {
+        opacity: .7;
+    }
 </style>
 
 <table>
@@ -200,19 +213,43 @@
             <td>{{ $siswa->jurusan }}</td>
             <td>
                 <div class="aksi-container">
+
+                    {{-- Tombol Lihat --}}
                     <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" class="aksi-lihat">
                         <i class="fas fa-eye"></i> Lihat
                     </a>
+
+                    {{-- Tombol Edit --}}
                     <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="aksi-edit">
                         <i class="fas fa-edit"></i> Edit
                     </a>
-                    <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+
+                    {{-- Tombol Hapus --}}
+                    <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" method="POST" 
+                        onsubmit="return confirm('Yakin hapus data ini?')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="aksi-hapus">
                             <i class="fas fa-trash"></i> Hapus
                         </button>
                     </form>
+
+                    {{-- 🔘 Toggle Akses Edit Siswa --}}
+                    <form action="{{ route('admin.datasiswa.toggleAkses', $siswa->nis) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        @if($siswa->akses_edit)
+                            <button type="submit" class="aksi-toggle" style="color:#16a085;">
+                                <i class="fas fa-unlock"></i> Aktif
+                            </button>
+                        @else
+                            <button type="submit" class="aksi-toggle" style="color:#e74c3c;">
+                                <i class="fas fa-lock"></i> Nonaktif
+                            </button>
+                        @endif
+                    </form>
+
                 </div>
             </td>
         </tr>

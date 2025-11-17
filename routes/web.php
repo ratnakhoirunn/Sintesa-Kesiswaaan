@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\KeterlambatanController;
 use App\Http\Controllers\Admin\DokumenSiswaController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserPasswordController;
+use App\Http\Controllers\Admin\SiswaAksesController;
 
 use App\Http\Controllers\bk\DashboardBKController;
 
@@ -84,7 +85,10 @@ Route::prefix('admin')->name('admin.')
 
     // CRUD Data Siswa untuk ADMIN
     Route::resource('datasiswa', SiswaController::class);
-    
+
+    // Akses Edit Siswa
+    Route::put('/datasiswa/{nis}/toggle-akses', [\App\Http\Controllers\Admin\SiswaAksesController::class, 'toggleAkses'])->name('datasiswa.toggleAkses');
+
     // 📤 Import Data Siswa
     Route::get('datasiswa/import', [SiswaImportController::class, 'showImportForm'])->name('datasiswa.import.form');
     Route::post('datasiswa/import', [SiswaImportController::class, 'import'])->name('datasiswa.import');
