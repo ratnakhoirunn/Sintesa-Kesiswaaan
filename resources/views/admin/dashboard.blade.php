@@ -60,14 +60,18 @@
         </div>
 
         <div class="right-column-cards">
-            <div class="admin-action-card">
+        <a href="{{ route('admin.dokumensiswa.index') }}" 
+        style="text-decoration:none; color:inherit; display:block;">
+            
+            <div class="admin-action-card" 
+                style="cursor:pointer; transition:.25s;">
+                
                 <h3>Dokumen Siswa</h3>
 
                 @php
-                    // Data contoh: jumlah dokumen yang sudah terpenuhi
                     $dokumenLengkap = 30;
                     $dokumenSedang = 15;
-                    $dokumenBerat = 5; // Dokumen belum diunggah
+                    $dokumenBerat = 5;
                     $totalDokumen = $dokumenLengkap + $dokumenSedang + $dokumenBerat;
 
                     $items = [
@@ -77,23 +81,31 @@
 
                 @foreach($items as $item)
                     @php
-                        // Persentase berdasarkan dokumen belum terpenuhi
                         $persen = round(($item['count'] / $totalDokumen) * 100);
                     @endphp
+
                     <div class="action-item" style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-                        <img src="{{ asset('images/' . $item['icon']) }}" alt="{{ $item['label'] }}" style="width:40px; height:40px;">
+                        <img src="{{ asset('images/' . $item['icon']) }}" 
+                            alt="{{ $item['label'] }}" 
+                            style="width:40px; height:40px;">
+                            
                         <div style="flex:1;">
                             <div style="display:flex; justify-content:space-between;">
                                 <span>{{ $item['label'] }}</span>
                                 <span>{{ $persen }}%</span>
                             </div>
+
                             <div class="progress-bar-container">
-                                <div class="progress-bar-fill" style="width: {{ $persen }}%; background-color: {{ $item['color'] }};"></div>
+                                <div class="progress-bar-fill" 
+                                    style="width: {{ $persen }}%; background-color: {{ $item['color'] }};">
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
+
             </div>
+        </a>
 
             <style>
             .progress-bar-container {
@@ -108,7 +120,17 @@
                 height: 100%;
                 transition: width 0.4s ease;
             }
+            .admin-action-card {
+                transition: .25s ease-in-out;
+            }
+
+            .admin-action-card:hover {
+                background: #f5f5f5; /* abu muda */
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            }
             </style>
+
 <div class="konseling-action-card">
     <h3>Tindakan Konseling</h3>
 
