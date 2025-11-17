@@ -327,30 +327,37 @@
             margin-top: -3px; 
         }
 
-        .profile-admin {
+    .profile-admin {
     text-align: center;
-    padding: 15px 10px;
-    color: white;
+    margin-top: 10px;
+    padding-top: 0;
 }
 
+/* Ukuran foto lebih kecil */
 .profile-admin-img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
+    width: 70px;        /* 🔥 foto diperkecil */
+    height: 70px;
     border-radius: 50%;
-    border: 2px solid white;
-    margin-bottom: 8px;
+    object-fit: cover;
+    margin-bottom: 5px; /* 🔥 jarak lebih kecil */
+    margin-top: -5px;   /* 🔥 foto sedikit naik */
+}
+
+/* Bikin teks lebih naik */
+.profile-admin-text {
+    margin-top: -5px;   /* 🔥 naikkan nama & role */
 }
 
 .profile-admin-name {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
-    margin-bottom: 2px;
+    margin-bottom: 2px; /* rapat */
 }
 
 .profile-admin-role {
-    font-size: 13px;
-    opacity: 0.9;
+    font-size: 12px;
+    margin: 0;
+    opacity: .85;
 }
 
     </style>
@@ -361,7 +368,7 @@
             <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
             <h3>Sintesa SMKN 2 Yogyakarta</h3>
         </div>
-      <div class="profile-admin">
+     <div class="profile-admin">
     <img 
         src="{{ auth('guru')->user()->foto 
                 ? asset('uploads/foto_guru/' . auth('guru')->user()->foto) 
@@ -370,13 +377,15 @@
         class="profile-admin-img"
     />
 
-    <h4 class="profile-admin-name">
-        {{ auth('guru')->user()->nama ?? 'Guru' }}
-    </h4>
+    <div class="profile-admin-text">
+        <h4 class="profile-admin-name">
+            {{ auth('guru')->user()->nama ?? 'Guru' }}
+        </h4>
 
-    <p class="profile-admin-role">
-        {{ ucfirst(str_replace('_', ' ', auth('guru')->user()->role)) }}
-    </p>
+        <p class="profile-admin-role">
+            {{ ucfirst(str_replace('_', ' ', auth('guru')->user()->role)) }}
+        </p>
+    </div>
 </div>
 
        <nav>
@@ -491,23 +500,34 @@
 
 
         {{-- ===================================
-              MENU UNTUK GURU BIASA
+              MENU UNTUK Kesiswaan
         =================================== --}}
-        @if(auth('guru')->user()->role == 'guru_biasa')
+        @if(auth('guru')->user()->role == 'kesiswaan')
 
-            <li>
-                <a href="{{ route('guru.dashboard') }}"
-                    class="{{ request()->is('guru/dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard Guru
-                </a>
-            </li>
+            <li><a href="{{ route('kesiswaan.dashboard') }}"
+                class="{{ request()->is('kesiswaan/dashboard') ? 'active' : '' }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a></li>
 
-            <li>
-                <a href="{{ route('guru.datasiswa.index') }}"
-                    class="{{ request()->is('guru/datasiswa*') ? 'active' : '' }}">
-                    <i class="fas fa-users"></i> Data Siswa
-                </a>
-            </li>
+            <li><a href="{{ route('admin.datasiswa.index') }}"
+                class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}">
+                <i class="fas fa-users"></i> Data Siswa
+            </a></li>
+
+            <li><a href="{{ route('admin.kartupelajar.index') }}"
+                class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}">
+                <i class="fas fa-id-card"></i> Kartu Pelajar
+            </a></li>
+
+            <li><a href="{{ route('admin.keterlambatan.index') }}"
+                class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
+                <i class="fas fa-clock"></i> Keterlambatan
+            </a></li>
+
+            <li><a href="{{ route('admin.dokumensiswa.index') }}"
+                class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
+                <i class="fas fa-file-alt"></i> Dokumen Siswa
+            </a></li>
 
         @endif
 

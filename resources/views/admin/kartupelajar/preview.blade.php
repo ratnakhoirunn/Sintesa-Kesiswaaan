@@ -194,48 +194,96 @@ body {
             <hr style="width:100%; max-width:750px; border:1px dashed #ccc;">
         @endforeach
 
-        <div style="margin-top: 10px; text-align:center;">
-            <button onclick="window.print()" class="btn-custom btn-cetak">🖨 Cetak Semua</button>
-            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
-            <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
-        </div>
+        <button onclick="window.print()" class="btn-custom btn-cetak">🖨 Cetak Semua</button>
 
-    @else
-        {{-- === CETAK SATUAN === --}}
-        <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
+{{-- HANYA ADMIN & BK YANG BOLEH EDIT --}}
+@unless(auth('guru')->user()->role === 'kesiswaan')
+    <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
+@endunless
 
-        <div style="margin-top: 10px; text-align:center;">
-            <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">🖨 Cetak</button>
-            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="btn-custom btn-edit">✏ Edit</a>
-            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
-            <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
-        </div>
-    @endif
+<a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
 
-    <!-- ✅ Form Edit Data Kartu -->
+
+   @else
+    {{-- === CETAK SATUAN === --}}
+    <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
+
+    <div style="margin-top: 10px; text-align:center;">
+
+        {{-- Tombol Cetak — Semua role boleh --}}
+        <button onclick="document.getElementById('kartuFrame').contentWindow.print()" 
+                class="btn-custom btn-cetak">
+            🖨 Cetak
+        </button>
+
+        {{-- HANYA ADMIN & BK yang boleh edit --}}
+        @unless(auth('guru')->user()->role === 'kesiswaan')
+
+            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" 
+                class="btn-custom btn-edit">
+                ✏ Edit
+            </a>
+
+            <button type="button" 
+                    class="btn-custom btn-edit" 
+                    onclick="toggleFooterForm()">
+                🧾 Edit Data Kartu
+            </button>
+
+        @endunless
+
+        {{-- Tombol kembali — semua role boleh --}}
+        <a href="{{ route('admin.kartupelajar.index') }}" 
+            class="btn-custom btn-batal">
+            ✖ Kembali
+        </a>
+
+    </div>
+@endif
+
+
+ {{-- ======================================
+   FORM EDIT DATA KARTU (Hanya Admin & BK)
+======================================= --}}
+@unless(auth('guru')->user()->role === 'kesiswaan')
+
 <div id="footerFormContainer" style="display:none; margin-top:20px; text-align:center;">
-    <form id="footerForm" onsubmit="return updateFrameFooter();" style="display:inline-block; background:#f0f4ff; padding:20px; border-radius:8px; text-align:left;">
+    <form id="footerForm" onsubmit="return updateFrameFooter();" 
+          style="display:inline-block; background:#f0f4ff; padding:20px; border-radius:8px; text-align:left;">
+
         <h4 style="color:#17375d; margin-bottom:10px;">Edit Data Kartu</h4>
+
         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
             <div>
                 <label>Bulan:</label>
-                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}" required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}"
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>Tahun:</label>
-                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}" required style="padding:5px 10px; border-radius:6px;">
+                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}"
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>Nama Kepala Sekolah:</label>
-                <input type="text" name="nama_kepsek" id="nama_kepsek" placeholder="Drs. Agus Waluyo, M.Eng." required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="nama_kepsek" id="nama_kepsek"
+                       placeholder="Drs. Agus Waluyo, M.Eng."
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>NIP:</label>
-                <input type="text" name="nip" id="nip" placeholder="196512271994121002" required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="nip" id="nip"
+                       placeholder="196512271994121002"
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>Gambar Cap & TTD Kepala Sekolah:</label>
-                <input type="file" id="cap_kepsek" accept="image/*" style="padding:5px 10px; border-radius:6px;">
+                <input type="file" id="cap_kepsek" accept="image/*"
+                       style="padding:5px 10px; border-radius:6px;">
             </div>
         </div>
 
@@ -243,8 +291,12 @@ body {
             <button type="submit" class="btn-custom btn-cetak">💾 Simpan Perubahan</button>
             <button type="button" class="btn-custom btn-batal" onclick="toggleFooterForm()">Batal</button>
         </div>
+
     </form>
 </div>
+
+@endunless
+
 
 </div>
 

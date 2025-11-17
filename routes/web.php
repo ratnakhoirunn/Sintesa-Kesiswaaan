@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserPasswordController;
 
 use App\Http\Controllers\bk\DashboardBKController;
+use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
 
 use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\SiswaImportController;
@@ -82,8 +83,10 @@ Route::prefix('admin')->name('admin.')
     // Dashboard Admin
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
 
-    // CRUD Data Siswa untuk ADMIN
-    Route::resource('datasiswa', SiswaController::class);
+   // === DATA SISWA (Admin full, Kesiswaan read-only) ===
+    Route::middleware(['kesiswaan.readonly'])->group(function () {
+        Route::resource('datasiswa', SiswaController::class);
+    });
     
     // 📤 Import Data Siswa
     Route::get('datasiswa/import', [SiswaImportController::class, 'showImportForm'])->name('datasiswa.import.form');
@@ -119,8 +122,9 @@ Route::prefix('admin')->name('admin.')
     // 📄 Roles
     Route::resource('role', RoleController::class);
 
-    // 📁 Dokumen Siswa
+    Route::middleware(['kesiswaan.readonly'])->group(function () {
     Route::resource('dokumensiswa', DokumenSiswaController::class);
+});
 
     //Ubah Password Siswa
     Route::prefix('password')->name('password.')->group(function () {
@@ -169,6 +173,21 @@ Route::prefix('bk')->name('bk.')
     // Dokumen siswa (read only)
     Route::get('/dokumen', [DokumenSiswaController::class, 'index'])
         ->name('dokumen.index');
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| 👨‍🏫 Kesiswaan Area
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth:guru', 'role:kesiswaan'])
+    ->prefix('kesiswaan')
+    ->name('kesiswaan.')
+    ->group(function () {
+
+    Route::get('/dashboard', [KesiswaanDashboardController::class, 'index'])
+        ->name('dashboard');
 
 });
 
