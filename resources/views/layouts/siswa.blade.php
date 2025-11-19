@@ -23,7 +23,7 @@
 
         /* Sidebar */
         .sidebar {
-            width: 250px;
+            width: 300px;
             background-color: #123B6B;
             color: #fff;
             padding: 20px 0;
@@ -70,8 +70,8 @@
         }
         .sidebar .profile .info h4 {
         margin: 10px 0 2px;
-        font-size: 1rem;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 550;
         color: #fff;
 }
 
@@ -167,7 +167,7 @@
 
         /* Main Content */
         .main-content {
-            margin-left: 250px;
+            margin-left: 300px;
             flex-grow: 1;
             padding: 30px;
             background-color: #f4f7f6;
@@ -403,15 +403,33 @@
     color: #22c55e;
 }
 
+.header-title {
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    white-space: nowrap;
+    color: #ffffff; /* tulisan putih */
+    margin: 0;
+}
+
+.header-white {
+    background: #123B6B;   /* biru */
+    color: #ffffff;        /* tulisan putih */
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 2px solid #17375d;
+}
+
+
         
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <div class="header">
-            <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
-            <h3>SINTESA SMKN 2 Yogyakarta</h3>
-        </div>
+         <div class="header header-white">
+        <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK" class="header-logo">
+        <h3 class="header-title">SINTESA SMK N 2 YOGYAKARTA</h3>
+    </div>
 
         <div class="profile">
             <img 
@@ -423,8 +441,6 @@
             <div class="info">
                 <h4>{{ Auth::guard('siswa')->user()->nama_lengkap ?? 'Siswa' }}</h4>
                 <p>{{ Auth::guard('siswa')->user()->role ?? 'Siswa' }}</p>
-
-
             </div>
         </div>
 

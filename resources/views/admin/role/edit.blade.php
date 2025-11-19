@@ -53,7 +53,7 @@
 
 <div class="form-container">
 
-    <form action="{{ route('admin.role.update', $role->nis) }}" method="POST">
+    <form action="{{ route('admin.role.update', $role->nip ?? $role->nis) }}" method="POST">
         @csrf
         @method('PUT')
 

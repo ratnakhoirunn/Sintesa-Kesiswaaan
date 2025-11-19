@@ -311,7 +311,6 @@ use App\Models\DokumenSiswa;
                     <th>Topik Konseling</th>
                     <th>Kegiatan Layanan</th>
                     <th>Status</th>
-                    <th>Tanggapan Admin</th>
                 </tr>
             </thead>
             <tbody>
@@ -327,7 +326,6 @@ use App\Models\DokumenSiswa;
                                 {{ $konseling->status }}
                             </span>
                         </td>
-                        <td>{{ $konseling->tanggapan_admin ?? 'Belum ada tanggapan' }}</td>
                     </tr>
                 @empty
                     <tr>

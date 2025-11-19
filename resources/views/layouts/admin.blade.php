@@ -27,7 +27,7 @@
 
         /* Sidebar */
         .sidebar {
-            width: 250px;
+            width: 300px;
             background-color: #17375d; /* Warna biru gelap */
             color: #fff;
             padding: 20px 0;
@@ -153,7 +153,7 @@
 
         /* Main Content */
         .main-content {
-            margin-left: 250px; /* Sesuaikan dengan lebar sidebar */
+            margin-left: 300px; /* Sesuaikan dengan lebar sidebar */
             flex-grow: 1;
             padding: 30px;
             background-color: #f4f7f6;
@@ -359,15 +359,33 @@
     margin: 0;
     opacity: .85;
 }
+.header-title {
+    font-size: 14px !important;
+    font-weight: 700;
+    white-space: nowrap;
+    color: #ffffff; /* tulisan putih */
+    margin: 0;
+}
+
+.header-white {
+    background: #17375d;   /* biru */
+    color: #ffffff;        /* tulisan putih */
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 2px solid #17375d;
+}
+
 
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <div class="header">
-            <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK">
-            <h3>Sintesa SMKN 2 Yogyakarta</h3>
-        </div>
+       <div class="header header-white">
+        <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK" class="header-logo">
+        <h3 class="header-title">SINTESA SMK N 2 YOGYAKARTA</h3>
+    </div>
+
      <div class="profile-admin">
     <img 
         src="{{ auth('guru')->user()->foto 
