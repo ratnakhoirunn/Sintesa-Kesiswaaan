@@ -80,19 +80,20 @@
         </form>
 
         <!-- Tombol kanan -->
-        <div class="button-group">
-            <a href="{{ route('admin.datasiswa.create') }}" class="btn-tambah">
-                <i class="fas fa-plus"></i> Tambah Data Siswa
-            </a>
+        @if(auth('guru')->user()->role !== 'kesiswaan')
+    <a href="{{ route('admin.datasiswa.create') }}" class="btn-tambah">
+        <i class="fas fa-plus"></i> Tambah Data Siswa
+    </a>
 
-            <form action="{{ route('admin.datasiswa.import') }}" method="POST" enctype="multipart/form-data" class="import-form">
-                @csrf
-                <label for="file" class="btn-import">
-                    <i class="fas fa-file-excel"></i> Import Excel
-                </label>
-                <input type="file" id="file" name="file" accept=".xlsx,.xls,.csv" style="display:none;" onchange="this.form.submit();">
-            </form>
-        </div>
+    <form action="{{ route('admin.datasiswa.import') }}" method="POST" enctype="multipart/form-data" class="import-form">
+        @csrf
+        <label for="file" class="btn-import">
+            <i class="fas fa-file-excel"></i> Import Excel
+        </label>
+        <input type="file" id="file" name="file" accept=".xlsx,.xls,.csv" style="display:none;" onchange="this.form.submit();">
+    </form>
+@endif
+
     </div>
 
     @if ($rombel)
@@ -253,6 +254,32 @@
                 </div>
             </td>
         </tr>
+    <div class="aksi-container">
+
+        {{-- Semua role boleh melihat detail --}}
+        <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" class="aksi-lihat">
+            <i class="fas fa-eye"></i> Lihat
+        </a>
+
+        {{-- Jika BUKAN kesiswaan, maka boleh edit & hapus --}}
+        @if(auth('guru')->user()->role !== 'kesiswaan')
+            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="aksi-edit">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+
+            <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" 
+                  method="POST" 
+                  onsubmit="return confirm('Yakin hapus data ini?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="aksi-hapus">
+                    <i class="fas fa-trash"></i> Hapus
+                </button>
+            </form>
+        @endif
+
+    </div>
+</td>
         @empty
         <tr><td colspan="6" style="text-align:center; padding:10px;">Belum ada data siswa.</td></tr>
         @endforelse

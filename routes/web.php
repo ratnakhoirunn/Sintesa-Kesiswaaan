@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\UserPasswordController;
 use App\Http\Controllers\Admin\SiswaAksesController;
 
 use App\Http\Controllers\bk\DashboardBKController;
+use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
 
 use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\SiswaImportController;
@@ -89,6 +90,12 @@ Route::prefix('admin')->name('admin.')
     // Akses Edit Siswa
     Route::put('/datasiswa/{nis}/toggle-akses', [\App\Http\Controllers\Admin\SiswaAksesController::class, 'toggleAkses'])->name('datasiswa.toggleAkses');
 
+   // === DATA SISWA (Admin full, Kesiswaan read-only) ===
+    Route::middleware(['kesiswaan.readonly'])->group(function () {
+        Route::resource('datasiswa', SiswaController::class);
+    });
+    
+
     // 📤 Import Data Siswa
     Route::get('datasiswa/import', [SiswaImportController::class, 'showImportForm'])->name('datasiswa.import.form');
     Route::post('datasiswa/import', [SiswaImportController::class, 'import'])->name('datasiswa.import');
@@ -123,8 +130,9 @@ Route::prefix('admin')->name('admin.')
     // 📄 Roles
     Route::resource('role', RoleController::class);
 
-    // 📁 Dokumen Siswa
+    Route::middleware(['kesiswaan.readonly'])->group(function () {
     Route::resource('dokumensiswa', DokumenSiswaController::class);
+});
 
     //Ubah Password Siswa
     Route::prefix('password')->name('password.')->group(function () {
@@ -173,6 +181,21 @@ Route::prefix('bk')->name('bk.')
     // Dokumen siswa (read only)
     Route::get('/dokumen', [DokumenSiswaController::class, 'index'])
         ->name('dokumen.index');
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| 👨‍🏫 Kesiswaan Area
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth:guru', 'role:kesiswaan'])
+    ->prefix('kesiswaan')
+    ->name('kesiswaan.')
+    ->group(function () {
+
+    Route::get('/dashboard', [KesiswaanDashboardController::class, 'index'])
+        ->name('dashboard');
 
 });
 

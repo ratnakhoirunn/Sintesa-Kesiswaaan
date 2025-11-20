@@ -67,22 +67,31 @@
                 <span class="badge-count">{{ $s->dokumen_siswa_count ?? 0 }} / {{ $totalDokumenWajib ?? 5 }}</span>
             </td>
             <td>
-                <div class="aksi-container">
-                    <a href="{{ route('admin.dokumensiswa.show', $s->nis) }}" class="aksi-lihat">
-                        <i class="fas fa-eye"></i> Lihat
-                    </a>
-                    <a href="{{ route('admin.dokumensiswa.edit', $s->nis) }}" class="aksi-edit">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
-                    <form action="{{ route('admin.dokumensiswa.destroy', $s->nis) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="aksi-hapus">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </form>
-                </div>
-            </td>
+    <div class="aksi-container">
+        {{-- Semua role boleh melihat detail dokumen --}}
+        <a href="{{ route('admin.dokumensiswa.show', $s->nis) }}" class="aksi-lihat">
+            <i class="fas fa-eye"></i> Lihat
+        </a>
+
+        {{-- Edit & Hapus hanya untuk ADMIN dan BK --}}
+        @if(auth('guru')->user()->role !== 'kesiswaan')
+            <a href="{{ route('admin.dokumensiswa.edit', $s->nis) }}" class="aksi-edit">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+
+            <form action="{{ route('admin.dokumensiswa.destroy', $s->nis) }}"
+                  method="POST"
+                  onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="aksi-hapus">
+                    <i class="fas fa-trash"></i> Hapus
+                </button>
+            </form>
+        @endif
+    </div>
+</td>
+
         </tr>
         @empty
         <tr>
