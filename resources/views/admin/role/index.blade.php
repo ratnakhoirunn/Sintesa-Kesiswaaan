@@ -24,7 +24,7 @@
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 15px;
     }
     .filters {
         display: flex;
@@ -32,11 +32,22 @@
         gap: 10px;
         flex: 1;
     }
+    .search-wrapper {
+        position: relative;
+        width: 100%;
+    }
     .search-box {
         border: none;
         border-radius: 8px;
         padding: 8px 35px 8px 35px;
-        width: 100%;
+        width: 92%;
+        font-size: 14px;
+    }
+    .search-wrapper i {
+        position: absolute;
+        top: 9px;
+        left: 10px;
+        color: #888;
         font-size: 14px;
     }
     .filter-role {
@@ -59,29 +70,31 @@
     .btn-add:hover {
         background: #f1f1f1;
     }
-    .search-wrapper {
-        position: relative;
-        width: 100%;
+
+    /* ===== RESPONSIVE FIX ===== */
+    @media (max-width: 768px) {
+        .top-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .filters {
+            width: 100%;
+            flex-direction: column;
+        }
+        .filter-role {
+            width: 100%;
+        }
+        .btn-add {
+            width: 100%;
+            text-align: center;
+        }
     }
-    .search-wrapper i {
-        position: absolute;
-        top: 9px;
-        color: #888;
-        font-size: 14px;
-    }
-    .search-wrapper .fa-search {
-        left: 10px;
-    }
-    .search-wrapper .fa-filter {
-        right: 10px;
-    }
+
     table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
     }
-
-    
     th, td {
         padding: 10px;
         text-align: left;
@@ -90,11 +103,10 @@
         background: #2c3e50;
         border-bottom: 2px solid #eee;
     }
-
     thead th {
-    color: #fff; /* ✅ hanya header putih */
-    font-weight: 600;
-}
+        color: #fff;
+        font-weight: 600;
+    }
     tbody tr:nth-child(even) {
         background: #fafafa;
     }
@@ -121,19 +133,35 @@
 <div class="table-container">
     <div class="top-bar">
         <form method="GET" action="{{ route('admin.role.index') }}" class="filters">
+
+            {{-- Search Box --}}
             <div class="search-wrapper">
                 <i class="fas fa-search"></i>
-                <input type="text" name="search" value="{{ request('search') }}" 
+                <input type="text" name="search" value="{{ request('search') }}"
                     class="search-box" placeholder="Cari User...">
-                <i class="fas fa-filter"></i>
             </div>
-            <select name="role" class="filter-role" onchange="this.form.submit()">
-                <option value="">Semua Role</option>
-                <option value="Admin" {{ request('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
-                <option value="BK" {{ request('role') == 'BK' ? 'selected' : '' }}>BK</option>
-                <option value="Guru" {{ request('role') == 'Guru' ? 'selected' : '' }}>Guru</option>
-                <option value="Siswa" {{ request('role') == 'Siswa' ? 'selected' : '' }}>Siswa</option>
-            </select>
+
+            {{-- Filter Role (dengan ikon di LUAR search box) --}}
+            <div style="display:flex; align-items:center; gap:6px; color:white;">
+                <select name="role" class="filter-role" onchange="this.form.submit()">
+                     <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>
+                        Admin
+                    </option>
+
+                    <option value="guru_bk" {{ request('role') == 'guru_bk' ? 'selected' : '' }}>
+                        Guru BK
+                    </option>
+
+                    <option value="guru_biasa" {{ request('role') == 'guru_biasa' ? 'selected' : '' }}>
+                        Guru Biasa
+                    </option>
+
+                    <option value="kesiswaan" {{ request('role') == 'kesiswaan' ? 'selected' : '' }}>
+                        Kesiswaan
+                    </option>
+                     <option value="Siswa" {{ request('role') == 'Siswa' ? 'selected' : '' }}>Siswa</option>
+                </select>
+            </div>
         </form>
 
         <a href="{{ route('admin.role.create') }}" class="btn-add">
@@ -146,7 +174,7 @@
             <tr>
                 <th>No</th>
                 <th>Nama Pengguna</th>
-                <th>NIS</th>
+                <th>NIS/NIP</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Aksi</th>
@@ -156,20 +184,27 @@
             @forelse($roles as $index => $role)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $role->nama_lengkap ?? '-' }}</td>
-                    <td>{{ $role->nis ?? '-' }}</td>
+                    <td>
+                        {{ $role->nama_lengkap ?? $role->nama ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $role->nis ?? $role->nip ?? '-' }}
+                    </td>
+
                     <td>{{ $role->email ?? '-' }}</td>
                     <td>
                         <span class="role-badge" style="background:
-                            {{ $role->role == 'Admin' ? '#0d6efd' : 
-                               ($role->role == 'BK' ? '#ffc107' : 
-                               ($role->role == 'Guru' ? '#6610f2' : '#28a745')) }};">
+                            {{ $role->role == 'admin' ? '#0d6efd' :
+                               ($role->role == 'guru_bk' ? '#ffc107' :
+                               ($role->role == 'kesiswaan' ? '#6610f2' : '#28a745')) }};">
                             {{ ucfirst($role->role) }}
                         </span>
                     </td>
                     <td>
-                        <a href="{{ route('admin.role.edit', $role->nis) }}" class="btn-action"><i class="fas fa-edit"></i></a>
-                        <form action="{{ route('admin.role.destroy', $role->nis) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('admin.role.edit', $role->nip ?? $role->nis) }}" class="btn-edit">Edit</a>
+                        <form action="{{ route('admin.role.destroy', $role->nip ?? $role->nis) }}" 
+                            method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-action" onclick="return confirm('Yakin hapus user ini?')">

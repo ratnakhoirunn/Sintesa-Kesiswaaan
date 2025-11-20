@@ -46,7 +46,9 @@
                 <h3>Grafik Siswa Per Jurusan</h3>
                  <div class="mb-3">
                     <label for="filterTahun" class="block text-sm font-medium text-gray-700">Filter Angkatan</label>
-                    <select id="filterTahun" class="border border-gray-300 rounded-lg p-2 mt-1">
+                    <select id="filterTahun" 
+                        class="border border-gray-300 rounded-lg p-2 mt-1 filter-dropdown"
+                        style="font-family: inherit;">
                         <option value="">Semua</option>
                         @foreach($angkatanList as $angkatan)
                             <option value="{{ $angkatan }}">{{ $angkatan }}</option>
@@ -147,15 +149,36 @@
     </a>
 </div>
 
-<style>
-/* === STYLE KEREN UNTUK NOTIF === */
+<!-- === KETERLAMBATAN (DIBUAT SAMA STYLING SEPERTI KONSELING) === -->
 
+<div class="konseling-action-card" style="margin-top:20px;">
+    <h3>Pengajuan Keterlambatan</h3>
+
+    <a href="{{ route('admin.keterlambatan.index') }}" 
+       class="notification-item fancy-notif fancy-late">
+
+        <i class="fas fa-clock"></i>
+
+        <span>
+            @if($keterlambatanBaru > 0)
+                <strong>{{ $keterlambatanBaru }} Pengajuan Baru</strong><br>
+                Menunggu tindakan admin
+            @else
+                <strong>Tidak ada pengajuan baru</strong>
+            @endif
+        </span>
+
+    </a>
+</div>
+
+<style>
+/* === BASE STYLE KONSELING (tetap kuning) === */
 .fancy-notif {
     display: flex;
     align-items: center;
     gap: 12px;
 
-    background: #fff7d6;
+    background: #fff7d6; /* kuning */
     border: 1px solid #ffdd85;
     padding: 15px 18px;
     border-radius: 12px;
@@ -168,18 +191,33 @@
 }
 
 .fancy-notif i {
-    color: #ffbb33;
     font-size: 24px;
 }
 
+/* === KETERLAMBATAN (warna dibuat PINK) === */
+.fancy-late {
+    background: #ffe4ec !important;       /* pink lembut */
+    border: 1px solid #ffb5c8 !important; /* border pink */
+    color: #7a3242 !important;            /* teks pink tua */
+}
+
+.fancy-late i {
+    color: #ff6b8b !important; /* ikon pink */
+}
+
 /* Hover effect */
-.fancy-notif:hover {
-    background: #ffe9a9;
+.fancy-notif:hover,
+.fancy-late:hover {
     transform: translateY(-2px);
     box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
-/* === Animasi Getar Halus (Elegan) === */
+/* Hover khusus keterlambatan */
+.fancy-late:hover {
+    background: #ffd3df !important;
+}
+
+/* Animasi getar */
 @keyframes notif-shake {
     0% { transform: translateX(0); }
     20% { transform: translateX(-2px); }
@@ -188,8 +226,37 @@
     80% { transform: translateX(2px); }
     100% { transform: translateX(0); }
 }
+
+/* === Judul Card jadi HITAM === */
+.konseling-action-card h3 {
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000; /* warna hitam */
+}
+
 </style>
 
+
+<style>
+    .filter-dropdown {
+    background: #f8f9fa;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    border-radius: 12px !important; /* biar lebih lembut */
+    transition: .2s;
+    width: 100px; /* kecil seperti awal */
+}
+
+.filter-dropdown:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.filter-dropdown:focus {
+    outline: none;
+    box-shadow: 0 0 6px rgba(0,123,255,0.4);
+}
+
+</style>
 
 
     {{-- Script ChartJS --}}

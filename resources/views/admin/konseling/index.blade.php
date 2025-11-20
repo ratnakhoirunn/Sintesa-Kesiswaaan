@@ -175,6 +175,43 @@
 .btn-reject:hover {
     background: #c82333;
 }
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: ; /* FONT SAMA */
+}
+
+.filter-icon {
+    font-size: 20px;
+    color: #123B6B;
+}
+
+.filter-input {
+    font-family: 'Poppins', sans-serif; /* FONT NYA SAMA */
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.filter-btn {
+    font-family: 'Poppins', sans-serif; /* FONT SAMA */
+    padding: 7px 12px;
+    border: none;
+    background: #123B6B;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.filter-btn:hover {
+    background: #0d2d52;
+}
+
 
 </style>
 
@@ -187,10 +224,11 @@
 {{-- Filter --}}
 <div class="filter-wrapper">
     <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="filter-form">
-        <i class="bi bi-calendar-date" style="font-size: 20px; color:#123B6B;"></i>
-        <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}">
-        <button type="submit">Tampilkan</button>
-    </form>
+    <i class="bi bi-calendar-date filter-icon"></i>
+    <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}" class="filter-input">
+    <button type="submit" class="filter-btn">Tampilkan</button>
+</form>
+
 
     <a href="{{ route('admin.konseling.create') }}" class="btn-tambah">
         + Tambah Data Konseling

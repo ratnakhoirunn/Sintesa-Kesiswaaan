@@ -29,4 +29,10 @@ class Konseling extends Model
     return $this->hasOne(OrangTua::class, 'nis', 'nis');
 }
 
+public function siswa()
+{
+    return $this->belongsTo(\App\Models\Siswa::class, 'siswa_id', 'id');
+}
+
+
 }

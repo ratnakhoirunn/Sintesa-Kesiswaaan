@@ -87,12 +87,6 @@ class KonselingController extends Controller
                          ->with('success', 'Data konseling berhasil dihapus.');
     }
 
-    public function show($id)
-    {
-        $konseling = Konseling::findOrFail($id);
-        return view('admin.konseling.show', compact('konseling'));
-    }
-
     public function proses(Request $request, $id)
 {
     $request->validate([
@@ -107,5 +101,11 @@ class KonselingController extends Controller
 
     return redirect()->route('admin.konseling.index')->with('success', 'Status konseling berhasil diperbarui.');
 }
+public function show($id)
+{
+    $konseling = Konseling::findOrFail($id);
+    return view('admin.konseling.show', compact('konseling'));
+}
+
 
 }

@@ -10,6 +10,7 @@ use App\Models\Konseling;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\SiswaImport;
+use App\Models\Keterlambatan;
 
 class DashboardController extends Controller
 {
@@ -40,7 +41,7 @@ class DashboardController extends Controller
     $totalSiswa = Siswa::count();
     $totalAdmin = User::where('role', 'admin')->count();
     $konselingMenunggu = Konseling::where('status', 'Menunggu')->count();
-
+   $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
 
     // === Data untuk Chart: Jumlah siswa per jurusan ===
     $query = Siswa::select('jurusan', DB::raw('COUNT(*) as total'));
@@ -65,6 +66,7 @@ class DashboardController extends Controller
         'angkatanList',
         'filterTahun',
         'konselingMenunggu',
+        'keterlambatanBaru'
     ));
     }
 
