@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SiswaAksesController;
 use App\Http\Controllers\bk\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
 
+use App\Http\Controllers\Siswa\OrtuController;
 use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\SiswaImportController;
 use App\Http\Controllers\Siswa\PasswordController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Siswa\KeterlambatanSiswaController;
 use App\Http\Controllers\Siswa\DokumenController;
 use App\Http\Controllers\Siswa\KonselingsiswaController;
 
+use App\Http\Controllers\Siswa\SiswaDataController;
 /*
 |--------------------------------------------------------------------------
 | 🏠 ROUTE ROOT
@@ -129,7 +131,6 @@ Route::prefix('admin')->name('admin.')
 
     // 📄 Roles
     Route::resource('role', RoleController::class);
-
     Route::middleware(['kesiswaan.readonly'])->group(function () {
     Route::resource('dokumensiswa', DokumenSiswaController::class);
 });
@@ -209,6 +210,14 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::get('/dashboard', [DashboardSiswaController::class, 'dashboard'])->name('dashboard');
     Route::get('/datasiswa', [DashboardSiswaController::class, 'dataSiswa'])->name('datasiswa');
     Route::get('/orangtua', [DashboardSiswaController::class, 'dataOrangtua'])->name('orangtua');
+
+    Route::get('/profil', [SiswaDataController::class, 'show'])->name('profil.show');
+    Route::get('/profil/{nis}/edit', [SiswaDataController::class, 'edit'])->name('profil.edit');
+    Route::put('/profil/{nis}/update', [SiswaDataController::class, 'update'])->name('profil.update');
+
+    Route::get('/ortu/{nis}', [OrtuController::class, 'show']) ->name('ortu.show');
+    Route::get('/ortu/{nis}/edit', [OrtuController::class, 'edit'])->name('ortu.edit');
+    Route::put('/ortu/{nis}/update', [OrtuController::class, 'update']) ->name('ortu.update');
 
     //Kartu Pelajar Siswa 
     Route::get('/kartu-pelajar', [DashboardSiswaController::class, 'kartuPelajar'])->name('kartupelajar.index');

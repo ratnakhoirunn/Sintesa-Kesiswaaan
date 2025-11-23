@@ -202,7 +202,32 @@
                 </div>
             </div>
 
+            {{-- TOMBOL EDIT HANYA MUNCUL JIKA ADMIN MENGAKTIFKAN AKSES --}}
+@if($siswa->akses_edit == 1)
+    <a href="{{ route('siswa.ortu.edit', $siswa->nis) }}" class="btn-edit">
+        Edit Profil
+    </a>
+@endif
+
+<style>
+    .btn-edit {
+        display: inline-block;
+        background-color: #f4b400; /* kuning modern */
+        color: #fff;
+        padding: 8px 18px;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+
+    .btn-edit:hover {
+        background-color: #d89e00;
+    }
+</style>
+
         </div>
     </div>
 </div>
+
 @endsection

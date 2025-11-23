@@ -213,73 +213,56 @@
             <td>{{ $siswa->rombel }}</td>
             <td>{{ $siswa->jurusan }}</td>
             <td>
-                <div class="aksi-container">
+     <div class="aksi-container">
 
-                    {{-- Tombol Lihat --}}
-                    <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" class="aksi-lihat">
-                        <i class="fas fa-eye"></i> Lihat
-                    </a>
+    {{-- Semua user (Admin, BK, Kesiswaan) bisa lihat --}}
+    <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" class="aksi-lihat">
+        <i class="fas fa-eye"></i> Lihat
+    </a>
 
-                    {{-- Tombol Edit --}}
-                    <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="aksi-edit">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
+    {{-- ===========================================================
+        KONDISI ROLE
+        Hanya Admin yang boleh Edit, Hapus, dan Toggle Akses
+       =========================================================== --}}
+    @if(auth()->user()->role == 'admin')
 
-                    {{-- Tombol Hapus --}}
-                    <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" method="POST" 
-                        onsubmit="return confirm('Yakin hapus data ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="aksi-hapus">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </form>
-
-                    {{-- 🔘 Toggle Akses Edit Siswa --}}
-                    <form action="{{ route('admin.datasiswa.toggleAkses', $siswa->nis) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-
-                        @if($siswa->akses_edit)
-                            <button type="submit" class="aksi-toggle" style="color:#16a085;">
-                                <i class="fas fa-unlock"></i> Aktif
-                            </button>
-                        @else
-                            <button type="submit" class="aksi-toggle" style="color:#e74c3c;">
-                                <i class="fas fa-lock"></i> Nonaktif
-                            </button>
-                        @endif
-                    </form>
-
-                </div>
-            </td>
-        </tr>
-    <div class="aksi-container">
-
-        {{-- Semua role boleh melihat detail --}}
-        <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" class="aksi-lihat">
-            <i class="fas fa-eye"></i> Lihat
+        {{-- Tombol Edit --}}
+        <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="aksi-edit">
+            <i class="fas fa-edit"></i> Edit
         </a>
 
-        {{-- Jika BUKAN kesiswaan, maka boleh edit & hapus --}}
-        @if(auth('guru')->user()->role !== 'kesiswaan')
-            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="aksi-edit">
-                <i class="fas fa-edit"></i> Edit
-            </a>
+        {{-- Tombol Hapus --}}
+        <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" 
+            method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="aksi-hapus">
+                <i class="fas fa-trash"></i> Hapus
+            </button>
+        </form>
 
-            <form action="{{ route('admin.datasiswa.destroy', $siswa->nis) }}" 
-                  method="POST" 
-                  onsubmit="return confirm('Yakin hapus data ini?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="aksi-hapus">
-                    <i class="fas fa-trash"></i> Hapus
+        {{-- Toggle Akses Edit Siswa --}}
+        <form action="{{ route('admin.datasiswa.toggleAkses', $siswa->nis) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            @if($siswa->akses_edit)
+                <button type="submit" class="aksi-toggle" style="color:#16a085;">
+                    <i class="fas fa-unlock"></i> Aktif
                 </button>
-            </form>
-        @endif
+            @else
+                <button type="submit" class="aksi-toggle" style="color:#e74c3c;">
+                    <i class="fas fa-lock"></i> Nonaktif
+                </button>
+            @endif
+        </form>
 
-    </div>
-</td>
+    @endif
+
+</div>
+
+            </td>
+        </tr>
         @empty
         <tr><td colspan="6" style="text-align:center; padding:10px;">Belum ada data siswa.</td></tr>
         @endforelse
