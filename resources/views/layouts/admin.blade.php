@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
@@ -548,7 +549,47 @@
             </a></li>
 
         @endif
+                {{-- ===================================
+                    MENU UNTUK WALI KELAS
+                =================================== --}}
+                @if(auth('guru')->user()->role == 'guru' && auth('guru')->user()->walikelas != null)
 
+                    <li>
+                        <a href="{{ route('wali.dashboard') }}"
+                            class="{{ request()->is('walikelas/dashboard') ? 'active' : '' }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.datasiswa') }}"
+                            class="{{ request()->is('walikelas/datasiswa*') ? 'active' : '' }}">
+                            <i class="fas fa-users"></i> Data Siswa
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.kartupelajar') }}"
+                            class="{{ request()->is('walikelas/kartu*') ? 'active' : '' }}">
+                            <i class="fas fa-id-card"></i> Kartu Pelajar
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.dokumensiswa') }}"
+                            class="{{ request()->is('walikelas/dokumen*') ? 'active' : '' }}">
+                            <i class="fas fa-file-alt"></i> Dokumen Siswa
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.password') }}"
+                            class="{{ request()->is('walikelas/password*') ? 'active' : '' }}">
+                            <i class="fas fa-lock"></i> Kelola Password
+                        </a>
+                    </li>
+
+                @endif
     </ul>
 </nav>
 

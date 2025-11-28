@@ -58,7 +58,7 @@
         @method('PUT')
 
         <label>Nama Lengkap</label>
-        <input type="text" name="nama_lengkap" value="{{ $role->nama_lengkap }}" readonly>
+        <input type="text" name="nama_lengkap" value="{{ $role->nama_lengkap ?? $role->nama }}" readonly>
 
         <label>NIP/NIS</label>
         <input type="text" name="nip_nis" value="{{ $role->nip ?? $role->nis }}" readonly>
@@ -74,6 +74,21 @@
             <option value="kesiswaan" {{ $role->role == 'kesiswaan' ? 'selected' : '' }}>Kesiswaan</option>
             <option value="admin" {{ $role->role == 'admin' ? 'selected' : '' }}>Admin</option>
         </select>
+
+        {{-- 🔹 Tambahan khusus GURU: Dropdown Wali Kelas --}}
+        @if($role instanceof \App\Models\Guru)
+            <label>Wali Kelas</label>
+            <select name="walikelas">
+                <option value="">-- Tidak Menjadi Wali Kelas --</option>
+
+                @foreach($rombels as $r)
+                    <option value="{{ $r->rombel }}" 
+                        {{ $role->walikelas == $r->rombel ? 'selected' : '' }}>
+                        {{ $r->rombel }}
+                    </option>
+                @endforeach
+            </select>
+        @endif
 
         <div class="text-center mt-3">
             <button type="submit" class="btn-primary">Simpan Perubahan</button>

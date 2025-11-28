@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Walikelas\DashboardWaliController;
 use Illuminate\Support\Facades\Route;
 
 // Controller Utama
@@ -16,6 +17,9 @@ use App\Http\Controllers\Admin\SiswaAksesController;
 
 use App\Http\Controllers\bk\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
+use App\Http\Controllers\WaliKelasController;
+use App\Http\Controllers\WaliKelas\WaliSiswaController;
+
 
 use App\Http\Controllers\Siswa\OrtuController;
 use App\Http\Controllers\Siswa\DashboardSiswaController;
@@ -25,7 +29,6 @@ use App\Http\Controllers\Siswa\ForgotPasswordController;
 use App\Http\Controllers\Siswa\KeterlambatanSiswaController;
 use App\Http\Controllers\Siswa\DokumenController;
 use App\Http\Controllers\Siswa\KonselingsiswaController;
-
 use App\Http\Controllers\Siswa\SiswaDataController;
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +47,7 @@ Route::get('/', function () {
             'admin'      => redirect()->route('admin.dashboard'),
             'guru_bk'    => redirect()->route('bk.dashboard'),
             'kesiswaan'  => redirect()->route('kesiswaan.dashboard'),
+            'walikeals'   => redirect()->route('wali.dashboard'),
             default      => redirect()->route('guru.dashboard'),
         };
     }
@@ -90,7 +94,7 @@ Route::prefix('admin')->name('admin.')
     Route::resource('datasiswa', SiswaController::class);
 
     // Akses Edit Siswa
-    Route::put('/datasiswa/{nis}/toggle-akses', [\App\Http\Controllers\Admin\SiswaAksesController::class, 'toggleAkses'])->name('datasiswa.toggleAkses');
+    Route::put('/datasiswa/{nis}/toggle-akses', [SiswaAksesController::class, 'toggleAkses'])->name('datasiswa.toggleAkses');
 
    // === DATA SISWA (Admin full, Kesiswaan read-only) ===
     Route::middleware(['kesiswaan.readonly'])->group(function () {
@@ -197,6 +201,55 @@ Route::middleware(['auth:guru', 'role:kesiswaan'])
 
     Route::get('/dashboard', [KesiswaanDashboardController::class, 'index'])
         ->name('dashboard');
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| 👨‍🏫 Wali Kelas Area
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('wali')
+    ->name('wali.')
+    ->middleware(['auth:guru', 'walikelas'])
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/dashboard', [DashboardWaliController::class, 'dashboard'])->name('dashboard');
+
+        // Data siswa wali kelas
+        Route::get('/datasiswa', [WaliSiswaController::class, 'index'])->name('datasiswa');
+        Route::get('/datasiswa/{nis}/edit', [WaliSiswaController::class, 'edit'])->name('datasiswa.edit');
+        Route::put('/datasiswa/{nis}', [WaliSiswaController::class, 'update'])->name('datasiswa.update');
+        Route::delete('/datasiswa/{nis}', [WaliSiswaController::class, 'destroy'])->name('datasiswa.destroy');
+        Route::post('/datasiswa/{nis}/toggle', [WaliSiswaController::class, 'toggleStatus']) ->name('datasiswa.toggle');
+        Route::post('/datasiswa/{nis}/reset-password', [WaliSiswaController::class, 'resetPassword'])->name('datasiswa.resetPassword');
+        Route::get('/datasiswa/{nis}', [WaliSiswaController::class, 'show'])->name('datasiswa.show');
+
+        // Kartu Pelajar (jika dipakai)
+        Route::get('/kartupelajar', [DashboardWaliController::class, 'kartuPelajar'])->name('kartupelajar');
+
+        // Dokumen Siswa
+        Route::get('/dokumensiswa', [DashboardWaliController::class, 'dokumen']) ->name('dokumensiswa');
+
+        // Kelola Password (opsional pake default)
+        Route::get('/password', [DashboardWaliController::class, 'password']) ->name('password');
+
+    });
+
+
+
+// ------------------------------------------------------------
+// 👨‍🏫 GURU BIASA (Role: guru)
+// ------------------------------------------------------------
+Route::prefix('guru')->name('guru.')
+    ->middleware(['auth:guru', 'role:guru'])
+    ->group(function () {
+
+    Route::get('/dashboard', function () {
+        return view('guru.dashboard'); // nanti kamu buat view-nya
+    })->name('dashboard');
 
 });
 
