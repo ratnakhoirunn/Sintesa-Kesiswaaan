@@ -152,8 +152,8 @@
                         Guru BK
                     </option>
 
-                    <option value="guru_biasa" {{ request('role') == 'guru_biasa' ? 'selected' : '' }}>
-                        Guru Biasa
+                    <option value="guru" {{ request('role') == 'guru' ? 'selected' : '' }}>
+                        Guru
                     </option>
 
                     <option value="kesiswaan" {{ request('role') == 'kesiswaan' ? 'selected' : '' }}>
@@ -171,15 +171,22 @@
 
     <table>
         <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama Pengguna</th>
-                <th>NIS/NIP</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
+    <tr>
+        <th>No</th>
+        <th>Nama Pengguna</th>
+        <th>NIS/NIP</th>
+        <th>Email</th>
+        <th>Role</th>
+
+        {{-- Kolom Wali Kelas kalau sedang filter guru --}}
+        @if(request('role') == 'guru')
+            <th>Wali Kelas</th>
+        @endif
+
+        <th>Aksi</th>
+    </tr>
+</thead>
+
         <tbody>
             @forelse($roles as $index => $role)
                 <tr>
@@ -201,6 +208,11 @@
                             {{ ucfirst($role->role) }}
                         </span>
                     </td>
+                    
+            {{-- Jika role guru: tampilkan Rombel dari tabel siswas --}}
+           @if(request('role') == 'guru')
+                        <td>{{ $role->walikelas ?? '-' }}</td>
+                    @endif
                     <td>
                         <a href="{{ route('admin.role.edit', $role->nip ?? $role->nis) }}" class="btn-edit">Edit</a>
                         <form action="{{ route('admin.role.destroy', $role->nip ?? $role->nis) }}" 

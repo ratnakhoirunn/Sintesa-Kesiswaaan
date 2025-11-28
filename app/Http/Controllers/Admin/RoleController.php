@@ -80,7 +80,7 @@ class RoleController extends Controller
     /**
      * Edit — terima id/nis, cari fleksibel (cari berdasarkan id dulu, kalau tidak ada pakai nis).
      */
-  public function edit($identifier)
+public function edit($identifier)
 {
     // cari siswa berdasarkan NIS
     $siswa = Siswa::where('nis', $identifier)->first();
@@ -95,29 +95,41 @@ class RoleController extends Controller
     // pilih data mana yg ditemukan
     $role = $siswa ?? $guru;
 
-    return view('admin.role.edit', compact('role'));
-}
+    // 🔹 Ambil daftar rombel (tabel: siswas)
+    $rombels = Siswa::select('rombel')->distinct()->get();
 
+    return view('admin.role.edit', compact('role', 'rombels'));
+}
 
     /**
      * Update role (menerima id/nis di route juga).
-     */
-   public function update(Request $request, $identifier)
+     */public function update(Request $request, $identifier)
 {
     $request->validate([
         'role' => 'required|string',
+        'walikelas' => 'nullable|string'  // tambahkan validasi wali kelas
     ]);
 
-    // cari siswa by NIS
+    // cari siswa berdasarkan NIS
     $siswa = Siswa::where('nis', $identifier)->first();
 
-    // cari guru by NIP
+    // cari guru berdasarkan NIP
     $guru = Guru::where('nip', $identifier)->first();
 
     if ($siswa) {
-        $siswa->update(['role' => $request->role]);
+        // siswa hanya update role
+        $siswa->update([
+            'role' => $request->role,
+        ]);
+
     } elseif ($guru) {
-        $guru->update(['role' => $request->role]);
+
+        // update role dan wali kelas (khusus guru)
+        $guru->update([
+            'role' => $request->role,
+            'walikelas' => $request->role === 'guru' ? $request->walikelas : null
+        ]);
+
     } else {
         abort(404, "Data tidak ditemukan.");
     }

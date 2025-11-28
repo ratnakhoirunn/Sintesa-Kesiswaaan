@@ -47,6 +47,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'kesiswaan.readonly' => \App\Http\Middleware\KesiswaanReadonly::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
             'cekAksesEdit' => \App\Http\Middleware\CekAksesEditSiswa::class,
+            'walikelas' => \App\Http\Middleware\WaliMiddleware::class,
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
