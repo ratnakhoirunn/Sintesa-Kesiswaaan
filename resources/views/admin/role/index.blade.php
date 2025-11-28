@@ -152,8 +152,8 @@
                         Guru BK
                     </option>
 
-                    <option value="guru_biasa" {{ request('role') == 'guru_biasa' ? 'selected' : '' }}>
-                        Guru Biasa
+                    <option value="guru" {{ request('role') == 'guru' ? 'selected' : '' }}>
+                        Guru
                     </option>
 
                     <option value="kesiswaan" {{ request('role') == 'kesiswaan' ? 'selected' : '' }}>
@@ -174,7 +174,7 @@
             <tr>
                 <th>No</th>
                 <th>Nama Pengguna</th>
-                <th>NIS/NIP</th>
+                <th>NIP/NIS</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Aksi</th>
@@ -198,7 +198,7 @@
                             {{ $role->role == 'admin' ? '#0d6efd' :
                                ($role->role == 'guru_bk' ? '#ffc107' :
                                ($role->role == 'kesiswaan' ? '#6610f2' : '#28a745')) }};">
-                            {{ ucfirst($role->role) }}
+                            {{ $role->role == 'guru' ? 'Guru' : ucfirst($role->role) }}
                         </span>
                     </td>
                     <td>
