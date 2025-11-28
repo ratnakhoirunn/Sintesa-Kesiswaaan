@@ -186,7 +186,6 @@
         <th>Aksi</th>
     </tr>
 </thead>
-
         <tbody>
             @forelse($roles as $index => $role)
                 <tr>
@@ -205,7 +204,7 @@
                             {{ $role->role == 'admin' ? '#0d6efd' :
                                ($role->role == 'guru_bk' ? '#ffc107' :
                                ($role->role == 'kesiswaan' ? '#6610f2' : '#28a745')) }};">
-                            {{ ucfirst($role->role) }}
+                            {{ $role->role == 'guru' ? 'Guru' : ucfirst($role->role) }}
                         </span>
                     </td>
                     

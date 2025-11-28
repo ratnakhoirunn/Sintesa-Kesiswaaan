@@ -33,7 +33,7 @@ class RoleController extends Controller
         return view('admin.role.index', compact('roles'));
     }
 
-    // Selain siswa — admin, guru_bk, guru_biasa, kesiswaan → tabel guru
+    // Selain siswa — admin, guru_bk, guru, kesiswaan → tabel guru
     $query = Guru::query();
 
     if ($search) {
@@ -58,24 +58,40 @@ class RoleController extends Controller
         return view('admin.role.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_pengguna' => 'required',
-            'nis' => 'required',
-            'email' => 'required|email',
-            'role' => 'required',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'nama_pengguna' => 'required|string|max:255',
+        'nip_nis' => 'required',
+        'email' => 'required|email',
+        'role' => 'required',
+    ]);
+
+    // Jika role Siswa → simpan ke tabel siswa
+    if ($request->role === 'Siswa') {
 
         Siswa::create([
-            'nama_pengguna' => $request->nama_pengguna,
-            'nis' => $request->nis,
+            'nama_lengkap' => $request->nama_pengguna,
+            'nis' => $request->nip_nis,   // ← perbaikan
             'email' => $request->email,
-            'role' => $request->role,
+            'password' => bcrypt('siswa123'),
+            'role' => 'siswa',
         ]);
 
-        return redirect()->route('admin.role.index')->with('success', 'Data berhasil ditambahkan.');
+    } else {
+
+        Guru::create([
+            'nama' => $request->nama_pengguna,
+            'nip' => $request->nip_nis, // ← perbaikan
+            'email' => $request->email,
+            'password' => bcrypt('password123'),
+            'role' => $request->role,
+        ]);
     }
+
+    return redirect()->route('admin.role.index')
+        ->with('success', 'Data berhasil ditambahkan.');
+}
 
     /**
      * Edit — terima id/nis, cari fleksibel (cari berdasarkan id dulu, kalau tidak ada pakai nis).

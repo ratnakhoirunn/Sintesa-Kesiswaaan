@@ -321,7 +321,6 @@
             </div>
 
             <div class="mt-4 text-center">
-                <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="btn btn-blue">Edit Data</a>
                 <a href="{{ route('admin.datasiswa.index') }}" class="btn btn-gray">Kembali ke Daftar</a>
             </div>
 

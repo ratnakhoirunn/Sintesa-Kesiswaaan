@@ -71,41 +71,48 @@
                 <h3>Dokumen Siswa</h3>
 
                 @php
-                    $dokumenLengkap = 30;
-                    $dokumenSedang = 15;
-                    $dokumenBerat = 5;
-                    $totalDokumen = $dokumenLengkap + $dokumenSedang + $dokumenBerat;
+                use Illuminate\Support\Facades\DB;
 
-                    $items = [
-                        ['label' => 'Belum Diunggah', 'count' => $dokumenBerat, 'icon' => 'dok_berat.png', 'color' => '#dc3545'],
-                    ];
+                try {
+                    // Total siswa berdasarkan NIS
+                    $totalSiswa = DB::table('siswas')->count('nis');
+
+                    // Jumlah siswa yang sudah upload dokumen (distinct nis)
+                    $sudahUpload = 0;
+                    if (DB::getSchemaBuilder()->hasTable('dokumen_siswas')) {
+                        $sudahUpload = DB::table('dokumen_siswas')->distinct()->count('nis');
+                    } elseif (DB::getSchemaBuilder()->hasTable('dokumen_siswa')) {
+                        $sudahUpload = DB::table('dokumen_siswa')->distinct()->count('nis');
+                    }
+
+                    // Hitung siswa yang belum upload
+                    $belumUpload = max(0, $totalSiswa - $sudahUpload);
+
+                    // Mencegah division by zero
+                    // Menggunakan 1 angka desimal
+                    $persenBelum = $totalSiswa > 0 ? number_format(($belumUpload / $totalSiswa) * 100, 1) : 0;
+                } catch (\Throwable $e) {
+                    // fallback aman
+                    $totalSiswa = 0;
+                    $sudahUpload = 0;
+                    $belumUpload = 0;
+                    $persenBelum = 0;
+                }
                 @endphp
 
-                @foreach($items as $item)
-                    @php
-                        $persen = round(($item['count'] / $totalDokumen) * 100);
-                    @endphp
+                <div class="action-item" style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                    <img src="{{ asset('images/dok_berat.png') }}" alt="Belum Diunggah" style="width:40px; height:40px;">
+                    <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span>Belum Diunggah</span>
+                            <span>{{ $persenBelum }}% ({{ $belumUpload }} dari {{ $totalSiswa }})</span>
+                        </div>
 
-                    <div class="action-item" style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-                        <img src="{{ asset('images/' . $item['icon']) }}" 
-                            alt="{{ $item['label'] }}" 
-                            style="width:40px; height:40px;">
-                            
-                        <div style="flex:1;">
-                            <div style="display:flex; justify-content:space-between;">
-                                <span>{{ $item['label'] }}</span>
-                                <span>{{ $persen }}%</span>
-                            </div>
-
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-fill" 
-                                    style="width: {{ $persen }}%; background-color: {{ $item['color'] }};">
-                                </div>
-                            </div>
+                        <div class="progress-bar-container" style="background:#eee; height:8px; border-radius:6px; overflow:hidden; margin-top:6px;">
+                            <div class="progress-bar-fill" style="width: {{ $persenBelum }}%; background-color:#dc3545; height:100%;"></div>
                         </div>
                     </div>
-                @endforeach
-
+                </div>
             </div>
         </a>
 
