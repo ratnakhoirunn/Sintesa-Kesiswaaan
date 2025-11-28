@@ -17,9 +17,9 @@
                 <div class="filter-group">
                     <label for="search">Cari Nama / NIS</label>
                     <div class="search-box">
-                        <input type="text" name="search" id="search" placeholder="Ketik nama atau NIS..." value="{{ request('search') }}">
-                        <button type="submit"><i class="fas fa-search"></i></button>
-                    </div>
+                    <input type="text" name="search" id="search" placeholder="Ketik nama atau NIS..." value="{{ request('search') }}">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                     </div>
                 </div>
             </div>
         </form>
@@ -134,6 +134,57 @@
     flex-wrap: nowrap;  /* supaya tidak turun ke bawah */
 }
 
+/* WRAPPER GROUP */
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* SEARCH BOX */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 0 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: 0.2s ease-in-out;
+}
+
+.search-box:hover {
+    border-color: #b5b5b5;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 8px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.search-box button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 18px;
+    color: #555;
+    transition: 0.2s;
+}
+
+.search-box button:hover {
+    color: #000;
+}
 
 </style>
 
@@ -184,10 +235,8 @@
     </form>
 
     {{-- Toggle Akses Edit --}}
-    <form action="{{ route('wali.datasiswa.toggle', $s->nis) }}" method="POST">
+    <form action="{{ route('wali.datasiswa.toggleAkses', $s->nis) }}" method="POST">
         @csrf
-        @method('PUT')
-
         @if($s->akses_edit)
             <button type="submit" class="aksi-toggle" style="color:#16a085;">
                 <i class="fas fa-unlock"></i> Aktif
