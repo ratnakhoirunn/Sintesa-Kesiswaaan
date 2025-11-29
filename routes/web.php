@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WaliKelas\WaliKartuPelajarController;
 use App\Http\Controllers\Walikelas\DashboardWaliController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,9 @@ use App\Http\Controllers\Admin\SiswaAksesController;
 
 use App\Http\Controllers\bk\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
-use App\Http\Controllers\WaliKelasController;
 use App\Http\Controllers\WaliKelas\WaliSiswaController;
 use App\Http\Controllers\WaliKelas\DokumenSiswaWaliController;
+
 
 
 use App\Http\Controllers\Siswa\OrtuController;
@@ -224,12 +225,17 @@ Route::prefix('wali')
         Route::get('/datasiswa/{nis}/edit', [WaliSiswaController::class, 'edit'])->name('datasiswa.edit');
         Route::put('/datasiswa/{nis}', [WaliSiswaController::class, 'update'])->name('datasiswa.update');
         Route::delete('/datasiswa/{nis}', [WaliSiswaController::class, 'destroy'])->name('datasiswa.destroy');
-        Route::post('/datasiswa/{nis}/toggle', [WaliSiswaController::class, 'toggleStatus']) ->name('datasiswa.toggle');
+        Route::post('/datasiswa/{nis}/toggle', [WaliSiswaController::class, 'toggleAkses']) ->name('datasiswa.toggleAkses');
         Route::post('/datasiswa/{nis}/reset-password', [WaliSiswaController::class, 'resetPassword'])->name('datasiswa.resetPassword');
         Route::get('/datasiswa/{nis}', [WaliSiswaController::class, 'show'])->name('datasiswa.show');
 
-        // Kartu Pelajar (jika dipakai)
-        Route::get('/kartupelajar', [DashboardWaliController::class, 'kartuPelajar'])->name('kartupelajar');
+        // 📌 KARTU PELAJAR WALI KELAS
+    Route::prefix('/kartu-pelajar')->name('kartupelajar.')->group(function () {
+        Route::get('/', [WaliKartuPelajarController::class, 'index'])->name('index');
+        Route::get('/preview/{nis}', [WaliKartuPelajarController::class, 'preview'])->name('preview');
+        Route::get('/frame/{nis}', [WaliKartuPelajarController::class, 'frame'])->name('frame');
+
+});
 
         // Dokumen Siswa
         Route::get('/dokumensiswa', [DokumenSiswaWaliController::class, 'index'])->name('dokumensiswa');

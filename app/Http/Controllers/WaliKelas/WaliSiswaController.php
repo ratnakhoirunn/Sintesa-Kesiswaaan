@@ -54,4 +54,28 @@ class WaliSiswaController extends Controller
         return redirect()->route('wali.datasiswa')
             ->with('success', 'Data siswa berhasil diperbarui.');
     }
+
+    public function show($nis)
+{
+    $guru = auth('guru')->user();
+    $rombel = $guru->walikelas;
+
+    // Pastikan siswa yang diakses hanya yang satu rombel
+    $siswa = Siswa::where('nis', $nis)
+                  ->where('rombel', $rombel)
+                  ->firstOrFail();
+
+    return view('walikelas.datasiswa.show', compact('siswa'));
+}
+     public function toggleAkses($nis)
+    {
+        $siswa = Siswa::where('nis', $nis)->firstOrFail();
+
+        $siswa->akses_edit = !$siswa->akses_edit;
+        $siswa->save();
+
+        return back()->with('success', 'Akses siswa diperbarui.');
+    }
+
+
 }

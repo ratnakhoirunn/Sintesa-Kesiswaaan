@@ -569,7 +569,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('wali.kartupelajar') }}"
+                        <a href="{{ route('wali.kartupelajar.index') }}"
                             class="{{ request()->is('walikelas/kartu*') ? 'active' : '' }}">
                             <i class="fas fa-id-card"></i> Kartu Pelajar
                         </a>

@@ -190,7 +190,7 @@ body {
     @if(isset($siswas))
         {{-- === CETAK MASSAL === --}}
         @foreach($siswas as $siswa)
-            <iframe class="preview-frame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
+            <iframe class="preview-frame" src="{{ route('wali.kartupelajar.frame', $siswa->nis) }}"></iframe>
             <hr style="width:100%; max-width:750px; border:1px dashed #ccc;">
         @endforeach
 
@@ -201,7 +201,7 @@ body {
     <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
 @endunless
 
-<a href="{{ route('wali.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
+<a href="{{ route('kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
 
 
    @else
@@ -219,7 +219,7 @@ body {
         {{-- HANYA ADMIN & BK yang boleh edit --}}
         @unless(auth('guru')->user()->role === 'kesiswaan')
 
-            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" 
+            <a href="{{ route('wali.datasiswa.edit', $siswa->nis) }}" 
                 class="btn-custom btn-edit">
                 ✏ Edit
             </a>
@@ -306,7 +306,7 @@ body {
         <div class="print-sheet">
             @foreach($siswas as $siswa)
             <div class="print-card">
-                <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
+                <iframe src="{{ route('wali.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
             </div>
             @endforeach
         </div>
