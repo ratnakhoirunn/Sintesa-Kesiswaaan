@@ -19,6 +19,7 @@ use App\Http\Controllers\bk\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
 use App\Http\Controllers\WaliKelasController;
 use App\Http\Controllers\WaliKelas\WaliSiswaController;
+use App\Http\Controllers\WaliKelas\DokumenSiswaWaliController;
 
 
 use App\Http\Controllers\Siswa\OrtuController;
@@ -47,7 +48,7 @@ Route::get('/', function () {
             'admin'      => redirect()->route('admin.dashboard'),
             'guru_bk'    => redirect()->route('bk.dashboard'),
             'kesiswaan'  => redirect()->route('kesiswaan.dashboard'),
-            'walikeals'   => redirect()->route('wali.dashboard'),
+            'walikelas'   => redirect()->route('wali.dashboard'),
             default      => redirect()->route('guru.dashboard'),
         };
     }
@@ -231,7 +232,11 @@ Route::prefix('wali')
         Route::get('/kartupelajar', [DashboardWaliController::class, 'kartuPelajar'])->name('kartupelajar');
 
         // Dokumen Siswa
-        Route::get('/dokumensiswa', [DashboardWaliController::class, 'dokumen']) ->name('dokumensiswa');
+        Route::get('/dokumensiswa', [DokumenSiswaWaliController::class, 'index'])->name('dokumensiswa');
+        Route::get('/dokumensiswa/{nis}', [DokumenSiswaWaliController::class, 'show'])->name('dokumensiswa.show');
+        Route::get('/dokumensiswa/{nis}/edit', [DokumenSiswaWaliController::class, 'edit'])->name('dokumensiswa.edit');
+        Route::put('/dokumensiswa/{nis}', [DokumenSiswaWaliController::class, 'update'])->name('dokumensiswa.update');
+        Route::delete('/dokumensiswa/{nis}', [DokumenSiswaWaliController::class, 'destroy'])->name('dokumensiswa.destroy');
 
         // Kelola Password (opsional pake default)
         Route::get('/password', [DashboardWaliController::class, 'password']) ->name('password');
