@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\WaliKelas\WaliKartuPelajarController;
-use App\Http\Controllers\Walikelas\DashboardWaliController;
 use Illuminate\Support\Facades\Route;
 
 // Controller Utama
@@ -20,6 +18,9 @@ use App\Http\Controllers\bk\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
 use App\Http\Controllers\WaliKelas\WaliSiswaController;
 use App\Http\Controllers\WaliKelas\DokumenSiswaWaliController;
+use App\Http\Controllers\WaliKelas\WaliKartuPelajarController;
+use App\Http\Controllers\WaliKelas\DashboardWaliController;
+use App\Http\Controllers\WaliKelas\UserPasswordWaliController;
 
 
 
@@ -230,7 +231,7 @@ Route::prefix('wali')
         Route::get('/datasiswa/{nis}', [WaliSiswaController::class, 'show'])->name('datasiswa.show');
 
         // 📌 KARTU PELAJAR WALI KELAS
-    Route::prefix('/kartu-pelajar')->name('kartupelajar.')->group(function () {
+        Route::prefix('/kartu-pelajar')->name('kartupelajar.')->group(function () {
         Route::get('/', [WaliKartuPelajarController::class, 'index'])->name('index');
         Route::get('/preview/{nis}', [WaliKartuPelajarController::class, 'preview'])->name('preview');
         Route::get('/frame/{nis}', [WaliKartuPelajarController::class, 'frame'])->name('frame');
@@ -245,7 +246,12 @@ Route::prefix('wali')
         Route::delete('/dokumensiswa/{nis}', [DokumenSiswaWaliController::class, 'destroy'])->name('dokumensiswa.destroy');
 
         // Kelola Password (opsional pake default)
-        Route::get('/password', [DashboardWaliController::class, 'password']) ->name('password');
+        Route::prefix('password')->name('password.')->group(function () {
+    Route::get('/', [UserPasswordWaliController::class, 'index'])->name('index');
+    Route::get('/{nis}/edit', [UserPasswordWaliController::class, 'edit'])->name('edit');
+    Route::post('/{nis}/update', [UserPasswordWaliController::class, 'update'])->name('update');
+    Route::post('/update-self', [UserPasswordWaliController::class, 'updateSelf'])->name('updateSelf');
+});
 
     });
 

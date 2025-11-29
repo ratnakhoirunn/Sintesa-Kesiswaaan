@@ -583,7 +583,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('wali.password') }}"
+                        <a href="{{ route('wali.password.index') }}"
                             class="{{ request()->is('walikelas/password*') ? 'active' : '' }}">
                             <i class="fas fa-lock"></i> Kelola Password
                         </a>
