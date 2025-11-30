@@ -84,7 +84,7 @@ public function store(Request $request)
             'nama' => $request->nama_pengguna,
             'nip' => $request->nip_nis, // ← perbaikan
             'email' => $request->email,
-            'password' => bcrypt('password123'),
+            'password' => bcrypt('guru123'),
             'role' => $request->role,
         ]);
     }
@@ -151,6 +151,29 @@ public function edit($identifier)
     }
 
     return redirect()->route('admin.role.index')->with('success', 'Role berhasil diperbarui!');
+}
+
+public function destroy($identifier)
+{
+    // Cari siswa berdasarkan NIS
+    $siswa = Siswa::where('nis', $identifier)->first();
+
+    // Cari guru berdasarkan NIP
+    $guru = Guru::where('nip', $identifier)->first();
+
+    if ($siswa) {
+        $siswa->delete();
+        return redirect()->route('admin.role.index')
+            ->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    if ($guru) {
+        $guru->delete();
+        return redirect()->route('admin.role.index')
+            ->with('success', 'Guru berhasil dihapus.');
+    }
+
+    abort(404, 'Data tidak ditemukan.');
 }
 
 }

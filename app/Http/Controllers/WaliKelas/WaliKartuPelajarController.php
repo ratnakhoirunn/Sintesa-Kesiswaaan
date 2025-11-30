@@ -34,7 +34,7 @@ class WaliKartuPelajarController extends Controller
         }
 
         // Pagination
-        $siswas = $query->orderBy('nama_lengkap', 'asc')->paginate(36);
+        $siswas = $query->orderBy('nama_lengkap', 'asc')->paginate(40);
 
         return view('walikelas.kartupelajar.index', compact('siswas', 'rombel'));
 

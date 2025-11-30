@@ -18,8 +18,8 @@ class DashboardWaliController extends Controller
 
         return view('walikelas.dashboard', [
             'totalSiswa'      => $siswa->count(),
-            'totalLaki'       => $siswa->where('jenis_kelamin', 'Laki-Laki')->count(),
-            'totalPerempuan'  => $siswa->where('jenis_kelamin', 'Perempuan')->count(),
+            'totalLaki'       => $siswa->whereIn('jenis_kelamin', ['L', 'Laki-Laki', 'Laki-laki', 'laki-laki'])->count(),
+            'totalPerempuan'  => $siswa->whereIn('jenis_kelamin', ['P', 'Perempuan', 'Perempuan', 'perempuan'])->count(),
             'dokumenBelum'    => $siswa->where('dokumen_lengkap', 0)->count(),
         ]);
     }
