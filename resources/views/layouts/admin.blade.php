@@ -450,7 +450,7 @@
                     <li>
                         <a href="{{ route('admin.keterlambatan.index') }}" 
                         class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
-                            Keterlambatan
+                            Keterlambatan dan Perizinan
                         </a>
                     </li>
                 </ul>

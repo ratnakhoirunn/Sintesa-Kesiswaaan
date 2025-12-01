@@ -146,4 +146,29 @@ class DokumenSiswaController extends Controller
         ];
         return view('admin.dokumensiswa.create', compact('rombel'));
     }
+
+    public function destroy($nis)
+{
+    // Ambil semua dokumen milik siswa berdasarkan NIS
+    $dokumenList = DokumenSiswa::where('nis', $nis)->get();
+
+    if ($dokumenList->isEmpty()) {
+        return redirect()->back()->with('error', 'Tidak ada dokumen yang ditemukan untuk dihapus.');
+    }
+
+    // Hapus file fisik jika ada
+    foreach ($dokumenList as $dok) {
+        if ($dok->file_path && Storage::exists('public/' . $dok->file_path)) {
+            Storage::delete('public/' . $dok->file_path);
+        }
+    }
+
+    // Hapus seluruh record dokumen siswa dari database
+    DokumenSiswa::where('nis', $nis)->delete();
+
+    return redirect()
+        ->route('admin.dokumensiswa.index')
+        ->with('success', 'Semua dokumen siswa berhasil dihapus.');
+}
+
 }

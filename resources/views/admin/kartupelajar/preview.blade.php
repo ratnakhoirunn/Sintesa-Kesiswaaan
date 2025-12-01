@@ -201,12 +201,12 @@ body {
     <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
 @endunless
 
-<a href="{{ route('wali.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
+<a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
 
 
    @else
     {{-- === CETAK SATUAN === --}}
-    <iframe class="preview-frame" id="kartuFrame" src="{{ route('wali.kartupelajar.frame', $siswa->nis) }}"></iframe>
+    <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
 
     <div style="margin-top: 10px; text-align:center;">
 

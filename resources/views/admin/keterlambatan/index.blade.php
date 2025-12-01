@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Keterlambatan')
-@section('page_title', 'Keterlambatan')
+@section('title', 'Keterlambatan dan Perizinan')
+@section('page_title', 'Keterlambatan dan Perizinan')
 
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -150,7 +150,7 @@
 
     {{-- Header --}}
     <div class="header-keterlambatan">
-        <h4>Manajemen Keterlambatan Siswa</h4>
+        <h4>Manajemen Keterlambatan dan Perizinan Siswa</h4>
         <div class="tanggal-jam" id="tanggal-jam"></div>
     </div>
 
@@ -210,7 +210,6 @@
                                 @method('PUT')
 
                                 <button name="status" value="pending" class="btn-status btn-pending">Pending</button>
-                                <button name="status" value="proses" class="btn-status btn-proses">Proses</button>
                                 <button name="status" value="terima" class="btn-status btn-terima">Terima</button>
                             </form>
                         </td>

@@ -206,7 +206,6 @@ body {
 
         <div style="margin-top: 10px; text-align:center;">
             <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">🖨 Cetak</button>
-            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
         </div>
     @endif
 
