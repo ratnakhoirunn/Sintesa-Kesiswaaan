@@ -90,7 +90,7 @@ Route::prefix('admin')->name('admin.')
     Route::resource('datasiswa', SiswaController::class);
 
     // Akses Edit Siswa
-    Route::put('/datasiswa/{nis}/toggle-akses', [\App\Http\Controllers\Admin\SiswaAksesController::class, 'toggleAkses'])->name('datasiswa.toggleAkses');
+    Route::put('/datasiswa/{nis}/toggle-akses', [SiswaAksesController::class, 'toggleAkses'])->name('datasiswa.toggleAkses');
 
    // === DATA SISWA (Admin full, Kesiswaan read-only) ===
     Route::middleware(['kesiswaan.readonly'])->group(function () {
