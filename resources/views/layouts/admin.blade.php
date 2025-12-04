@@ -464,6 +464,13 @@
             </li>
 
             <li>
+                <a href="{{ route('admin.prestasi.index') }}" 
+                    class="{{ request()->is('admin/prestasisiswa*') ? 'active' : '' }}">
+                    <i class="fas fa-trophy"></i> Prestasi Siswa
+                </a>
+            </li>
+
+            <li>
                 <a href="{{ route('admin.role.index') }}" 
                     class="{{ request()->is('admin/role*') ? 'active' : '' }}">
                     <i class="fas fa-user-cog"></i> Manajemen Role

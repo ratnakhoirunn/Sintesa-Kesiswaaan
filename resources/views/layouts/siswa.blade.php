@@ -498,6 +498,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('siswa.prestasi.index') }}" 
+                       class="{{ request()->is('siswa/prestasi*') ? 'active' : '' }}">
+                        <i class="fas fa-trophy"></i> Prestasi Siswa
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('siswa.password.edit') }}">
                         <i class="fas fa-key"></i> Ubah Password
@@ -531,7 +538,7 @@
         </div>
         <div class="alert-text">
             <h4>Peringatan Keamanan!</h4>
-            <p>Kamu masih menggunakan password default <strong>(siswa123)</strong>.<br>
+            <p>Kamu masih menggunakan password default <br>
             Segera ubah password untuk menjaga keamanan akunmu.</p>
             <a href="{{ route('siswa.password.edit') }}" class="alert-button">Ganti Password Sekarang</a>
         </div>

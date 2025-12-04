@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\DokumenSiswaController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserPasswordController;
 use App\Http\Controllers\Admin\SiswaAksesController;
+use App\Http\Controllers\Admin\PrestasiController;
 
 use App\Http\Controllers\bk\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Siswa\KeterlambatanSiswaController;
 use App\Http\Controllers\Siswa\DokumenController;
 use App\Http\Controllers\Siswa\KonselingsiswaController;
 use App\Http\Controllers\Siswa\SiswaDataController;
+use App\Http\Controllers\Siswa\SiswaPrestasiController;
 /*
 |--------------------------------------------------------------------------
 | 🏠 ROUTE ROOT
@@ -120,9 +122,6 @@ Route::prefix('admin')->name('admin.')
         
     });
 
-    
-
-
     // 💬 Konseling
     Route::get('konseling', [KonselingController::class, 'index'])->name('konseling.index');
     Route::get('konseling/create', [KonselingController::class, 'create'])->name('konseling.create');
@@ -161,6 +160,17 @@ Route::prefix('admin')->name('admin.')
         ->name('update');
     Route::post('/update-self', [UserPasswordController::class, 'updateSelf'])->name('updateSelf');
 
+});
+
+// 📌 PRESTASI SISWA (ADMIN)
+Route::prefix('prestasi')->name('prestasi.')->group(function () {
+    Route::get('/', [PrestasiController::class, 'index'])->name('index');
+    Route::get('/create', [PrestasiController::class, 'create'])->name('create');
+    Route::post('/store', [PrestasiController::class, 'store'])->name('store');
+    Route::get('/{id}', [PrestasiController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [PrestasiController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [PrestasiController::class, 'update'])->name('update');
+    Route::delete('/{id}', [PrestasiController::class, 'destroy'])->name('destroy');
 });
 
 });
@@ -321,6 +331,14 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::post('/ubah-password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/lupa-password', [ForgotPasswordController::class, 'showForm'])->name('password.form');
     Route::post('/lupa-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
+
+     // 📌 Prestasi Siswa
+    Route::get('/prestasi', [SiswaPrestasiController::class, 'index'])->name('prestasi.index');
+    Route::post('/prestasi/store', [SiswaPrestasiController::class, 'store'])->name('prestasi.store');
+    Route::get('/{id}/edit', [SiswaPrestasiController::class, 'edit'])->name('prestasi.edit');
+    Route::put('/{id}', [SiswaPrestasiController::class, 'update'])->name('prestasi.update');
+    Route::delete('/{id}', [SiswaPrestasiController::class, 'destroy'])->name('prestasi.destroy');
 });
+
 
 
