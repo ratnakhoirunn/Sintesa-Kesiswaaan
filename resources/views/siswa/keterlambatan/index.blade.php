@@ -551,8 +551,8 @@ tbody tr:hover {
                 @forelse($riwayat as $data)
                 <tr>
                     <tr>
-                    <td>{{ \Carbon\Carbon::parse($data->tanggal)->translatedFormat('d M Y') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($data->jam_datang)->format('H:i') }}</td>
+                    <td>{{ Carbon::parse($data->tanggal)->translatedFormat('d M Y') }}</td>
+                    <td>{{ Carbon::parse($data->jam_datang)->format('H:i') }}</td>
                     <td class="text-left">{{ $data->keterangan }}</td>
                     <td>
    @if ($data->status == 'terima')

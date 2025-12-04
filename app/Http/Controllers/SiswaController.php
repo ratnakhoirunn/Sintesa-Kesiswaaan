@@ -10,40 +10,70 @@ use Illuminate\Http\Request;
 class SiswaController extends Controller
 {
     public function index(Request $request)
-    {
-        $rombel = $request->input('rombel');
-        $jurusan = $request->input('jurusan');
-        $search  = $request->input('search');
+{
+    $rombel  = $request->input('rombel');
+    $jurusan = $request->input('jurusan');
+    $search  = $request->input('search');
+    $angkatan = $request->input('angkatan');
 
-        // Query awal
-        $query = Siswa::query();
+    // ================================
+    // AMBIL DAFTAR ANGKATAN OTOMATIS
+    // ================================
+    $angkatan_list = Siswa::selectRaw("SUBSTR(nis, 1, 2) AS angkatan")
+        ->whereNotNull('nis')
+        ->whereRaw("LENGTH(nis) >= 2")
+        ->distinct()
+        ->orderBy('angkatan', 'desc')
+        ->pluck('angkatan');
 
-        // Filter rombel
-        if ($rombel) {
-            $query->where('rombel', $rombel);
-        }
+    // Query awal
+    $query = Siswa::query();
 
-        // Filter jurusan
-        if ($jurusan) {
-            $query->where('jurusan', $jurusan);
-        }
-
-        // Filter pencarian
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('nama_lengkap', 'like', "%{$search}%")
-                ->orWhere('nis', 'like', "%{$search}%");
-            });
-        }
-
-        // Hitung jumlah siswa hasil filter
-        $jumlah = $query->count();
-
-        // Ambil data dan pagination
-        $siswas = $query->orderBy('rombel')->orderBy('nama_lengkap')->paginate(15);
-
-        return view('admin.datasiswa.index', compact('siswas', 'rombel', 'jurusan', 'jumlah'));
+    // Filter rombel
+    if ($rombel) {
+        $query->where('rombel', $rombel);
     }
+
+    // Filter jurusan
+    if ($jurusan) {
+        $query->where('jurusan', $jurusan);
+    }
+
+    // Filter pencarian
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('nama_lengkap', 'like', "%{$search}%")
+              ->orWhere('nis', 'like', "%{$search}%");
+        });
+    }
+
+    // ==========================================
+    // FILTER ANGKATAN BERDASARKAN 2 DIGIT NIS
+    // ==========================================
+    if ($angkatan) {
+        $query->whereRaw("SUBSTR(nis, 1, 2) = ?", [$angkatan]);
+    }
+
+    // Hitung jumlah siswa hasil filter
+    $jumlah = $query->count();
+
+    // Ambil data + pagination
+    $siswas = $query
+        ->orderBy('rombel')
+        ->orderBy('nama_lengkap')
+        ->paginate(36)
+        ->appends($request->all()); // ← penting agar filter tidak hilang saat pagination
+
+    return view('admin.datasiswa.index', compact(
+        'siswas',
+        'rombel',
+        'jurusan',
+        'jumlah',
+        'angkatan',
+        'angkatan_list'
+    ));
+}
+
 
     public function create()
     {
@@ -218,5 +248,68 @@ class SiswaController extends Controller
         return redirect()->route('admin.datasiswa.index')->with('success', 'Data siswa berhasil dihapus.');
     }
 
-    
+    public function naikkanRombel($rombel)
+{
+    $siswas = Siswa::where('rombel', $rombel)->get();
+
+    foreach ($siswas as $siswa) {
+        $rombelLama = $siswa->rombel;
+
+        if (str_starts_with($rombelLama, 'ALUMNI')) {
+            continue;
+        }
+
+        // X → XI
+        if (preg_match('/^X\b/', $rombelLama)) {
+            $rombelBaru = preg_replace('/^X\b/', 'XI', $rombelLama);
+        } 
+        // XI → XII
+        else if (preg_match('/^XI\b/', $rombelLama)) {
+            $rombelBaru = preg_replace('/^XI\b/', 'XII', $rombelLama);
+        } 
+        // XII → ALUMNI
+        else if (preg_match('/^XII\b/', $rombelLama)) {
+            $rombelBaru = 'ALUMNI';
+        } 
+        else {
+            continue;
+        }
+
+        $siswa->rombel = $rombelBaru;
+        $siswa->save();
+    }
+
+    return back()->with('success', 'Semua siswa di rombel ' . $rombel . ' berhasil dinaikkan!');
+}
+
+public function naikkanSiswa($nis)
+{
+    $siswa = Siswa::where('nis', $nis)->firstOrFail();
+
+    // Ambil rombel lama
+    $rombel = $siswa->rombel;
+
+    // Pecah kelas
+    [$kelas, $jurusan, $nomor] = explode(' ', $rombel);
+
+    if ($kelas == 'X') {
+        $kelasBaru = 'XI';
+    } elseif ($kelas == 'XI') {
+        $kelasBaru = 'XII';
+    } else {
+        return back()->with('error', 'Siswa sudah di kelas XII.');
+    }
+
+    // Buat rombel baru
+    $rombelBaru = $kelasBaru . ' ' . $jurusan . ' ' . $nomor;
+
+    // Update
+    $siswa->update([
+        'rombel' => $rombelBaru
+    ]);
+
+    return back()->with('success', "{$siswa->nama_lengkap} berhasil dinaikkan ke kelas {$kelasBaru}.");
+}
+
+
 }

@@ -20,33 +20,113 @@
         <form method="GET" action="{{ route('admin.datasiswa.index') }}" class="filter-form">
             <div class="filter-container">
                 <!-- Pilih Rombel -->
-                <div class="filter-group">
+               <div class="filter-group">
                     <label for="rombel">Pilih Rombel</label>
                     <select name="rombel" id="rombel" class="filter-select">
-                        <option value="">Semua</option>
-                        <option value="X DKV 1" {{ request('rombel') == 'X DKV 1' ? 'selected' : '' }}>X DKV 1</option>
-                        <option value="X DKV 2" {{ request('rombel') == 'X DKV 2' ? 'selected' : '' }}>X DKV 2</option>
-                        <option value="X DPIB 1" {{ request('rombel') == 'X DPIB 1' ? 'selected' : '' }}>X DPIB 1</option>
-                        <option value="X DPIB 2" {{ request('rombel') == 'X DPIB 2' ? 'selected' : '' }}>X DPIB 2</option>
-                        <option value="X DPIB 3" {{ request('rombel') == 'X DPIB 3' ? 'selected' : '' }}>X DPIB 3</option>
-                        <option value="X GEOMATIKA" {{ request('rombel') == 'X GEOMATIKA' ? 'selected' : '' }}>X GEOMATIKA</option>
-                        <option value="X KGS" {{ request('rombel') == 'X KGS' ? 'selected' : '' }}>X KGS</option>
-                        <option value="X MEKATRONIKA" {{ request('rombel') == 'X MEKATRONIKA' ? 'selected' : '' }}>X MEKATRONIKA</option>
-                        <option value="X SIJA 1" {{ request('rombel') == 'X SIJA 1' ? 'selected' : '' }}>X SIJA 1</option>
-                        <option value="X SIJA 2" {{ request('rombel') == 'X SIJA 2' ? 'selected' : '' }}>X SIJA 2</option>
-                        <option value="X TAV" {{ request('rombel') == 'X TAV' ? 'selected' : '' }}>X TAV</option>
-                        <option value="X TITL 1" {{ request('rombel') == 'X TITL 1' ? 'selected' : '' }}>X TITL 1</option>
-                        <option value="X TITL 2" {{ request('rombel') == 'X TITL 2' ? 'selected' : '' }}>X TITL 2</option>
-                        <option value="X TITL 3" {{ request('rombel') == 'X TITL 3' ? 'selected' : '' }}>X TITL 3</option>
-                        <option value="X TITL 4" {{ request('rombel') == 'X TITL 4' ? 'selected' : '' }}>X TITL 4</option>
-                        <option value="X TKR 1" {{ request('rombel') == 'X TKR 1' ? 'selected' : '' }}>X TKR 1</option>
-                        <option value="X TKR 2" {{ request('rombel') == 'X TKR 2' ? 'selected' : '' }}>X TKR 2</option>
-                        <option value="X TKR 3" {{ request('rombel') == 'X TKR 3' ? 'selected' : '' }}>X TKR 3</option>
-                        <option value="X TKR 4" {{ request('rombel') == 'X TKR 4' ? 'selected' : '' }}>X TKR 4</option>
-                        <option value="X TP 1" {{ request('rombel') == 'X TP 1' ? 'selected' : '' }}>X TP 1</option>
-                        <option value="X TP 2" {{ request('rombel') == 'X TP 2' ? 'selected' : '' }}>X TP 2</option>
-                        <option value="X TP 3" {{ request('rombel') == 'X TP 3' ? 'selected' : '' }}>X TP 3</option>
-                        <option value="X TP 4" {{ request('rombel') == 'X TP 4' ? 'selected' : '' }}>X TP 4</option>
+                        <option value="" {{ request('rombel') == '' ? 'selected' : '' }}>Semua</option>
+
+                        <!-- =======================
+                            KELAS X
+                        ======================= -->
+                        <optgroup label="Kelas X">
+                            <option value="X DKV 1">X DKV 1</option>
+                            <option value="X DKV 2">X DKV 2</option>
+                            <option value="X DPIB 1">X DPIB 1</option>
+                            <option value="X DPIB 2">X DPIB 2</option>
+                            <option value="X DPIB 3">X DPIB 3</option>
+                            <option value="X GEOMATIKA">X GEOMATIKA</option>
+                            <option value="X KGS">X KGS</option>
+                            <option value="X MEKATRONIKA">X MEKATRONIKA</option>
+                            <option value="X SIJA 1">X SIJA 1</option>
+                            <option value="X SIJA 2">X SIJA 2</option>
+                            <option value="X TAV">X TAV</option>
+                            <option value="X TITL 1">X TITL 1</option>
+                            <option value="X TITL 2">X TITL 2</option>
+                            <option value="X TITL 3">X TITL 3</option>
+                            <option value="X TITL 4">X TITL 4</option>
+                            <option value="X TKR 1">X TKR 1</option>
+                            <option value="X TKR 2">X TKR 2</option>
+                            <option value="X TKR 3">X TKR 3</option>
+                            <option value="X TKR 4">X TKR 4</option>
+                            <option value="X TP 1">X TP 1</option>
+                            <option value="X TP 2">X TP 2</option>
+                            <option value="X TP 3">X TP 3</option>
+                            <option value="X TP 4">X TP 4</option>
+                        </optgroup>
+
+                        <!-- =======================
+                            KELAS XI
+                        ======================= -->
+                        <optgroup label="Kelas XI">
+                            <option value="XI DKV 1">XI DKV 1</option>
+                            <option value="XI DKV 2">XI DKV 2</option>
+                            <option value="XI DPIB 1">XI DPIB 1</option>
+                            <option value="XI DPIB 2">XI DPIB 2</option>
+                            <option value="XI DPIB 3">XI DPIB 3</option>
+                            <option value="XI GEOMATIKA">XI GEOMATIKA</option>
+
+                            <!-- KGS & SIJA -->
+                            <option value="XI KGS">XI KGS</option>
+                            <option value="XI SIJA 1">XI SIJA 1</option>
+                            <option value="XI SIJA 2">XI SIJA 2</option>
+
+                            <option value="XI MEKATRONIKA">XI MEKATRONIKA</option>
+                            <option value="XI TAV">XI TAV</option>
+                            <option value="XI TITL 1">XI TITL 1</option>
+                            <option value="XI TITL 2">XI TITL 2</option>
+                            <option value="XI TITL 3">XI TITL 3</option>
+                            <option value="XI TITL 4">XI TITL 4</option>
+                            <option value="XI TKR 1">XI TKR 1</option>
+                            <option value="XI TKR 2">XI TKR 2</option>
+                            <option value="XI TKR 3">XI TKR 3</option>
+                            <option value="XI TKR 4">XI TKR 4</option>
+                            <option value="XI TP 1">XI TP 1</option>
+                            <option value="XI TP 2">XI TP 2</option>
+                            <option value="XI TP 3">XI TP 3</option>
+                            <option value="XI TP 4">XI TP 4</option>
+                        </optgroup>
+
+                        <!-- =======================
+                            KELAS XII
+                        ======================= -->
+                        <optgroup label="Kelas XII">
+                            <option value="XII DKV 1">XII DKV 1</option>
+                            <option value="XII DKV 2">XII DKV 2</option>
+                            <option value="XII DPIB 1">XII DPIB 1</option>
+                            <option value="XII DPIB 2">XII DPIB 2</option>
+                            <option value="XII DPIB 3">XII DPIB 3</option>
+                            <option value="XII GEOMATIKA">XII GEOMATIKA</option>
+
+                            <!-- KGS & SIJA -->
+                            <option value="XII KGS">XII KGS</option>
+                            <option value="XII SIJA 1">XII SIJA 1</option>
+                            <option value="XII SIJA 2">XII SIJA 2</option>
+
+                            <option value="XII MEKATRONIKA">XII MEKATRONIKA</option>
+                            <option value="XII TAV">XII TAV</option>
+                            <option value="XII TITL 1">XII TITL 1</option>
+                            <option value="XII TITL 2">XII TITL 2</option>
+                            <option value="XII TITL 3">XII TITL 3</option>
+                            <option value="XII TITL 4">XII TITL 4</option>
+                            <option value="XII TKR 1">XII TKR 1</option>
+                            <option value="XII TKR 2">XII TKR 2</option>
+                            <option value="XII TKR 3">XII TKR 3</option>
+                            <option value="XII TKR 4">XII TKR 4</option>
+                            <option value="XII TP 1">XII TP 1</option>
+                            <option value="XII TP 2">XII TP 2</option>
+                            <option value="XII TP 3">XII TP 3</option>
+                            <option value="XII TP 4">XII TP 4</option>
+                        </optgroup>
+
+                        <!-- =======================
+                            KELAS XIII (KHUSUS)
+                            Hanya SIJA & KGS
+                        ======================= -->
+                        <optgroup label="Kelas XIII (Khusus)">
+                            <option value="XIII KGS">XIII KGS</option>
+                            <option value="XIII SIJA 1">XIII SIJA 1</option>
+                            <option value="XIII SIJA 2">XIII SIJA 2</option>
+                        </optgroup>
                     </select>
                 </div>
 
@@ -68,6 +148,19 @@
                     </select>
                 </div>
 
+                <!-- FILTER ANGKATAN -->
+                    <div class="filter-group">
+                        <label for="angkatan">Angkatan</label>
+                        <select name="angkatan" id="angkatan" class="filter-select">
+                            <option value="">Semua</option>
+                            @foreach($angkatan_list as $a)
+                                <option value="{{ $a }}" {{ request('angkatan') == $a ? 'selected' : '' }}>
+                                    Angkatan {{ $a }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                 <!-- Pencarian -->
                 <div class="filter-group">
                     <label for="search">Cari</label>
@@ -81,32 +174,59 @@
 
         <!-- Tombol kanan -->
         @if(auth('guru')->user()->role !== 'kesiswaan')
-    <a href="{{ route('admin.datasiswa.create') }}" class="btn-tambah">
-        <i class="fas fa-plus"></i> Tambah Data Siswa
-    </a>
+            <a href="{{ route('admin.datasiswa.create') }}" class="btn-tambah">
+                <i class="fas fa-plus"></i> Tambah Data Siswa
+            </a>
 
-    <form action="{{ route('admin.datasiswa.import') }}" method="POST" enctype="multipart/form-data" class="import-form">
-        @csrf
-        <label for="file" class="btn-import">
-            <i class="fas fa-file-excel"></i> Import Excel
-        </label>
-        <input type="file" id="file" name="file" accept=".xlsx,.xls,.csv" style="display:none;" onchange="this.form.submit();">
-    </form>
-@endif
+            <form action="{{ route('admin.datasiswa.import') }}" method="POST" enctype="multipart/form-data" class="import-form">
+                @csrf
+                <label for="file" class="btn-import">
+                    <i class="fas fa-file-excel"></i> Import Excel
+                </label>
+                <input type="file" id="file" name="file" accept=".xlsx,.xls,.csv" style="display:none;" onchange="this.form.submit();">
+            </form>
+        @endif
 
     </div>
 
     @if ($rombel)
      <div style="margin-top: 6px; text-align: right; color: #121212ff;">
         <strong>Jumlah siswa di {{ $rombel }}:</strong> {{ $jumlah }}
-    </div>
-@else
-     <div style="margin-top: 6px; text-align: right; color: #121212ff;">
-        <strong>Total semua siswa:</strong> {{ $jumlah }}
-    </div>
-@endif
+            </div>
+        @else
+            <div style="margin-top: 6px; text-align: right; color: #121212ff;">
+                <strong>Total semua siswa:</strong> {{ $jumlah }}
+            </div>
+    @endif
+
+      @if(request('rombel'))
+            <form 
+                action="{{ route('admin.naikkanRombel', request('rombel')) }}" 
+                method="POST"
+                onsubmit="return confirm('Yakin ingin menaikkan kelas seluruh siswa di rombel {{ request('rombel') }}?');"
+                style="margin-top:10px;"
+            >
+                @csrf
+                @method('PUT')
+
+                <button type="submit" class="btn-tambah" style="background:#8e44ad;">
+                    <i class="fas fa-level-up-alt"></i> Naikkan Kelas Rombel Ini
+                </button>
+            </form>
+            @endif
 
 </div>
+
+<script>
+document.getElementById('angkatan')?.addEventListener('change', function() {
+    this.form.submit();
+});
+
+// SET NILAI SELECT ROMBEL AGAR TETAP TERPILIH
+document.getElementById('rombel').value = "{{ request('rombel') }}";
+</script>
+
+
 
 <style>
     /* =======================
@@ -147,12 +267,14 @@
 
     /* Aksi sejajar */
     .aksi-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: nowrap;
-    }
+    display: flex;
+    justify-content: flex-start; /* geser kiri */
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    overflow: visible; /* cegah elemen menghilang */
+}
+
 
     .aksi-container a, 
     .aksi-container button {
@@ -191,6 +313,21 @@
     .aksi-toggle:hover {
         opacity: .7;
     }
+
+    /* Tombol aksi naik kelas */
+    .aksi-naik {
+        color: #8e44ad; /* ungu */
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .aksi-naik:hover {
+        opacity: 0.7;
+}
+
 </style>
 
 <table>
@@ -201,7 +338,7 @@
             <th>Nama Lengkap</th>
             <th>Rombel</th>
             <th>Kompetensi Keahlian</th>
-            <th>Aksi</th>
+            <th style="width: 250px;">Aksi</th>
         </tr>
     </thead>
    <tbody>
@@ -213,7 +350,7 @@
             <td>{{ $siswa->rombel }}</td>
             <td>{{ $siswa->jurusan }}</td>
             <td>
-     <div class="aksi-container">
+    <div class="aksi-container">
 
     {{-- Semua user (Admin, BK, Kesiswaan) bisa lihat --}}
     <a href="{{ route('admin.datasiswa.show', $siswa->nis) }}" class="aksi-lihat">
@@ -257,8 +394,21 @@
             @endif
         </form>
 
-    @endif
+        {{-- Tombol Naikkan kelas per siswa (hanya muncul saat filter rombel aktif) --}}
+        @if(request('rombel'))
+        <form action="{{ route('admin.naikkanSiswa', $siswa->nis) }}"
+            method="POST"
+            onsubmit="return confirm('Naikkan kelas {{ $siswa->nama_lengkap }}?');">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="aksi-naik" title="Naikkan Kelas">
+                <i class="fas fa-level-up-alt"></i> Naikkan
+            </button>
+        </form>
+        @endif
 
+    @endif
+ 
 </div>
 
             </td>

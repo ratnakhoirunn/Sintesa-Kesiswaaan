@@ -173,6 +173,10 @@ Route::prefix('prestasi')->name('prestasi.')->group(function () {
     Route::delete('/{id}', [PrestasiController::class, 'destroy'])->name('destroy');
 });
 
+//Naik Kelas 
+    Route::put('/naikkan-rombel/{rombel}', [SiswaController::class, 'naikkanRombel'])->name('naikkanRombel');
+    Route::put('/naikkan-siswa/{nis}', [SiswaController::class, 'naikkanSiswa'])->name('naikkanSiswa');
+
 });
 
 /*
