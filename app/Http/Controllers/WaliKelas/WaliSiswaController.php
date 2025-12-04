@@ -15,7 +15,7 @@ class WaliSiswaController extends Controller
         $rombel = $guru->walikelas; // ambil rombel wali kelas
 
         // Ambil semua siswa di rombel wali
-        $siswas = Siswa::where('rombel', $rombel)->paginate(40);
+        $siswas = Siswa::where('rombel', $rombel)->orderBy('nama_lengkap', 'asc')->paginate(40);
 
         // Hitung jumlah siswa
         $jumlah = Siswa::where('rombel', $rombel)->count();

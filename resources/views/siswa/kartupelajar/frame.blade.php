@@ -220,6 +220,31 @@
 </head>
 <body>
 
+@php
+    use Carbon\Carbon;
+    // 1. Pastikan Carbon menggunakan locale Bahasa Indonesia
+    Carbon::setLocale('id');
+
+    // 2. Tentukan Bulan untuk Footer
+    $bulanFooter = request('bulan');
+    
+    if (!empty($bulanFooter)) {
+        // Coba parsing bulan (misalnya jika inputnya angka '8' atau nama Inggris 'August')
+        try {
+            $date = Carbon::parse($bulanFooter);
+            $bulanIndonesia = $date->translatedFormat('F');
+        } catch (\Exception $e) {
+            // Fallback jika parsing gagal (misalnya jika inputnya sudah nama Indonesia 'Agustus')
+            $bulanIndonesia = $bulanFooter; 
+        }
+    } else {
+        // Default ke bulan saat ini jika tidak ada request
+        $bulanIndonesia = Carbon::now()->translatedFormat('F'); 
+    }
+
+    $tahunFooter = request('tahun') ?? date('Y');
+@endphp
+
     {{-- 📄 HALAMAN DEPAN --}}
     <div class="card">
         <div class="header">

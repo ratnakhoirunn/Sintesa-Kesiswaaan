@@ -11,6 +11,30 @@
 </div>
 
 <div class="info-cards">
+    @php
+    use Carbon\Carbon;
+    // 1. Pastikan Carbon menggunakan locale Bahasa Indonesia
+    Carbon::setLocale('id');
+
+    // 2. Tentukan Bulan untuk Footer
+    $bulanFooter = request('bulan');
+    
+    if (!empty($bulanFooter)) {
+        // Coba parsing bulan (misalnya jika inputnya angka '8' atau nama Inggris 'August')
+        try {
+            $date = Carbon::parse($bulanFooter);
+            $bulanIndonesia = $date->translatedFormat('F');
+        } catch (\Exception $e) {
+            // Fallback jika parsing gagal (misalnya jika inputnya sudah nama Indonesia 'Agustus')
+            $bulanIndonesia = $bulanFooter; 
+        }
+    } else {
+        // Default ke bulan saat ini jika tidak ada request
+        $bulanIndonesia = Carbon::now()->translatedFormat('M'); 
+    }
+
+    $tahunFooter = request('tahun') ?? date('Y');
+@endphp
 
     <div class="info-card">
         <div class="content">
@@ -105,7 +129,7 @@
                 <div>
                     <strong style="font-size: 14px;">{{ $t->siswa->nama_lengkap }}</strong><br>
                     <span style="font-size: 12px; color:#777;">
-                        Terlambat: {{ $t->created_at->format('d M Y, H:i') }}
+                        Terlambat: {{ $t->created_at->translatedformat('d M Y, H:i') }}
                     </span>
                 </div>
             </div>

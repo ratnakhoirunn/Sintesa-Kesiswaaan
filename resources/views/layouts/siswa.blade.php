@@ -24,7 +24,7 @@
         /* Sidebar */
         .sidebar {
             width: 300px;
-            background-color: #123B6B;
+            background-color: #17375d;
             color: #fff;
             padding: 20px 0;
             display: flex;
