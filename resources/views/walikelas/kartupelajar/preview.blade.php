@@ -1,6 +1,6 @@
-@extends('layouts.siswa')
+@extends('layouts.admin')
 @section('title', 'Kartu Pelajar')
-@section('page_title', isset($siswas) ? '' : 'Preview Kartu Pelajar')
+@section('page_title', isset($siswas) ? 'Preview Kartu Pelajar Massal' : 'Preview Kartu Pelajar')
 
 @section('content')
 
@@ -190,49 +190,100 @@ body {
     @if(isset($siswas))
         {{-- === CETAK MASSAL === --}}
         @foreach($siswas as $siswa)
-           <iframe class="preview-frame" id="kartuFrame" src="{{ route('siswa.kartupelajar.frame', $siswa->nis) }}"></iframe>
+            <iframe class="preview-frame" src="{{ route('wali.kartupelajar.frame', $siswa->nis) }}"></iframe>
             <hr style="width:100%; max-width:750px; border:1px dashed #ccc;">
         @endforeach
 
-        <div style="margin-top: 10px; text-align:center;">
-            <button onclick="window.print()" class="btn-custom btn-cetak">🖨 Cetak Semua</button>
-            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
-            <a href="{{ route('siswa.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
-        </div>
+        <button onclick="window.print()" class="btn-custom btn-cetak">🖨 Cetak Semua</button>
 
-    @else
-        {{-- === CETAK SATUAN === --}}
-        <iframe class="preview-frame" id="kartuFrame" src="{{ route('siswa.kartupelajar.frame', Auth::guard('siswa')->user()->nis) }}"></iframe>
+{{-- HANYA ADMIN & BK YANG BOLEH EDIT --}}
+@unless(auth('guru')->user()->role === 'kesiswaan')
+    <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
+@endunless
 
-        <div style="margin-top: 10px; text-align:center;">
-            <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">🖨 Cetak</button>
-        </div>
-    @endif
+<a href="{{ route('kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
 
-    <!-- ✅ Form Edit Data Kartu -->
+
+   @else
+    {{-- === CETAK SATUAN === --}}
+    <iframe class="preview-frame" id="kartuFrame" src="{{ route('wali.kartupelajar.frame', $siswa->nis) }}"></iframe>
+
+    <div style="margin-top: 10px; text-align:center;">
+
+        {{-- Tombol Cetak — Semua role boleh --}}
+        <button onclick="document.getElementById('kartuFrame').contentWindow.print()" 
+                class="btn-custom btn-cetak">
+            🖨 Cetak
+        </button>
+
+        {{-- HANYA ADMIN & BK yang boleh edit --}}
+        @unless(auth('guru')->user()->role === 'kesiswaan')
+
+            <a href="{{ route('wali.datasiswa.edit', $siswa->nis) }}" 
+                class="btn-custom btn-edit">
+                ✏ Edit
+            </a>
+
+            <button type="button" 
+                    class="btn-custom btn-edit" 
+                    onclick="toggleFooterForm()">
+                🧾 Edit Data Kartu
+            </button>
+
+        @endunless
+
+        {{-- Tombol kembali — semua role boleh --}}
+        <a href="{{ route('admin.kartupelajar.index') }}" 
+            class="btn-custom btn-batal">
+            ✖ Kembali
+        </a>
+
+    </div>
+@endif
+
+
+ {{-- ======================================
+   FORM EDIT DATA KARTU (Hanya Admin & BK)
+======================================= --}}
+@unless(auth('guru')->user()->role === 'kesiswaan')
+
 <div id="footerFormContainer" style="display:none; margin-top:20px; text-align:center;">
-    <form id="footerForm" onsubmit="return updateFrameFooter();" style="display:inline-block; background:#f0f4ff; padding:20px; border-radius:8px; text-align:left;">
+    <form id="footerForm" onsubmit="return updateFrameFooter();" 
+          style="display:inline-block; background:#f0f4ff; padding:20px; border-radius:8px; text-align:left;">
+
         <h4 style="color:#17375d; margin-bottom:10px;">Edit Data Kartu</h4>
+
         <div style="display: flex; flex-wrap: wrap; gap: 10px;">
             <div>
                 <label>Bulan:</label>
-                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}" required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}"
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>Tahun:</label>
-                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}" required style="padding:5px 10px; border-radius:6px;">
+                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}"
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>Nama Kepala Sekolah:</label>
-                <input type="text" name="nama_kepsek" id="nama_kepsek" placeholder="Drs. Agus Waluyo, M.Eng." required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="nama_kepsek" id="nama_kepsek"
+                       placeholder="Drs. Agus Waluyo, M.Eng."
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>NIP:</label>
-                <input type="text" name="nip" id="nip" placeholder="196512271994121002" required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="nip" id="nip"
+                       placeholder="196512271994121002"
+                       required style="padding:5px 10px; border-radius:6px;">
             </div>
+
             <div>
                 <label>Gambar Cap & TTD Kepala Sekolah:</label>
-                <input type="file" id="cap_kepsek" accept="image/*" style="padding:5px 10px; border-radius:6px;">
+                <input type="file" id="cap_kepsek" accept="image/*"
+                       style="padding:5px 10px; border-radius:6px;">
             </div>
         </div>
 
@@ -240,7 +291,28 @@ body {
             <button type="submit" class="btn-custom btn-cetak">💾 Simpan Perubahan</button>
             <button type="button" class="btn-custom btn-batal" onclick="toggleFooterForm()">Batal</button>
         </div>
+
     </form>
+</div>
+
+@endunless
+
+
+</div>
+
+    {{-- ✅ Area cetak massal --}}
+    @if(isset($siswas))
+    <div id="printArea">
+        <div class="print-sheet">
+            @foreach($siswas as $siswa)
+            <div class="print-card">
+                <iframe src="{{ route('wali.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
 </div>
 
     <script>

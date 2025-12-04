@@ -1,7 +1,7 @@
 @extends('layouts.siswa')
 
-@section('title', 'Keterlambatan')
-@section('page_title', 'Keterlambatan')
+@section('title', 'Keterlambatan dan Perizinan Siswa')
+@section('page_title', 'Keterlambatan dan Perizinan Siswa')
 
 @section('content')
 <style>

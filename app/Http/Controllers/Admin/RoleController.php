@@ -33,7 +33,7 @@ class RoleController extends Controller
         return view('admin.role.index', compact('roles'));
     }
 
-    // Selain siswa — admin, guru_bk, guru_biasa, kesiswaan → tabel guru
+    // Selain siswa — admin, guru_bk, guru, kesiswaan → tabel guru
     $query = Guru::query();
 
     if ($search) {
@@ -58,29 +58,45 @@ class RoleController extends Controller
         return view('admin.role.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_pengguna' => 'required',
-            'nis' => 'required',
-            'email' => 'required|email',
-            'role' => 'required',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'nama_pengguna' => 'required|string|max:255',
+        'nip_nis' => 'required',
+        'email' => 'required|email',
+        'role' => 'required',
+    ]);
+
+    // Jika role Siswa → simpan ke tabel siswa
+    if ($request->role === 'Siswa') {
 
         Siswa::create([
-            'nama_pengguna' => $request->nama_pengguna,
-            'nis' => $request->nis,
+            'nama_lengkap' => $request->nama_pengguna,
+            'nis' => $request->nip_nis,   // ← perbaikan
             'email' => $request->email,
-            'role' => $request->role,
+            'password' => bcrypt('siswa123'),
+            'role' => 'siswa',
         ]);
 
-        return redirect()->route('admin.role.index')->with('success', 'Data berhasil ditambahkan.');
+    } else {
+
+        Guru::create([
+            'nama' => $request->nama_pengguna,
+            'nip' => $request->nip_nis, // ← perbaikan
+            'email' => $request->email,
+            'password' => bcrypt('guru123'),
+            'role' => $request->role,
+        ]);
     }
+
+    return redirect()->route('admin.role.index')
+        ->with('success', 'Data berhasil ditambahkan.');
+}
 
     /**
      * Edit — terima id/nis, cari fleksibel (cari berdasarkan id dulu, kalau tidak ada pakai nis).
      */
-  public function edit($identifier)
+public function edit($identifier)
 {
     // cari siswa berdasarkan NIS
     $siswa = Siswa::where('nis', $identifier)->first();
@@ -95,34 +111,69 @@ class RoleController extends Controller
     // pilih data mana yg ditemukan
     $role = $siswa ?? $guru;
 
-    return view('admin.role.edit', compact('role'));
-}
+    // 🔹 Ambil daftar rombel (tabel: siswas)
+    $rombels = Siswa::select('rombel')->distinct()->get();
 
+    return view('admin.role.edit', compact('role', 'rombels'));
+}
 
     /**
      * Update role (menerima id/nis di route juga).
-     */
-   public function update(Request $request, $identifier)
+     */public function update(Request $request, $identifier)
 {
     $request->validate([
         'role' => 'required|string',
+        'walikelas' => 'nullable|string'  // tambahkan validasi wali kelas
     ]);
 
-    // cari siswa by NIS
+    // cari siswa berdasarkan NIS
     $siswa = Siswa::where('nis', $identifier)->first();
 
-    // cari guru by NIP
+    // cari guru berdasarkan NIP
     $guru = Guru::where('nip', $identifier)->first();
 
     if ($siswa) {
-        $siswa->update(['role' => $request->role]);
+        // siswa hanya update role
+        $siswa->update([
+            'role' => $request->role,
+        ]);
+
     } elseif ($guru) {
-        $guru->update(['role' => $request->role]);
+
+        // update role dan wali kelas (khusus guru)
+        $guru->update([
+            'role' => $request->role,
+            'walikelas' => $request->role === 'guru' ? $request->walikelas : null
+        ]);
+
     } else {
         abort(404, "Data tidak ditemukan.");
     }
 
     return redirect()->route('admin.role.index')->with('success', 'Role berhasil diperbarui!');
+}
+
+public function destroy($identifier)
+{
+    // Cari siswa berdasarkan NIS
+    $siswa = Siswa::where('nis', $identifier)->first();
+
+    // Cari guru berdasarkan NIP
+    $guru = Guru::where('nip', $identifier)->first();
+
+    if ($siswa) {
+        $siswa->delete();
+        return redirect()->route('admin.role.index')
+            ->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    if ($guru) {
+        $guru->delete();
+        return redirect()->route('admin.role.index')
+            ->with('success', 'Guru berhasil dihapus.');
+    }
+
+    abort(404, 'Data tidak ditemukan.');
 }
 
 }

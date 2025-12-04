@@ -41,7 +41,7 @@ class DashboardController extends Controller
     $totalSiswa = Siswa::count();
     $totalAdmin = User::where('role', 'admin')->count();
     $konselingMenunggu = Konseling::where('status', 'Menunggu')->count();
-   $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
+    $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
 
     // === Data untuk Chart: Jumlah siswa per jurusan ===
     $query = Siswa::select('jurusan', DB::raw('COUNT(*) as total'));

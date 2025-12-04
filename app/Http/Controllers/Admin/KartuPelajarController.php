@@ -60,7 +60,7 @@ class KartuPelajarController extends Controller
     }
 
     // 🧾 PREVIEW kartu pelajar (dalam layout admin)
-    public function cetak($nis)
+    public function preview($nis)
     {
         $siswa = Siswa::where('nis', $nis)->firstOrFail();
 

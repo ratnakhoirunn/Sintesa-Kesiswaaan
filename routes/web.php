@@ -13,9 +13,17 @@ use App\Http\Controllers\Admin\DokumenSiswaController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserPasswordController;
 use App\Http\Controllers\Admin\SiswaAksesController;
+use App\Http\Controllers\Admin\PrestasiController;
 
 use App\Http\Controllers\bk\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
+use App\Http\Controllers\WaliKelas\WaliSiswaController;
+use App\Http\Controllers\WaliKelas\DokumenSiswaWaliController;
+use App\Http\Controllers\WaliKelas\WaliKartuPelajarController;
+use App\Http\Controllers\WaliKelas\DashboardWaliController;
+use App\Http\Controllers\WaliKelas\UserPasswordWaliController;
+
+
 
 use App\Http\Controllers\Siswa\OrtuController;
 use App\Http\Controllers\Siswa\DashboardSiswaController;
@@ -25,8 +33,8 @@ use App\Http\Controllers\Siswa\ForgotPasswordController;
 use App\Http\Controllers\Siswa\KeterlambatanSiswaController;
 use App\Http\Controllers\Siswa\DokumenController;
 use App\Http\Controllers\Siswa\KonselingsiswaController;
-
 use App\Http\Controllers\Siswa\SiswaDataController;
+use App\Http\Controllers\Siswa\SiswaPrestasiController;
 /*
 |--------------------------------------------------------------------------
 | 🏠 ROUTE ROOT
@@ -44,6 +52,7 @@ Route::get('/', function () {
             'admin'      => redirect()->route('admin.dashboard'),
             'guru_bk'    => redirect()->route('bk.dashboard'),
             'kesiswaan'  => redirect()->route('kesiswaan.dashboard'),
+            'walikelas'   => redirect()->route('wali.dashboard'),
             default      => redirect()->route('guru.dashboard'),
         };
     }
@@ -105,11 +114,12 @@ Route::prefix('admin')->name('admin.')
     // 🪪 Kartu Pelajar
     Route::prefix('kartupelajar')->name('kartupelajar.')->group(function () {
         Route::get('/', [KartuPelajarController::class, 'index'])->name('index');
-        Route::get('/preview/{nis}', [KartuPelajarController::class, 'cetak'])->name('preview');
+        Route::get('/preview/{nis}', [KartuPelajarController::class, 'preview'])->name('preview');
         Route::post('/print-mass', [KartuPelajarController::class, 'printMass'])->name('printMass');
         Route::get('/search', [KartuPelajarController::class, 'search'])->name('search');
         Route::get('/download-pdf/{nis}', [KartuPelajarController::class, 'downloadPDF'])->name('download.pdf');
         Route::get('/frame/{nis}', [KartuPelajarController::class, 'previewFrame'])->name('frame');
+        
     });
 
     // 💬 Konseling
@@ -132,8 +142,10 @@ Route::prefix('admin')->name('admin.')
     // 📄 Roles
     Route::resource('role', RoleController::class);
     Route::middleware(['kesiswaan.readonly'])->group(function () {
-    Route::resource('dokumensiswa', DokumenSiswaController::class);
+    
 });
+    // dokumen siswa
+    Route::resource('dokumensiswa', DokumenSiswaController::class);
 
     //Ubah Password Siswa
     Route::prefix('password')->name('password.')->group(function () {
@@ -148,6 +160,17 @@ Route::prefix('admin')->name('admin.')
         ->name('update');
     Route::post('/update-self', [UserPasswordController::class, 'updateSelf'])->name('updateSelf');
 
+});
+
+// 📌 PRESTASI SISWA (ADMIN)
+Route::prefix('prestasi')->name('prestasi.')->group(function () {
+    Route::get('/', [PrestasiController::class, 'index'])->name('index');
+    Route::get('/create', [PrestasiController::class, 'create'])->name('create');
+    Route::post('/store', [PrestasiController::class, 'store'])->name('store');
+    Route::get('/{id}', [PrestasiController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [PrestasiController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [PrestasiController::class, 'update'])->name('update');
+    Route::delete('/{id}', [PrestasiController::class, 'destroy'])->name('destroy');
 });
 
 });
@@ -200,6 +223,69 @@ Route::middleware(['auth:guru', 'role:kesiswaan'])
 
 });
 
+/*
+|--------------------------------------------------------------------------
+| 👨‍🏫 Wali Kelas Area
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('wali')
+    ->name('wali.')
+    ->middleware(['auth:guru', 'walikelas'])
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/dashboard', [DashboardWaliController::class, 'dashboard'])->name('dashboard');
+
+        // Data siswa wali kelas
+        Route::get('/datasiswa', [WaliSiswaController::class, 'index'])->name('datasiswa');
+        Route::get('/datasiswa/{nis}/edit', [WaliSiswaController::class, 'edit'])->name('datasiswa.edit');
+        Route::put('/datasiswa/{nis}', [WaliSiswaController::class, 'update'])->name('datasiswa.update');
+        Route::delete('/datasiswa/{nis}', [WaliSiswaController::class, 'destroy'])->name('datasiswa.destroy');
+        Route::post('/datasiswa/{nis}/toggle', [WaliSiswaController::class, 'toggleAkses']) ->name('datasiswa.toggleAkses');
+        Route::post('/datasiswa/{nis}/reset-password', [WaliSiswaController::class, 'resetPassword'])->name('datasiswa.resetPassword');
+        Route::get('/datasiswa/{nis}', [WaliSiswaController::class, 'show'])->name('datasiswa.show');
+
+        // 📌 KARTU PELAJAR WALI KELAS
+        Route::prefix('/kartu-pelajar')->name('kartupelajar.')->group(function () {
+        Route::get('/', [WaliKartuPelajarController::class, 'index'])->name('index');
+        Route::get('/preview/{nis}', [WaliKartuPelajarController::class, 'preview'])->name('preview');
+        Route::get('/frame/{nis}', [WaliKartuPelajarController::class, 'frame'])->name('frame');
+
+});
+
+        // Dokumen Siswa
+        Route::get('/dokumensiswa', [DokumenSiswaWaliController::class, 'index'])->name('dokumensiswa');
+        Route::get('/dokumensiswa/{nis}', [DokumenSiswaWaliController::class, 'show'])->name('dokumensiswa.show');
+        Route::get('/dokumensiswa/{nis}/edit', [DokumenSiswaWaliController::class, 'edit'])->name('dokumensiswa.edit');
+        Route::put('/dokumensiswa/{nis}', [DokumenSiswaWaliController::class, 'update'])->name('dokumensiswa.update');
+        Route::delete('/dokumensiswa/{nis}', [DokumenSiswaWaliController::class, 'destroy'])->name('dokumensiswa.destroy');
+
+        // Kelola Password (opsional pake default)
+        Route::prefix('password')->name('password.')->group(function () {
+    Route::get('/', [UserPasswordWaliController::class, 'index'])->name('index');
+    Route::get('/{nis}/edit', [UserPasswordWaliController::class, 'edit'])->name('edit');
+    Route::post('/{nis}/update', [UserPasswordWaliController::class, 'update'])->name('update');
+    Route::post('/update-self', [UserPasswordWaliController::class, 'updateSelf'])->name('updateSelf');
+});
+
+    });
+
+
+
+// ------------------------------------------------------------
+// 👨‍🏫 GURU BIASA (Role: guru)
+// ------------------------------------------------------------
+Route::prefix('guru')->name('guru.')
+    ->middleware(['auth:guru', 'role:guru'])
+    ->group(function () {
+
+    Route::get('/dashboard', function () {
+        return view('guru.dashboard'); // nanti kamu buat view-nya
+    })->name('dashboard');
+
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -245,4 +331,14 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::post('/ubah-password', [PasswordController::class, 'update'])->name('password.update');
     Route::get('/lupa-password', [ForgotPasswordController::class, 'showForm'])->name('password.form');
     Route::post('/lupa-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
+
+     // 📌 Prestasi Siswa
+    Route::get('/prestasi', [SiswaPrestasiController::class, 'index'])->name('prestasi.index');
+    Route::post('/prestasi/store', [SiswaPrestasiController::class, 'store'])->name('prestasi.store');
+    Route::get('/{id}/edit', [SiswaPrestasiController::class, 'edit'])->name('prestasi.edit');
+    Route::put('/{id}', [SiswaPrestasiController::class, 'update'])->name('prestasi.update');
+    Route::delete('/{id}', [SiswaPrestasiController::class, 'destroy'])->name('prestasi.destroy');
 });
+
+
+

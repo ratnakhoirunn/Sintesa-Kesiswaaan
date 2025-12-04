@@ -258,7 +258,7 @@
                 <td style="text-align:left;">{{ $item->nama_siswa }}</td>
                 <td>{{ $item->kelas }}</td>
                 <td>{{ $item->nama_ortu }}</td>
-                <td>{{ $item->topik }}</td>
+                <td style="text-align:left;">{{ $item->topik }}</td>
                 <td>{{ $item->tanggal }}</td>
 
                 <td>

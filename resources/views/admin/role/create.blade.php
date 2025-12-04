@@ -121,8 +121,8 @@
                 </div>
 
                 <div class="col-half">
-                    <label class="form-label">NIS</label>
-                    <input type="text" name="nis" class="form-control" placeholder="Masukkan NIS" required>
+                    <label class="form-label">NIP/NIS</label>
+                    <input type="text" name="nip_nis" class="form-control" placeholder="Masukkan NIP atau NIS" required>
                 </div>
 
                 <div class="col-half">
@@ -134,9 +134,11 @@
                     <label class="form-label">Role</label>
                     <select name="role" class="form-control" required>
                         <option value="">-- Pilih Role --</option>
-                        <option value="Admin">Admin</option>
+                        <option value="admin">Admin</option>
+                        <option value="guru_bk">Guru BK</option>
+                        <option value="guru">Guru</option>
+                        <option value="kesiswaan">Kesiswaan</option>
                         <option value="Siswa">Siswa</option>
-                        <option value="Guru">Guru</option>
                     </select>
                 </div>
             </div>

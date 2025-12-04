@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
@@ -383,7 +384,7 @@
     <div class="sidebar">
        <div class="header header-white">
         <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK" class="header-logo">
-        <h3 class="header-title">SINTESA SMK N 2 YOGYAKARTA</h3>
+        <h3 class="header-title">SINTESA SMKN 2 YOGYAKARTA</h3>
     </div>
 
      <div class="profile-admin">
@@ -449,7 +450,7 @@
                     <li>
                         <a href="{{ route('admin.keterlambatan.index') }}" 
                         class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
-                            Keterlambatan
+                            Keterlambatan dan Perizinan
                         </a>
                     </li>
                 </ul>
@@ -459,6 +460,13 @@
                 <a href="{{ route('admin.dokumensiswa.index') }}" 
                     class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
                     <i class="fas fa-file-alt"></i> Dokumen Siswa
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('admin.prestasi.index') }}" 
+                    class="{{ request()->is('admin/prestasisiswa*') ? 'active' : '' }}">
+                    <i class="fas fa-trophy"></i> Prestasi Siswa
                 </a>
             </li>
 
@@ -548,7 +556,47 @@
             </a></li>
 
         @endif
+                {{-- ===================================
+                    MENU UNTUK WALI KELAS
+                =================================== --}}
+                @if(auth('guru')->user()->role == 'guru' && auth('guru')->user()->walikelas != null)
 
+                    <li>
+                        <a href="{{ route('wali.dashboard') }}"
+                            class="{{ request()->is('walikelas/dashboard') ? 'active' : '' }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.datasiswa') }}"
+                            class="{{ request()->is('walikelas/datasiswa*') ? 'active' : '' }}">
+                            <i class="fas fa-users"></i> Data Siswa
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.kartupelajar.index') }}"
+                            class="{{ request()->is('walikelas/kartu*') ? 'active' : '' }}">
+                            <i class="fas fa-id-card"></i> Kartu Pelajar
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.dokumensiswa') }}"
+                            class="{{ request()->is('walikelas/dokumen*') ? 'active' : '' }}">
+                            <i class="fas fa-file-alt"></i> Dokumen Siswa
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('wali.password.index') }}"
+                            class="{{ request()->is('walikelas/password*') ? 'active' : '' }}">
+                            <i class="fas fa-lock"></i> Kelola Password
+                        </a>
+                    </li>
+
+                @endif
     </ul>
 </nav>
 
