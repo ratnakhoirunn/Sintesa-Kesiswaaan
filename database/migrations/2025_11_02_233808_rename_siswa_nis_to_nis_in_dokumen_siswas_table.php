@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
 {
     Schema::table('dokumen_siswas', function (Blueprint $table) {
-        $table->renameColumn('siswa_nis', 'nis');
+        if (Schema::hasColumn('dokumen_siswas', 'siswa_nis')) {
+            $table->renameColumn('siswa_nis', 'nis');
+        }
     });
 }
 
@@ -23,7 +25,9 @@ return new class extends Migration
     public function down(): void
 {
     Schema::table('dokumen_siswas', function (Blueprint $table) {
-        $table->renameColumn('nis', 'siswa_nis');
+        if (Schema::hasColumn('dokumen_siswas', 'nis')) {
+            $table->renameColumn('nis', 'siswa_nis');
+        }
     });
 }
 

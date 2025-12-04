@@ -81,6 +81,14 @@
         border-radius: 6px;
         text-decoration: none;
     }
+
+    .tanggal-jam {
+        text-align: right;
+        font-size: 14px;
+        color: #fff;
+        font-weight: 600;
+        line-height: 1.2;
+    }
 </style>
 
 <div class="wrap-card">
@@ -88,8 +96,7 @@
     {{-- HEADER --}}
     <div class="header-box">
         <span>Tambah Data Konseling</span>
-        <span>{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}<br>
-              {{ \Carbon\Carbon::now()->format('H:i:s') }}</span>
+        <div class="tanggal-jam" id="tanggalJamSiswa"></div>
     </div>
 
     <div class="form-body">
@@ -126,4 +133,29 @@
     </div>
 
 </div>
+
+<script>
+function updateClock() {
+    const now = new Date();
+
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
+    const tanggal = now.toLocaleDateString('id-ID', options);
+    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+
+    document.getElementById('tanggalJamSiswa').innerHTML = `
+        ${tanggal}<br>${jam}
+    `;
+}
+
+// update setiap detik
+setInterval(updateClock, 1000);
+// panggil sekali saat awal load
+updateClock();
+</script>
 @endsection

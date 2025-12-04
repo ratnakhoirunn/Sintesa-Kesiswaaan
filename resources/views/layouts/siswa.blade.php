@@ -428,7 +428,7 @@
     <div class="sidebar">
          <div class="header header-white">
         <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK" class="header-logo">
-        <h3 class="header-title">SINTESA SMK N 2 YOGYAKARTA</h3>
+        <h3 class="header-title">SINTESA SMKN 2 YOGYAKARTA</h3>
     </div>
 
         <div class="profile">

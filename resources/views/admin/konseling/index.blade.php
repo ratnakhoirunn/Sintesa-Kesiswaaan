@@ -212,13 +212,20 @@
     background: #0d2d52;
 }
 
+.tanggal-jam {
+    text-align: right;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.2;
+}
 
 </style>
 
 {{-- Header --}}
 <div class="header-keterlambatan">
     <h4>Manajemen Konseling Siswa</h4>
-    <div class="tanggal-jam" id="tanggal-jam"></div>
+    <div class="tanggal-jam" id="tanggalJamSiswa"></div>
 </div>
 
 {{-- Filter --}}
@@ -325,5 +332,30 @@
     </tbody>
 </table>
 </div>
+
+<script>
+function updateClock() {
+    const now = new Date();
+
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
+    const tanggal = now.toLocaleDateString('id-ID', options);
+    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+
+    document.getElementById('tanggalJamSiswa').innerHTML = `
+        ${tanggal}<br>${jam}
+    `;
+}
+
+// update setiap detik
+setInterval(updateClock, 1000);
+// panggil sekali saat awal load
+updateClock();
+</script>
 
 @endsection

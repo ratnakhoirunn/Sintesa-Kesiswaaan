@@ -5,7 +5,9 @@
 <div class="konseling-container">
     <div class="header-konseling">
         <h4>📋 Daftar Pengajuan Konseling</h4>
-        <span class="tanggal-jam">{{ now()->format('d M Y, H:i') }}</span>
+
+    <div class="tanggal-jam" id="tanggalJamSiswa"></div>
+
     </div>
 
     <div class="filter-wrapper">
@@ -190,5 +192,38 @@ tr:nth-child(even) {
     transition: all 0.4s ease;
     z-index: 9999;
 }
+
+.tanggal-jam {
+    text-align: right;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.2;
+}
 </style>
+
+<script>
+function updateClock() {
+    const now = new Date();
+
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
+    const tanggal = now.toLocaleDateString('id-ID', options);
+    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+
+    document.getElementById('tanggalJamSiswa').innerHTML = `
+        ${tanggal}<br>${jam}
+    `;
+}
+
+// update setiap detik
+setInterval(updateClock, 1000);
+// panggil sekali saat awal load
+updateClock();
+</script>
 @endsection

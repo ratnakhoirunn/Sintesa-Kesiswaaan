@@ -40,7 +40,7 @@ class SiswaController extends Controller
         $jumlah = $query->count();
 
         // Ambil data dan pagination
-        $siswas = $query->orderBy('rombel')->paginate(10);
+        $siswas = $query->orderBy('rombel')->orderBy('nama_lengkap')->paginate(15);
 
         return view('admin.datasiswa.index', compact('siswas', 'rombel', 'jurusan', 'jumlah'));
     }

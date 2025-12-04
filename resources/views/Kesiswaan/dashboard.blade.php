@@ -7,7 +7,7 @@
 
 <div class="welcome-card">
     <h1>Selamat Datang, Kesiswaan</h1>
-    <p>Panel Informasi Kesiswaan SMK N 2 Yogyakarta</p>
+    <p>Panel Informasi Kesiswaan SMKN 2 Yogyakarta</p>
 </div>
 
 <div class="info-cards">

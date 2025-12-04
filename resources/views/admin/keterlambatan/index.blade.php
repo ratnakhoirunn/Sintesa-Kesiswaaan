@@ -23,11 +23,6 @@
         font-weight: 600;
     }
 
-    .tanggal-jam {
-        font-size: 14px;
-        text-align: right;
-    }
-
     /* === FILTER === */
     .filter-wrapper {
         background: #f8f9fa;
@@ -144,6 +139,13 @@
         font-size: 18px;
     }
 
+    .tanggal-jam {
+    text-align: right;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.2;
+}
 </style>
 
 <div class="card shadow-sm">
@@ -151,7 +153,7 @@
     {{-- Header --}}
     <div class="header-keterlambatan">
         <h4>Manajemen Keterlambatan dan Perizinan Siswa</h4>
-        <div class="tanggal-jam" id="tanggal-jam"></div>
+        <div class="tanggal-jam" id="tanggalJamSiswa"></div>
     </div>
 
     {{-- Filter Tanggal + Tambah --}}
@@ -232,16 +234,27 @@
 </div>
 
 <script>
-    function updateDateTime() {
-        const now = new Date();
-        const hari = now.toLocaleDateString('id-ID', { weekday: 'long' });
-        const tanggal = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-        const jam = now.toLocaleTimeString('id-ID', { hour12: false });
+function updateClock() {
+    const now = new Date();
 
-        document.getElementById('tanggal-jam').innerHTML = `${hari}, ${tanggal}<br>${jam}`;
-    }
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
 
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
+    const tanggal = now.toLocaleDateString('id-ID', options);
+    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+
+    document.getElementById('tanggalJamSiswa').innerHTML = `
+        ${tanggal}<br>${jam}
+    `;
+}
+
+// update setiap detik
+setInterval(updateClock, 1000);
+// panggil sekali saat awal load
+updateClock();
 </script>
 @endsection

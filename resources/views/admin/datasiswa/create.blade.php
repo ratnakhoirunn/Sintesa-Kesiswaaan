@@ -73,6 +73,7 @@
         padding: 10px 25px;
         border-radius: 5px;
         font-weight: 500;
+        color: white;
     }
 
     .btn-primary:hover {

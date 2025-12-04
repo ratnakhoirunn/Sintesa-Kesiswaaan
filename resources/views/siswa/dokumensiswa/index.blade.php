@@ -4,263 +4,305 @@
 @section('page_title', 'Dokumen Siswa')
 
 <style>
-    /* ====== CARD STYLE ====== */
-    .card {
-        border-radius: 15px !important;
-        overflow: hidden;
-    }
+/* 🎨 Gaya CSS untuk Tampilan yang Sangat Rapi dan Rapat */
 
-    .card-header {
-        font-size: 1rem;
-        letter-spacing: 0.3px;
-        padding: 12px 18px;
-    }
-
-    .card-body {
-        background-color: #fafafa;
-    }
-
-    /* ====== TABLE STYLE ====== */
-    table.table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    table.table tr {
-        transition: all 0.2s ease-in-out;
-    }
-
-    table.table tr:hover {
-        background-color: #f1f7ff;
-        transform: scale(1.005);
-    }
-
-    table.table td {
-        padding: 10px 12px;
-        vertical-align: middle;
-        font-size: 0.95rem;
-    }
-
-    /* Atur lebar kolom agar tidak terlalu renggang */
-    table.table td:nth-child(2) {
-        width: 35%;
-    }
-
-    table.table td:nth-child(3) {
-        width: 25%;
-        text-align: center;
-    }
-
-    table.table td:nth-child(4) {
-        width: 20%;
-        text-align: right;
-    }
-
-    /* ====== ICONS ====== */
-    .fa-file-alt {
-        color: #007bff;
-        background: #e9f2ff;
-        padding: 10px;
-        border-radius: 10px;
-    }
-
-    /* ====== STATUS STYLE ====== */
-    .text-success.fw-semibold,
-    .text-danger.fw-semibold {
-        padding: 6px 12px;
-        border-radius: 12px;
-        display: inline-block;
-        font-size: 0.9rem;
-        white-space: nowrap;
-    }
-
-    .text-success.fw-semibold {
-        background-color: #e7f9ef;
-        color: #0f8b3e !important;
-    }
-
-    .text-danger.fw-semibold {
-        background-color: #fde7e7;
-        color: #c72c2c !important;
-    }
-
-    /* ====== BUTTON STYLE ====== */
-    .btn-sm {
-        border-radius: 8px;
-        font-weight: 600;
-        letter-spacing: 0.3px;
-        padding: 6px 14px;
-        font-size: 0.85rem;
-    }
-
-    .btn-success.btn-sm {
-        background-color: #198754;
-        border-color: #198754;
-    }
-
-    .btn-danger.btn-sm {
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
-
-    .btn:hover {
-        opacity: 0.9;
-        transform: scale(1.02);
-    }
-
-    /* ====== HILANGKAN INPUT FILE BAWAAN ====== */
-    input[type="file"] {
-        position: absolute;
-        left: -9999px;
-        opacity: 0;
-        visibility: hidden;
-        width: 0;
-        height: 0;
-    }
-
-    /* ====== DETAIL CARD ====== */
-    .card.mt-4 .card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #007bff;
-        color: white;
-        font-weight: 600;
-        border-bottom: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .card.mt-4 .card-header:hover {
-        background-color: #0069d9;
-    }
-
-    .card.mt-4 .card-body {
-        background-color: white;
-        border-top: 1px solid #e0e0e0;
-    }
-
-    .text-muted {
-        font-size: 0.9rem;
-    }
-
-    /* Container tombol */
-.action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
+/* --- Umum --- */
+body {
+    background-color: #f7f9fc;
 }
 
-/* Style umum tombol */
+/* ====== CARD STYLE ====== */
+.card {
+    border-radius: 12px !important;
+    overflow: hidden;
+    border: 1px solid #e0e7ff;
+}
+
+.card-header {
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    padding: 15px 20px;
+    border-bottom: none !important;
+}
+
+.card-header.bg-primary {
+    background-color: #007bff !important;
+    color: white !important;
+    font-weight: 700;
+}
+
+.card-body {
+    background-color: white;
+    /* Perbaikan: Tambahkan padding atas agar konten tidak menempel ke header */
+    padding: 5px 0 0 0; 
+}
+
+/* ====== TABLE STYLE (Inti Perapian & Kerapatan) ====== */
+table.table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+/* Menggunakan Flexbox untuk Kesejajaran Vertikal Penuh dan BARIS YANG RENGGANG CUKUP */
+table.table tr {
+    transition: background-color 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    height: 50px; /* Tinggi baris ideal */
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0 10px;
+}
+/* Perbaikan: Atur padding atas/bawah yang lebih aman untuk baris pertama */
+table.table tr:first-child {
+    padding-top: 5px; 
+    padding-bottom: 5px;
+}
+
+table.table tr:hover {
+    background-color: #f5f9ff;
+    transform: none;
+}
+
+table.table tr:last-child {
+    border-bottom: none;
+}
+
+table.table td {
+    padding: 6px 8px !important;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+}
+
+/* 🎯 Penyesuaian Lebar Kolom untuk Mengurangi Jarak Horizontal */
+/* Icon */
+.table td:nth-child(1) {
+    width: 50px;
+    justify-content: center;
+}
+
+/* Jenis Dokumen (Fleksibel, Tetap Beri Sedikit Batasan Lebar Maksimal) */
+.table td:nth-child(2) {
+    width: 35%; 
+    padding-left: 0 !important;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Status (Lebar Tetap) */
+.table td:nth-child(3) {
+    width: 160px; 
+    justify-content: center;
+}
+
+/* Tombol Aksi (Lebar Tetap) */
+.table td:nth-child(4) {
+    flex-grow: 1; 
+    min-width: 250px; 
+    justify-content: flex-end;
+    padding-right: 15px !important;
+}
+
+/* ====== ICONS ====== */
+.doc-icon {
+    color: #007bff;
+    background: #e9f2ff;
+    padding: 7px 9px;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+
+/* ====== STATUS STYLE (Badge) ====== */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-success {
+    background-color: #e6fff0;
+    color: #1a7a40 !important;
+}
+
+.status-danger {
+    background-color: #ffe8e8;
+    color: #c0392b !important;
+}
+
+.status-badge i {
+    font-size: 0.8rem;
+    margin-left: 4px;
+}
+
+/* ====== ACTION BUTTONS (Tombol Aksi yang Rapi dan Seragam) ====== */
+.action-buttons {
+    display: flex;
+    gap: 6px; 
+}
+
+/* Style umum untuk tombol dan label upload */
 .action-buttons a,
 .action-buttons label {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    text-decoration: none !important; /* hilangkan garis bawah */
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 0.85rem;
+    text-decoration: none !important;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
     font-weight: 600;
-    height: 34px; /* bikin semua tinggi sama */
+    height: 32px; 
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
-/* Tombol lihat */
+.action-buttons a:hover,
+.action-buttons label:hover {
+    opacity: 0.9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Tombol Lihat (Primary/Blue) */
 .btn-view {
     background-color: #0d6efd !important;
     border-color: #0d6efd !important;
     color: white !important;
 }
 
-/* Tombol ganti */
+/* Tombol Ganti File (Success/Green) */
 .btn-ganti {
     background-color: #198754 !important;
     border-color: #198754 !important;
     color: white !important;
 }
 
-/* Tombol upload */
+/* Tombol Upload File (Danger/Red) */
 .btn-upload {
     background-color: #dc3545 !important;
     border-color: #dc3545 !important;
     color: white !important;
 }
 
+/* ====== HILANGKAN INPUT FILE BAWAAN ====== */
+input[type="file"] {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+/* ====== DETAIL CARD (Accordion Style) ====== */
+.detail-card-header {
+    background-color: #2c7ef6 !important;
+    color: white;
+    font-weight: 600;
+    border-radius: 12px 12px 0 0 !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.detail-card-header:hover {
+    background-color: #0056b3 !important;
+}
+
+.detail-card-body {
+    padding: 20px !important;
+    border-top: 1px solid #e0e0e0;
+}
+
+.text-muted {
+    font-size: 0.9rem;
+}
 </style>
 
 @section('content')
 <div class="container mt-4">
 
-    {{-- Bagian Dokumen Terpenuhi --}}
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white fw-bold">
+    {{-- 📑 Bagian Dokumen Terpenuhi --}}
+    <div class="card shadow-sm">
+        {{-- Header Dokumen --}}
+        <div class="card-header bg-primary text-white">
             Dokumen Terpenuhi :
             {{ $dokumens->whereNotNull('file_path')->count() }} dari {{ $dokumens->count() }}
         </div>
 
-        <div class="card-body p-0">
-            <table class="table mb-0 align-middle">
+        {{-- Body Dokumen (Tabel) --}}
+        <div class="card-body">
+            <table class="table mb-0">
                 <tbody>
                     @foreach($dokumens as $dokumen)
                     <tr>
                         {{-- Icon dokumen --}}
-                        <td class="ps-3" style="width: 45px;">
-                            <i class="fas fa-file-alt text-primary fs-5"></i>
+                        <td class="ps-4">
+                            <i class="fas fa-file-alt doc-icon"></i>
                         </td>
 
                         {{-- Jenis dokumen --}}
                         <td>{{ $dokumen->jenis_dokumen }}</td>
 
                         {{-- Status --}}
-                        <td style="width: 180px;">
+                        <td>
                             @if($dokumen->file_path)
-                                <span class="text-success fw-semibold">
-                                    Diunggah <i class="fas fa-check-circle ms-1"></i>
+                                <span class="status-badge status-success">
+                                    Diunggah <i class="fas fa-check-circle"></i>
                                 </span>
                             @else
-                                <span class="text-danger fw-semibold">
-                                    Belum Diunggah <i class="fas fa-times-circle ms-1"></i>
+                                <span class="status-badge status-danger">
+                                    Belum Diunggah <i class="fas fa-times-circle"></i>
                                 </span>
                             @endif
                         </td>
 
-                       <td class="text-end pe-3" style="width: 250px;">
-    <div class="action-buttons">
+                        {{-- Tombol Aksi (Sudah Rapi dan Sejajar) --}}
+                        <td>
+                            <div class="action-buttons">
 
-        {{-- Tombol Lihat --}}
-        @if($dokumen->file_path)
-            <a href="{{ asset('storage/' . $dokumen->file_path) }}"
-               target="_blank"
-               class="btn-view">
-               Lihat
-            </a>
-        @endif
+                                {{-- Tombol Lihat (Hanya Muncul jika sudah diunggah) --}}
+                                @if($dokumen->file_path)
+                                    <a href="{{ asset('storage/' . $dokumen->file_path) }}"
+                                        target="_blank"
+                                        class="btn-view">
+                                        <i class="fas fa-eye me-1"></i> Lihat
+                                    </a>
+                                @endif
 
-        {{-- Upload/Ganti --}}
-        <form action="{{ route('siswa.dokumensiswa.upload', $dokumen->id) }}"
-              method="POST" enctype="multipart/form-data" class="d-inline">
-            @csrf
+                                {{-- Form Upload/Ganti --}}
+                                <form action="{{ route('siswa.dokumensiswa.upload', $dokumen->id) }}"
+                                      method="POST" enctype="multipart/form-data">
+                                    @csrf
 
-            <input type="file" name="file"
-                   id="fileInput{{ $dokumen->id }}"
-                   class="d-none"
-                   onchange="this.form.submit()">
+                                    {{-- Input file tersembunyi --}}
+                                    <input type="file" name="file"
+                                           id="fileInput{{ $dokumen->id }}"
+                                           onchange="this.form.submit()">
 
-            @if($dokumen->file_path)
-                <label for="fileInput{{ $dokumen->id }}" class="btn-ganti">
-                    Ganti File
-                </label>
-            @else
-                <label for="fileInput{{ $dokumen->id }}" class="btn-upload">
-                    Upload File
-                </label>
-            @endif
-        </form>
+                                    {{-- Label sebagai tombol (Upload/Ganti) --}}
+                                    @if($dokumen->file_path)
+                                        <label for="fileInput{{ $dokumen->id }}" class="btn-ganti">
+                                            <i class="fas fa-edit me-1"></i> Ganti File
+                                        </label>
+                                    @else
+                                        <label for="fileInput{{ $dokumen->id }}" class="btn-upload">
+                                            <i class="fas fa-upload me-1"></i> Upload File
+                                        </label>
+                                    @endif
+                                </form>
 
-    </div>
-</td>
+                            </div>
+                        </td>
 
                     </tr>
                     @endforeach
@@ -269,15 +311,19 @@
         </div>
     </div>
 
-    {{-- Bagian Detail Data Administrasi --}}
+    {{-- 📋 Bagian Detail Data Administrasi (Dropdown/Accordion) --}}
     <div class="card mt-4 shadow-sm border-0">
-        <div class="card-header bg-primary text-white fw-bold d-flex justify-content-between align-items-center">
+        {{-- Header Detail --}}
+        <div class="detail-card-header" data-bs-toggle="collapse" data-bs-target="#detailData" aria-expanded="true" aria-controls="detailData">
             <span>Detail Data Administrasi Siswa</span>
             <i class="fas fa-chevron-down"></i>
         </div>
-        <div class="card-body">
-            {{-- Isi detail data siswa bisa ditambahkan di sini --}}
-            <p class="text-muted mb-0">Data administrasi siswa akan ditampilkan di sini.</p>
+
+        {{-- Body Detail --}}
+        <div class="collapse show" id="detailData">
+            <div class="detail-card-body">
+                <p class="text-muted mb-0">Data administrasi siswa akan ditampilkan di sini.</p>
+            </div>
         </div>
     </div>
 

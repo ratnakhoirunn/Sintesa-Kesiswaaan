@@ -322,6 +322,13 @@ tbody tr:hover {
 }
 
 /* ===== WRAPPER RIWAYAT ===== */
+.riwayat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Sejajarkan di bagian bawah */
+    margin-bottom: 12px;
+}
+
 .riwayat-wrapper {
     margin-top: 40px;
 }
@@ -331,7 +338,7 @@ tbody tr:hover {
     font-size: 18px;
     font-weight: 700;
     color: #1e3a8a;
-    margin-bottom: 12px;
+    margin: 0;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -346,6 +353,7 @@ tbody tr:hover {
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0,0,0,.08);
     font-size: 14px;
+    table-layout: fixed;
 }
 
 /* ===== HEADER TABEL ===== */
@@ -359,7 +367,13 @@ tbody tr:hover {
 .riwayat-table thead th {
     padding: 14px;
     letter-spacing: 0.5px;
+    text-align: left;
 }
+
+.riwayat-table thead th:nth-child(1) { width: 15%; } /* Tanggal */
+.riwayat-table thead th:nth-child(2) { width: 10%; } /* Waktu */
+.riwayat-table thead th:nth-child(3) { width: 50%; } /* Alasan (Paling Lebar) */
+.riwayat-table thead th:nth-child(4) { width: 25%; text-align: center; } /* Status (Pusat) */
 
 /* ===== BODY ===== */
 .riwayat-table tbody tr {
@@ -375,6 +389,12 @@ tbody tr:hover {
 .riwayat-table td {
     padding: 12px;
     border-bottom: 1px solid #e5e7eb;
+    text-align: left; /* Rata kiri untuk semua data, kecuali Status */
+    vertical-align: top;
+}
+
+.riwayat-table td:nth-child(4) {
+    text-align: center;
 }
 
 /* ===== STATUS BADGE ===== */
@@ -411,7 +431,20 @@ tbody tr:hover {
     }
 }
 
+.tanggal-jam {
+    text-align: right;
+    font-size: 14px;
+    color: #1e3a8a;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
 </style>
+
+@php
+    use Carbon\Carbon;
+    Carbon::setLocale('id');
+@endphp
 
 <div class="bg-gradient-to-b from-blue-50 to-white p-6 rounded-2xl shadow-md transition-all duration-300">
 
@@ -503,7 +536,7 @@ tbody tr:hover {
     <h3 class="riwayat-title">
         <i class="bi bi-clock-history"></i> Riwayat Pengajuan SIT
     </h3>
-
+    <div class="tanggal-jam" id="tanggalJamSiswa"></div>
     <div class="overflow-x-auto">
         <table class="riwayat-table">
             <thead>
@@ -517,7 +550,8 @@ tbody tr:hover {
             <tbody>
                 @forelse($riwayat as $data)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($data->tanggal)->format('d M Y') }}</td>
+                    <tr>
+                    <td>{{ \Carbon\Carbon::parse($data->tanggal)->translatedFormat('d M Y') }}</td>
                     <td>{{ \Carbon\Carbon::parse($data->jam_datang)->format('H:i') }}</td>
                     <td class="text-left">{{ $data->keterangan }}</td>
                     <td>
@@ -574,4 +608,30 @@ function closeModal() {
     document.getElementById('modalIzin').style.display = 'none';
 }
 </script>
+
+<script>
+function updateClock() {
+    const now = new Date();
+
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
+    const tanggal = now.toLocaleDateString('id-ID', options);
+    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+
+    document.getElementById('tanggalJamSiswa').innerHTML = `
+        ${tanggal}<br>${jam}
+    `;
+}
+
+// update setiap detik
+setInterval(updateClock, 1000);
+// panggil sekali saat awal load
+updateClock();
+</script>
+
 @endsection

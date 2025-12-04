@@ -14,41 +14,36 @@ class DokumenController extends Controller
     // 🔹 Tampilkan halaman dokumen siswa
     public function index()
     {
-        // Ambil data siswa yang login
-        $siswa = Siswa::where('nis', Auth::guard('siswa')->user()->nis)->first();
-
-        // Simpan NIS dalam variabel untuk digunakan di bawah
+        // Ambil siswa yang login
+        $siswa = Auth::guard('siswa')->user();
         $nis = $siswa->nis;
 
-        // Ambil semua dokumen berdasarkan NIS
-        $dokumens = DokumenSiswa::where('nis', $nis)->get();
+        // Daftar dokumen wajib
+        $jenisDokumen = [
+            'Kartu Keluarga',
+            'Akta Kelahiran',
+            'KPSPKH',
+            'KIP',
+            'Pas Foto'
+        ];
 
-        // Kalau dokumen belum ada sama sekali, isi daftar default (biar selalu tampil 5 item)
-        if ($dokumens->isEmpty()) {
-            $jenisDokumen = [
-                'Kartu Keluarga',
-                'Akta Kelahiran',
-                'KPSPKH',
-                'KIP',
-                'Pas Foto'
-            ];
-
-            foreach ($jenisDokumen as $jenis) {
-                DokumenSiswa::create([
-                    'nis' => $nis,
-                    'jenis_dokumen' => $jenis,
-                    'file_path' => null,
-                ]);
-            }
-
-            $dokumens = DokumenSiswa::where('nis', $nis)->get();
+        // Pastikan setiap dokumen wajib ADA
+        foreach ($jenisDokumen as $jenis) {
+            DokumenSiswa::firstOrCreate(
+                ['nis' => $nis, 'jenis_dokumen' => $jenis],
+                ['file_path' => null]
+            );
         }
 
-        // Pastikan view-nya sesuai folder
+        // Ambil semua dokumen setelah dijamin lengkap 5 item
+        $dokumens = DokumenSiswa::where('nis', $nis)
+                    ->orderByRaw("FIELD(jenis_dokumen, 'Kartu Keluarga', 'Akta Kelahiran', 'KPSPKH', 'KIP', 'Pas Foto')")
+                    ->get();
+
         return view('siswa.dokumensiswa.index', compact('dokumens', 'siswa'));
     }
 
-    // 🔹 Proses upload / ganti file
+    // 🔹 Upload / ganti file
     public function upload(Request $request, $id)
     {
         $dokumen = DokumenSiswa::findOrFail($id);
@@ -63,24 +58,22 @@ class DokumenController extends Controller
             'file' => 'required|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        // Hapus file lama kalau ada
-        if ($dokumen->file_path && Storage::exists($dokumen->file_path)) {
-            Storage::delete($dokumen->file_path);
+        // Hapus file lama jika ada
+        if ($dokumen->file_path && Storage::disk('public')->exists($dokumen->file_path)) {
+            Storage::disk('public')->delete($dokumen->file_path);
         }
 
-        // Simpan file baru
+        // Upload file baru
         $filePath = $request->file('file')->storeAs(
             'dokumen_siswa/' . $nis,
             time() . '_' . $request->file('file')->getClientOriginalName(),
             'public'
         );
 
-
-        // Update path file
-     $dokumen->update([
-        'file_path' => $filePath,
-]);
-
+        // Update database
+        $dokumen->update([
+            'file_path' => $filePath,
+        ]);
 
         return back()->with('success', 'File berhasil diunggah!');
     }

@@ -35,7 +35,7 @@ class KartuPelajarController extends Controller
         $query->where('rombel', $rombel);
     }
 
-    $siswas = $query->orderBy('nama_lengkap')
+    $siswas =  $query->orderBy('rombel')->orderBy('nama_lengkap')
                     ->paginate(30)
                     ->withQueryString();
 
