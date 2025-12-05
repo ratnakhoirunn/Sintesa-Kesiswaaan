@@ -68,7 +68,8 @@
             <td>{{ $s->nama_lengkap }}</td>
 
             <td style="text-align:center;">
-                <span class="badge-count">{{ $s->dokumen_siswa_count ?? 0 }} / {{ $totalDokumenWajib ?? 5 }}</span>
+                {{-- GANTI DOKUMEN_SISWA_COUNT menjadi DOKUMEN_UPLOADED_COUNT --}}
+                <span class="badge-count">{{ $s->dokumen_uploaded_count ?? 0 }} / {{ $totalDokumenWajib ?? 5 }}</span>
             </td>
 
             <td>

@@ -20,11 +20,13 @@ public function index(Request $request)
 
     // Query siswa yang rombelnya sesuai
     $query = Siswa::where('rombel', $rombel)
-    ->withCount([
-        'dokumenSiswa as dokumen_uploaded_count' => function ($q) {
-            $q->whereNotNull('file_path');
-        }
-    ]);
+        ->withCount([
+            'dokumenSiswa as dokumen_uploaded_count' => function ($q) {
+                $q->whereNotNull('file_path');
+            }
+        ]);
+
+    $query->orderBy('nama_lengkap', 'asc');
 
     // Search
     if ($request->filled('search')) {
