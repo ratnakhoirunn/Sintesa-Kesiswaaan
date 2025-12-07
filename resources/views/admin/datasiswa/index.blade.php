@@ -210,7 +210,7 @@
                 @method('PUT')
 
                 <button type="submit" class="btn-tambah" style="background:#8e44ad;">
-                    <i class="fas fa-level-up-alt"></i> Naikkan Kelas Rombel Ini
+                    <i class="fas fa-arrow-circle-up"></i> Naikkan Kelas Rombel Ini
                 </button>
             </form>
             @endif
@@ -402,7 +402,7 @@ document.getElementById('rombel').value = "{{ request('rombel') }}";
             @csrf
             @method('PUT')
             <button type="submit" class="aksi-naik" title="Naikkan Kelas">
-                <i class="fas fa-level-up-alt"></i> Naikkan
+                <i class="fas fa-arrow-circle-up"></i> Naikkan
             </button>
         </form>
         @endif

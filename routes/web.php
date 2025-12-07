@@ -22,8 +22,7 @@ use App\Http\Controllers\WaliKelas\DokumenSiswaWaliController;
 use App\Http\Controllers\WaliKelas\WaliKartuPelajarController;
 use App\Http\Controllers\WaliKelas\DashboardWaliController;
 use App\Http\Controllers\WaliKelas\UserPasswordWaliController;
-
-
+use App\Http\Controllers\WaliKelas\WaliPrestasiController;
 
 use App\Http\Controllers\Siswa\OrtuController;
 use App\Http\Controllers\Siswa\DashboardSiswaController;
@@ -209,6 +208,10 @@ Route::prefix('bk')->name('bk.')
     // Dokumen siswa (read only)
     Route::get('/dokumen', [DokumenSiswaController::class, 'index'])
         ->name('dokumen.index');
+    
+     // Prestasi siswa (read only)
+    Route::get('/prestasi', [PrestasiController::class, 'index'])
+        ->name('prestasi.index');
 
 });
 
@@ -256,7 +259,7 @@ Route::prefix('wali')
         Route::get('/preview/{nis}', [WaliKartuPelajarController::class, 'preview'])->name('preview');
         Route::get('/frame/{nis}', [WaliKartuPelajarController::class, 'frame'])->name('frame');
 
-});
+    });
 
         // Dokumen Siswa
         Route::get('/dokumensiswa', [DokumenSiswaWaliController::class, 'index'])->name('dokumensiswa');
@@ -267,15 +270,23 @@ Route::prefix('wali')
 
         // Kelola Password (opsional pake default)
         Route::prefix('password')->name('password.')->group(function () {
-    Route::get('/', [UserPasswordWaliController::class, 'index'])->name('index');
-    Route::get('/{nis}/edit', [UserPasswordWaliController::class, 'edit'])->name('edit');
-    Route::post('/{nis}/update', [UserPasswordWaliController::class, 'update'])->name('update');
-    Route::post('/update-self', [UserPasswordWaliController::class, 'updateSelf'])->name('updateSelf');
+        Route::get('/', [UserPasswordWaliController::class, 'index'])->name('index');
+        Route::get('/{nis}/edit', [UserPasswordWaliController::class, 'edit'])->name('edit');
+        Route::post('/{nis}/update', [UserPasswordWaliController::class, 'update'])->name('update');
+        Route::post('/update-self', [UserPasswordWaliController::class, 'updateSelf'])->name('updateSelf');
+    });
+
+        // Naik Kelas Rombel
+        Route::post('/datasiswa/naikkan-semua', [WaliSiswaController::class, 'naikkanSemua'])->name('datasiswa.naikkanSemua');
+        Route::post('/datasiswa/{nis}/naikkan', [WaliSiswaController::class, 'naikkanSatu'])->name('datasiswa.naikkanSatu');
+
+        // 📌 PRESTASI SISWA WALI KELAS
+        Route::prefix('prestasi')->name('prestasi.')->group(function () {
+            Route::get('/', [WaliPrestasiController::class, 'index'])->name('index');
+            Route::get('/{nis}', [WaliPrestasiController::class, 'show'])->name('show');
 });
 
     });
-
-
 
 // ------------------------------------------------------------
 // 👨‍🏫 GURU BIASA (Role: guru)

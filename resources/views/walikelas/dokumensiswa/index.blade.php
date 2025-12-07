@@ -156,6 +156,7 @@ tbody tr:hover { background: #f8f9fa; }
     justify-content: center;
     align-items: center;
     gap: 10px;
+    
 }
 .aksi-lihat { color: #007bff; }
 .aksi-edit { color: #ff9800; }

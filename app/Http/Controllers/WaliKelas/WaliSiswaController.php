@@ -77,5 +77,70 @@ class WaliSiswaController extends Controller
         return back()->with('success', 'Akses siswa diperbarui.');
     }
 
+    private function generateRombelBaru($rombelLama)
+{
+    // Format rombel: "XII TKR 3" atau "X KGS" dll
+
+    $parts = explode(' ', $rombelLama);
+
+    // Kelas = X, XI, XII, XIII
+    $kelas = $parts[0];
+
+    // Jurusan bisa 1 kata atau lebih
+    $jurusan = implode(' ', array_slice($parts, 1));
+
+    // Proses naik kelas
+    switch ($kelas) {
+        case 'X':
+            $kelasBaru = 'XI';
+            break;
+        case 'XI':
+            $kelasBaru = 'XII';
+            break;
+        case 'XII':
+            $kelasBaru = 'XIII';
+            break;
+        case 'XIII':
+            $kelasBaru = 'XIII'; // Tidak naik lagi
+            break;
+        default:
+            $kelasBaru = $kelas;
+    }
+
+    return $kelasBaru . ' ' . $jurusan;
+}
+
+public function naikkanSemua()
+{
+    $guru = auth('guru')->user();
+    $rombel = $guru->walikelas;
+
+    $rombelsBaru = $this->generateRombelBaru($rombel);
+
+    Siswa::where('rombel', $rombel)->update([
+        'rombel' => $rombelsBaru
+    ]);
+
+    return back()->with('success', 'Semua siswa berhasil dinaikkan ke ' . $rombelsBaru . '.');
+}
+
+public function naikkanSatu($nis)
+{
+    $guru = auth('guru')->user();
+    $rombel = $guru->walikelas;
+
+    $siswa = Siswa::where('nis', $nis)
+                  ->where('rombel', $rombel)
+                  ->firstOrFail();
+
+    $rombelBaru = $this->generateRombelBaru($siswa->rombel);
+
+    $siswa->update([
+        'rombel' => $rombelBaru
+    ]);
+
+    return back()->with('success', 'Siswa berhasil dinaikkan ke ' . $rombelBaru . '.');
+}
+
 
 }

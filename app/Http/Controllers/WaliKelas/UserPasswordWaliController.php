@@ -15,11 +15,14 @@ class UserPasswordWaliController extends Controller
     // ===============================
     public function index(Request $request)
     {
-        $walikelas = Auth::guard('guru')->user();
-        $kelas = $walikelas->walikelas;   // berdasarkan field rombel guru/walikelas
+        
+        $guru = auth('guru')->user();
+        // Ambil rombel wali kelas dari user login
+         $rombel = $guru->walikelas; // ambil rombel wali kelas
+
 
         // Filter + pencarian siswa, tapi hanya dalam kelas walikelas
-        $siswas = Siswa::where('rombel', $kelas)
+        $siswas = Siswa::where('rombel', $rombel)
             ->when($request->search_siswa, function($q) use ($request) {
                 $q->where('nis', 'like', '%' . $request->search_siswa . '%')
                   ->orWhere('nama_lengkap', 'like', '%' . $request->search_siswa . '%');
@@ -27,7 +30,7 @@ class UserPasswordWaliController extends Controller
             ->orderBy('nama_lengkap')
             ->paginate(40);
 
-        return view('walikelas.password.index', compact('siswas', 'kelas'));
+        return view('walikelas.password.index', compact('siswas', 'rombel'));
     }
 
     // ===============================

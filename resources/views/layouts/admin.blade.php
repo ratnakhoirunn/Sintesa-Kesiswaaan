@@ -521,6 +521,13 @@
                 </a>
             </li>
 
+             <li>
+                <a href="{{ route('bk.prestasi.index') }}"
+                    class="{{ request()->is('bk/dokumen*') ? 'active' : '' }}">
+                    <i class="fas fa-trophy"></i> Prestasi Siswa
+                </a>
+            </li>
+
         @endif
 
 
@@ -555,6 +562,11 @@
                 <i class="fas fa-file-alt"></i> Dokumen Siswa
             </a></li>
 
+            <li><a href="{{ route('admin.prestasi.index') }}"
+                class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
+                <i class="fas fa-trophy"></i> Prestasi Siswa
+            </a></li>
+
         @endif
                 {{-- ===================================
                     MENU UNTUK WALI KELAS
@@ -586,6 +598,13 @@
                         <a href="{{ route('wali.dokumensiswa') }}"
                             class="{{ request()->is('walikelas/dokumen*') ? 'active' : '' }}">
                             <i class="fas fa-file-alt"></i> Dokumen Siswa
+                        </a>
+                    </li>
+
+                     <li>
+                        <a href="{{ route('wali.prestasi.index') }}"
+                            class="{{ request()->is('walikelas/prestasi*') ? 'active' : '' }}">
+                            <i class="fas fa-trophy"></i> Prestasi Siswa
                         </a>
                     </li>
 

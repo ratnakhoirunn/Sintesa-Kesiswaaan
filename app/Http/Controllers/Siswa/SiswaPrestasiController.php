@@ -75,7 +75,7 @@ class SiswaPrestasiController extends Controller
         }
 
         Prestasi::create([
-            'siswa_id' => auth()->user()->id,
+            'nis' => auth()->user()->nis,  
             'judul' => $request->judul,
             'jenis' => $request->jenis,
             'tanggal_prestasi' => $request->tanggal_prestasi,

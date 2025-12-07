@@ -45,6 +45,12 @@
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
+
+.filter-wrapper {
+    margin-bottom: 30px !important;
+}
+
+
 </style>
 
 <div class="tab-container">
@@ -57,21 +63,24 @@
 ================================ --}}
 <div id="tab-siswa" class="tab-content active">
 
-    <div class="topbar-filter">
-        <form method="GET" action="{{ route('wali.password.index') }}">
-            <div class="filter-container">
-                <div class="filter-group">
-                    <label>Cari Siswa</label>
-                    <div class="search-box">
-                        <input type="text" name="search_siswa" placeholder="Cari NIS / Nama..."
-                            value="{{ request('search_siswa') }}">
-                        <button><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-            </div>
+    <div class="filter-wrapper">
+         <div style="background:#1e3a67; padding:18px; border-radius:8px; color:#fff;">
+        <div style="font-size:1.1rem; font-weight:600;">
+            Rombel yang Anda ampu : {{ $rombel }}
+        </div>
+
+        {{-- FORM SEARCH (Tanpa dropdown kelas karena otomatis filter) --}}
+        <form action="{{ route('wali.kartupelajar.index') }}" method="GET" style="margin-top:12px; display:flex; gap:8px;">
+            <input name="q" type="text" placeholder="Cari nama / NIS..." 
+                   value="{{ request('q') }}"
+                   style="flex:1; padding:10px 12px; border-radius:6px; border:none; outline:none;">
+
+            <button type="submit" style="background:#fff; color:#1e3a67; padding:8px 12px; border-radius:6px; border:none;">
+                Cari
+            </button>
         </form>
     </div>
-
+   </div>
     <table>
         {{-- ============ KOLOM FIX AGAR LURUS ============ --}}
         <colgroup>

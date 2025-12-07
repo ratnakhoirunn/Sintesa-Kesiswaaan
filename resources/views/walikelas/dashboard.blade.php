@@ -45,6 +45,23 @@
         </div>
     </div>
 
+    {{-- Prestasi Siswa --}}
+    <div class="info-card">
+        <div class="content">
+            <p>Prestasi Siswa</p>
+            <h3>{{ $totalPrestasi }}</h3>
+            @if($prestasiTerbaru)
+                <small style="color: #555;">Terbaru: {{ $prestasiTerbaru->judul }}</small><br>
+                <small style="color: #777;">Tanggal: {{ $prestasiTerbaru->tanggal_prestasi }}</small>
+            @else
+                <small style="color: #777;">Belum ada prestasi</small>
+            @endif
+        </div>
+        <div class="icon">
+            <i class="bi bi-trophy-fill" style="font-size:38px; color:#f7b500;"></i>
+        </div>
+    </div>
+
 </div>
 
 
@@ -89,7 +106,10 @@
 
 
     </div>
+    
 </div>
+
+
 
 
 {{-- === CHART.JS === --}}
