@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\guru;
 use App\Models\Siswa;
 use App\Models\Konseling;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +21,7 @@ class DashboardController extends Controller
     {
         // Ambil data statistik untuk dashboard admin
         $totalSiswa = Siswa::count();
-        $totalAdmin = User::where('role', 'admin')->count();
+        $totalAdmin = guru::where('role', 'admin')->count();
         $totalKonseling = Konseling::count();
 
  // Ambil filter angkatan dari query string (?angkatan=2025)
@@ -39,7 +39,7 @@ class DashboardController extends Controller
 
     // Hitung statistik umum
     $totalSiswa = Siswa::count();
-    $totalAdmin = User::where('role', 'admin')->count();
+    $totalAdmin = guru::where('role', 'admin')->count();
     $konselingMenunggu = Konseling::where('status', 'Menunggu')->count();
     $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
 
