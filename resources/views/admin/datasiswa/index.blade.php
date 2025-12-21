@@ -266,13 +266,12 @@ document.getElementById('rombel').value = "{{ request('rombel') }}";
     }
 
     /* Aksi sejajar */
-    .aksi-container {
+.aksi-container {
     display: flex;
-    justify-content: flex-start; /* geser kiri */
-    align-items: center;
+    justify-content: center;   /* ✅ tengah horizontal */
+    align-items: center;       /* ✅ tengah vertikal */
     gap: 10px;
     flex-wrap: nowrap;
-    overflow: visible; /* cegah elemen menghilang */
 }
 
 
