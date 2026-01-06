@@ -124,12 +124,32 @@
 
         .data table {
             width: 100%;
-            font-size: 6.3px;
+            font-size: 6px;
         }
 
         .data td {
             padding: 0;
             vertical-align: top;
+        }
+
+        /* Kolom label: Nama, NIPD, dll */
+        .data td:nth-child(1) {
+            width: 15%;
+            white-space: nowrap; /* biar teks kiri tidak turun */
+            
+            
+        }
+
+        /* Kolom titik dua */
+        .data td:nth-child(2) {
+            width: 2%;
+            text-align: center;
+        }
+
+        /* Kolom isi (data siswa) */
+        .data td:nth-child(3) {
+            width: 65%;
+            white-space: normal; /* BOLEH turun ke bawah */
         }
 
         /* ===== FOOTER ===== */
