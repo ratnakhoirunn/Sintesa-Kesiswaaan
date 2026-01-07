@@ -377,6 +377,43 @@
     border-bottom: 2px solid #17375d;
 }
 
+/* ============================= */
+/* RESPONSIVE SIDEBAR */
+/* ============================= */
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 991px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1050;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding: 20px;
+    }
+
+    .mobile-toggle {
+        display: block;
+    }
+}
+
 
     </style>
 </head>
@@ -627,6 +664,9 @@
 
     <div class="main-content">
         <div class="navbar">
+            <button class="mobile-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
             <h2>@yield('page_title', 'Dashboard Admin')</h2>
             <div class="user-profile">
                 <img src="{{ asset('images/profil_admin_tem.jfif') }}" alt="Admin Profile">
@@ -653,6 +693,24 @@
             });
         });
     });
+</script>
+
+<script>
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('show');
+}
+
+/* Auto close sidebar ketika klik di luar (mobile) */
+document.addEventListener('click', function(e) {
+    const sidebar = document.querySelector('.sidebar');
+    const toggle = document.querySelector('.mobile-toggle');
+
+    if (window.innerWidth <= 991) {
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+            sidebar.classList.remove('show');
+        }
+    }
+});
 </script>
 
 </body>
