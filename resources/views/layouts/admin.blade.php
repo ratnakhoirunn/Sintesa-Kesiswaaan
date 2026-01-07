@@ -414,7 +414,6 @@
     }
 }
 
-
     </style>
 </head>
 <body>
@@ -671,6 +670,10 @@
             <div class="user-profile">
                 <img src="{{ asset('images/profil_admin_tem.jfif') }}" alt="Admin Profile">
             </div>
+            <div class="menu-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+            </div>
+
         </div>
 
         @yield('content')
@@ -712,6 +715,5 @@ document.addEventListener('click', function(e) {
     }
 });
 </script>
-
 </body>
 </html>
