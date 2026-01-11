@@ -32,7 +32,7 @@
 
     /* ===== HEADER CARD (REVISI: Lebih Kompak) ===== */
     .header-card {
-        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        background: linear-gradient(135deg, #1e3a8a, #17375d);
         color: white;
         padding: 20px 25px; /* Padding dikecilkan */
         border-radius: var(--border-radius);

@@ -103,7 +103,7 @@
 
     /* ===== WELCOME CARD (TANPA TANGGAL) ===== */
     .welcome-card {
-        background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, #102C57 100%);
         padding: 40px; border-radius: var(--radius); color: white; margin-bottom: 30px;
         position: relative; overflow: hidden; box-shadow: var(--shadow);
     }

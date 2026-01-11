@@ -7,7 +7,7 @@
 <style>
     /* --- Root & Reset --- */
     :root {
-        --primary-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        --primary-gradient: linear-gradient(135deg, #1e40af 0%, #17375d 100%);
         --soft-bg: #f8fafc;
         --border-color: #e2e8f0;
     }

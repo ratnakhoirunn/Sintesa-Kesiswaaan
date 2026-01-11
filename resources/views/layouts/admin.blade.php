@@ -39,12 +39,21 @@
             flex-direction: column;
             position: fixed;
             height: 100%;
-            overflow-y: auto;
+            overflow-y: auto; /* Tetap auto agar bisa di-scroll */
             z-index: 1050;
             left: 0;
             top: 0;
             transition: transform 0.3s ease;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+
+            /* --- TRIK MENGHILANGKAN SCROLLBAR SECARA VISUAL --- */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* Chrome, Safari and Opera */
+        .sidebar::-webkit-scrollbar {
+            display: none;
         }
 
         .sidebar .header { display: flex; align-items: center; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
@@ -116,7 +125,6 @@
         .info-card .content p { margin: 0; font-size: 0.9rem; color: #777; }
         .info-card .content h3 { margin: 5px 0 0; font-size: 1.6rem; color: #333; }
         
-        /* Style Icon yang membuat gambar hitam besar jadi rapi lagi */
         .info-card .icon {
             width: 60px; height: 60px; border-radius: 50%; background-color: #e0f0ff; display: flex; justify-content: center; align-items: center;
         }
@@ -153,7 +161,6 @@
             .navbar { padding: 10px 15px; }
             .navbar h2 { font-size: 1rem; }
 
-            /* Dashboard Grid jadi 1 kolom di HP */
             .dashboard-grid { grid-template-columns: 1fr; }
         }
     </style>

@@ -23,10 +23,16 @@
 
     /* ===== WELCOME CARD ===== */
     .welcome-card {
-        background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
-        padding: 30px; border-radius: var(--radius); color: white;
-        margin-bottom: 30px; position: relative; overflow: hidden; box-shadow: var(--shadow);
-    }
+    /* Menggunakan warna solid biru sesuai identitas SINTESA */
+    background: #17375d; /* Biru tua yang konsisten dengan desain poster Anda */
+    padding: 30px; 
+    border-radius: var(--radius); 
+    color: white;
+    margin-bottom: 30px; 
+    position: relative; 
+    overflow: hidden; 
+    box-shadow: var(--shadow);
+}
     .welcome-card::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%; }
     .welcome-content h1 { margin: 0; font-size: 24px; font-weight: 700; }
     .welcome-content p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; font-weight: 300; }
@@ -45,9 +51,9 @@
     }
     .stat-card:hover { transform: translateY(-3px); }
 
-    .border-blue { border-left-color: #3b82f6; }
-    .border-cyan { border-left-color: #06b6d4; }
-    .border-pink { border-left-color: #ec4899; }
+    .border-blue { border-left-color: #102C57; }
+    .border-cyan { border-left-color: #C1ECE4; }
+    .border-pink { border-left-color: #FFCCE1; }
     .border-yellow { border-left-color: #f59e0b; }
 
     .stat-info h3 { margin: 0; font-size: 26px; font-weight: 700; color: #1e293b; }
@@ -249,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function() {
             labels: ['Laki-Laki', 'Perempuan'],
             datasets: [{
                 data: [{{ $totalLaki }}, {{ $totalPerempuan }}],
-                backgroundColor: ['#06b6d4', '#ec4899'], // Cyan & Pink
+                backgroundColor: ['#40679E', '#FFB1B1'], // Cyan & Pink
                 borderWidth: 0,
                 hoverOffset: 4
             }]
