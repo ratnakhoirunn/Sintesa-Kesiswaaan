@@ -4,81 +4,139 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\guru;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+
+// Import Models
+use App\Models\guru; // Pastikan nama model sesuai (Guru / guru)
 use App\Models\Siswa;
 use App\Models\Konseling;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\SiswaImport;
 use App\Models\Keterlambatan;
+use App\Imports\SiswaImport;
 
 class DashboardController extends Controller
 {
     /** ===============================
-     *  DASHBOARD ADMIN & SISWA
-     *  =============================== */
+     * DASHBOARD ADMIN
+     * =============================== */
     public function adminDashboard(Request $request)
     {
-        // Ambil data statistik untuk dashboard admin
-        $totalSiswa = Siswa::count();
-        $totalAdmin = guru::where('role', 'admin')->count();
+        // === 1. DATA CARD UTAMA ===
+        $totalSiswa     = Siswa::count();
+        $totalAdmin     = guru::where('role', 'admin')->count();
         $totalKonseling = Konseling::count();
 
- // Ambil filter angkatan dari query string (?angkatan=2025)
-    $filterTahun = $request->get('angkatan');
+        // === 2. DOKUMEN SISWA (Progress Bar) ===
+        $sudahUpload = 0;
+        // Cek tabel dokumen_siswas atau dokumen_siswa (antisipasi nama tabel beda)
+        if (Schema::hasTable('dokumen_siswas')) {
+            $sudahUpload = DB::table('dokumen_siswas')->distinct('nis')->count('nis');
+        } elseif (Schema::hasTable('dokumen_siswa')) {
+            $sudahUpload = DB::table('dokumen_siswa')->distinct('nis')->count('nis');
+        }
 
-    // Ambil daftar angkatan unik dari 2 digit depan NIS dan ubah jadi format tahun penuh
-    $angkatanList = Siswa::selectRaw('LEFT(nis, 2) as kode')
-        ->distinct()
-        ->get()
-        ->map(function ($item) {
-            return 2000 + (int)$item->kode; // contoh: 25 => 2025
-        })
-        ->sort()
-        ->values();
+        $belumUpload = max(0, $totalSiswa - $sudahUpload);
+        $persenBelum = $totalSiswa > 0 ? number_format(($belumUpload / $totalSiswa) * 100, 1) : 0;
 
-    // Hitung statistik umum
-    $totalSiswa = Siswa::count();
-    $totalAdmin = guru::where('role', 'admin')->count();
-    $konselingMenunggu = Konseling::where('status', 'Menunggu')->count();
-    $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
+        // === 3. NOTIFIKASI BAWAH (Konseling, Keterlambatan, Prestasi) ===
+        $konselingMenunggu = Konseling::whereIn('status', ['Menunggu', 'pending'])->count();
+        
+        $keterlambatanBaru = 0;
+        if (Schema::hasTable('keterlambatans')) {
+            $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
+        }
 
-    // === Data untuk Chart: Jumlah siswa per jurusan ===
-    $query = Siswa::select('jurusan', DB::raw('COUNT(*) as total'));
+        $totalPrestasi = 0;
+        if (Schema::hasTable('prestasis')) {
+            $totalPrestasi = DB::table('prestasis')->count();
+        }
 
-    // Jika filter angkatan dipilih, ubah tahun jadi dua digit dan filter
-    if ($filterTahun) {
-        $kodeTahun = substr($filterTahun, -2); // contoh: 2025 -> 25
-        $query->whereRaw('LEFT(nis, 2) = ?', [$kodeTahun]);
+        // === 4. CHART 1: SISWA PER JURUSAN (Filter Angkatan) ===
+        $filterAngkatan = $request->get('angkatan');
+        $querySiswa = Siswa::select('jurusan', DB::raw('COUNT(*) as total'));
+
+        if ($filterAngkatan) {
+            // Ambil 2 digit terakhir dari angkatan (misal 2025 -> 25)
+            $kodeTahun = substr($filterAngkatan, -2);
+            $querySiswa->whereRaw('LEFT(nis, 2) = ?', [$kodeTahun]);
+        }
+        $chartData = $querySiswa->groupBy('jurusan')->orderBy('jurusan')->get();
+
+        // List Angkatan untuk Dropdown
+        $angkatanList = Siswa::selectRaw('LEFT(nis, 2) as kode')
+            ->distinct()->get()
+            ->map(function ($item) { return 2000 + (int)$item->kode; })
+            ->sortDesc()->values();
+
+
+        // === 5. CHART 2: PIE CHART PRESTASI (Filter Tahun Prestasi) ===
+        $chartPrestasi = [
+            'Lomba' => 0,
+            'Seminar' => 0,
+            'Sertifikat' => 0,
+            'Lainnya' => 0
+        ];
+        $tahunPrestasiList = collect([]); // Default kosong
+
+        if (Schema::hasTable('prestasis')) {
+            $filterTahunPrestasi = $request->get('tahun_prestasi');
+            
+            // Query Statistik Jenis Prestasi
+            $queryPrestasi = DB::table('prestasis')
+                ->select('jenis', DB::raw('count(*) as total'));
+
+            if ($filterTahunPrestasi) {
+                // Asumsi kolom tanggal bernama 'tanggal_prestasi' atau 'created_at'
+                // Sesuaikan dengan nama kolom di tabel Anda
+                $kolomTanggal = Schema::hasColumn('prestasis', 'tanggal_prestasi') ? 'tanggal_prestasi' : 'created_at';
+                $queryPrestasi->whereYear($kolomTanggal, $filterTahunPrestasi);
+            }
+            
+            $dataPrestasi = $queryPrestasi->groupBy('jenis')->get();
+
+            foreach ($dataPrestasi as $p) {
+                // Normalisasi nama jenis (huruf besar awal)
+                $jenis = ucfirst(strtolower($p->jenis));
+                
+                if (array_key_exists($jenis, $chartPrestasi)) {
+                    $chartPrestasi[$jenis] = $p->total;
+                } else {
+                    $chartPrestasi['Lainnya'] += $p->total;
+                }
+            }
+
+            // Ambil List Tahun untuk Dropdown
+            $kolomTanggal = Schema::hasColumn('prestasis', 'tanggal_prestasi') ? 'tanggal_prestasi' : 'created_at';
+            $tahunPrestasiList = DB::table('prestasis')
+                ->selectRaw("YEAR($kolomTanggal) as tahun")
+                ->distinct()
+                ->orderBy('tahun', 'desc')
+                ->pluck('tahun');
+        }
+
+        // === RETURN VIEW ===
+        return view('admin.dashboard', compact(
+            'totalSiswa', 'totalAdmin', 'totalKonseling',
+            'sudahUpload', 'belumUpload', 'persenBelum',
+            'konselingMenunggu', 'keterlambatanBaru', 'totalPrestasi',
+            'chartData', 'angkatanList',
+            'chartPrestasi', 'tahunPrestasiList'
+        ));
     }
 
-    $chartData = $query
-        ->groupBy('jurusan')
-        ->orderBy('jurusan')
-        ->get();
-
-    // Kirim data ke view dashboard
-    return view('admin.dashboard', compact(
-        'totalSiswa',
-        'totalAdmin',
-        'totalKonseling',
-        'chartData',
-        'angkatanList',
-        'filterTahun',
-        'konselingMenunggu',
-        'keterlambatanBaru'
-    ));
-    }
-
-
+    /** ===============================
+     * DASHBOARD SISWA
+     * =============================== */
     public function siswaDashboard()
     {
         return view('siswa.dashboard');
     }
 
     /** ===============================
-     *  DATA SISWA
-     *  =============================== */
+     * DATA SISWA
+     * =============================== */
     public function dataSiswa()
     {
         return view('admin.datasiswa.index');
@@ -101,8 +159,8 @@ class DashboardController extends Controller
     }
 
     /** ===============================
-     *  MANAJEMEN KARTU PELAJAR
-     *  =============================== */
+     * MANAJEMEN KARTU PELAJAR
+     * =============================== */
     public function manajemenKartu(Request $request)
     {
         $search = $request->input('search');
@@ -124,16 +182,13 @@ class DashboardController extends Controller
     }
 
     /** ===============================
-     *  MANAJEMEN KONSELING
-     *  =============================== */
+     * MANAJEMEN LAINNYA
+     * =============================== */
     public function konseling()
     {
         return view('admin.konseling.index');
     }
 
-    /** ===============================
-     *  MANAJEMEN MANAJEMEN ROLE
-     *  =============================== */
     public function role()
     {
         return view('admin.role.index'); 

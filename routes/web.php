@@ -145,6 +145,7 @@ Route::prefix('admin')->name('admin.')
 });
     // dokumen siswa
     Route::resource('dokumensiswa', DokumenSiswaController::class);
+    Route::post('dokumensiswa/ingatkan/{nis}', [App\Http\Controllers\Admin\DokumenSiswaController::class, 'kirimPeringatan'])->name('dokumensiswa.ingatkan');
 
     //Ubah Password Siswa
     Route::prefix('password')->name('password.')->group(function () {

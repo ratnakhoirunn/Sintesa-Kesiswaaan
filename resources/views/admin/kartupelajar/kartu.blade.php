@@ -76,16 +76,30 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            font-size: 7px;
+            font-size: 8px;
             padding: 1px 0;
         }
 
         /* ===== ISI ===== */
         .content {
             display: flex;
-            padding: 3px 6px;
-            font-size: 7px;
+            padding: 3px 2px;
+            font-size: 9px;
             align-items: flex-start;
+        }
+
+        /* Container baru untuk Foto & Barcode biar Rata Tengah */
+        .left-section {
+            display: flex;
+            flex-direction: column; /* Susun atas-bawah */
+            
+            /* UBAH DI SINI: */
+            align-items: flex-start; /* Pakai 'flex-start' agar rata kiri */
+            /* align-items: center; */ /* JANGAN pakai center */
+            
+            margin-right: -9px;      /* Jarak ke teks data */
+            margin-left: 10px;      /* Atur jarak dari tepi kiri kartu di sini */
+            width: 2.3cm;           /* Lebar mengikuti elemen terbesar (barcode) */
         }
 
         .foto {
@@ -93,8 +107,9 @@
             height: 2.5cm;
             border: 1px solid #000;
             text-align: center;
-            margin-right: 6px;
             overflow: hidden;
+            margin-bottom: 0px;
+            background: #eee; /* Placeholder bg */
         }
 
         .foto img {
@@ -104,10 +119,10 @@
         }
 
         .barcode {
-            width: 1.9cm;
-            height: 0.6cm;
-            margin-top: 2px;
-            text-align: center;
+            width: 2.3cm;
+            height: 1.2cm;
+            margin-top: -5px; /* 🔹 Barcode naik ke atas mendekati foto */
+            text-align: left;
         }
 
         .barcode img {
@@ -132,12 +147,10 @@
             vertical-align: top;
         }
 
-        /* Kolom label: Nama, NIPD, dll */
+        /* Kolom label */
         .data td:nth-child(1) {
             width: 15%;
-            white-space: nowrap; /* biar teks kiri tidak turun */
-            
-            
+            white-space: nowrap;
         }
 
         /* Kolom titik dua */
@@ -146,10 +159,10 @@
             text-align: center;
         }
 
-        /* Kolom isi (data siswa) */
+        /* Kolom isi */
         .data td:nth-child(3) {
             width: 65%;
-            white-space: normal; /* BOLEH turun ke bawah */
+            white-space: normal;
         }
 
         /* ===== FOOTER ===== */
@@ -157,18 +170,18 @@
             position: absolute;
             bottom: 17px;
             right: 10px;
-            font-size: 5.5px;
+            font-size: 5.3px;
             line-height: 1.3;
             text-align: left;
         }
         
-       .footer strong:first-of-type {
-        display: block;
-        margin-top: -10px !important; /* ✅ ini yang kamu ubah */
-        text-align: center;
-        position: relative;
-        z-index: 2;
-    }
+        .footer strong:first-of-type {
+            display: block;
+            margin-top: -10px !important;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
 
         .footer strong:last-of-type {
             display: block;
@@ -187,21 +200,20 @@
             padding: 2px 0;
         }
 
-       .ttd-single {
-        position: relative;
-        margin-top: -8px;
-        margin-bottom: -4px;
-        text-align: right;        /* tetap kanan biar sejajar dgn teks bawah */
-        margin-right: 10px;       /* jarak aman dari tepi kanan */
-    }
+        .ttd-single {
+            position: relative;
+            margin-top: -8px;
+            margin-bottom: -4px;
+            text-align: right;
+            margin-right: 10px;
+        }
 
-    /* Gambar tanda tangan & cap */
-    .ttd-single .ttd-cap {
-        width: 60px;              /* ukuran ideal */
-        opacity: 0.9;
-        display: inline-block;
-        transform: translateX(-25px) rotate(-3deg); /* 🔹 geser ke kiri 25px */
-    }
+        .ttd-single .ttd-cap {
+            width: 60px;
+            opacity: 0.9;
+            display: inline-block;
+            transform: translateX(-25px) rotate(-3deg);
+        }
         
         /* ===== BELAKANG ===== */
         .back-header {
@@ -242,23 +254,18 @@
 
 @php
     use Carbon\Carbon;
-    // 1. Pastikan Carbon menggunakan locale Bahasa Indonesia
     Carbon::setLocale('id');
 
-    // 2. Tentukan Bulan untuk Footer
+    // Logic Bulan Footer
     $bulanFooter = request('bulan');
-    
     if (!empty($bulanFooter)) {
-        // Coba parsing bulan (misalnya jika inputnya angka '8' atau nama Inggris 'August')
         try {
             $date = Carbon::parse($bulanFooter);
             $bulanIndonesia = $date->translatedFormat('F');
         } catch (\Exception $e) {
-            // Fallback jika parsing gagal (misalnya jika inputnya sudah nama Indonesia 'Agustus')
             $bulanIndonesia = $bulanFooter; 
         }
     } else {
-        // Default ke bulan saat ini jika tidak ada request
         $bulanIndonesia = Carbon::now()->translatedFormat('F'); 
     }
 
@@ -290,25 +297,28 @@
         <div class="title">KARTU PELAJAR</div>
 
         <div class="content">
-            <div>
+            {{-- 🔹 BAGIAN KIRI: Foto & Barcode dibungkus .left-section --}}
+            <div class="left-section">
                 <div class="foto">
                     @if($siswa->foto)
                         <img src="{{ asset('uploads/foto_siswa/'.$siswa->foto) }}" alt="Foto Siswa">
                     @else
-                        <span style="font-size:7px;">Foto Siswa</span>
+                        <span style="font-size:7px; display:block; padding-top:1cm;">Foto Siswa</span>
                     @endif
                 </div>
                 <div class="barcode">
-                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($siswa->nis, 'C39', 1, 30) }}" alt="Barcode">
+                    {{-- Pastikan width parameter (1.5 atau 2) sesuai kebutuhan scanner --}}
+                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($siswa->nis, 'C39', 1, 45) }}" alt="Barcode">
                 </div>
             </div>
-
+            
+            {{-- 🔹 BAGIAN KANAN: Data Siswa --}}
             <div class="data">
                 <table>
                     <tr><td>Nama</td><td>:</td><td>{{ strtoupper($siswa->nama_lengkap) }}</td></tr>
                     <tr><td>NIPD</td><td>:</td><td>{{ $siswa->nis }}</td></tr>
                     <tr><td>NISN</td><td>:</td><td>{{ $siswa->nisn }}</td></tr>
-                    <tr><td>Tempat, Tgl Lahir</td><td>:</td><td>{{ $siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($siswa->tanggal_lahir)->translatedFormat('d F Y') }}</td></tr>
+                    <tr><td>Tempat, Tgl Lahir</td><td>:</td><td>{{ $siswa->tempat_lahir }}, {{ Carbon::parse($siswa->tanggal_lahir)->translatedFormat('d F Y') }}</td></tr>
                     <tr><td>Jenis Kelamin</td><td>:</td><td>{{ $siswa->jenis_kelamin }}</td></tr>
                     <tr><td>Agama</td><td>:</td><td>{{ $siswa->agama }}</td></tr>
                     <tr><td>Nama Orang Tua</td><td>:</td><td>{{ $siswa->nama_ortu }}</td></tr>
@@ -317,27 +327,22 @@
             </div>
         </div>
 
-    <div class="footer">
-    <div>
-        Yogyakarta, {{ request('bulan') ?? 'Agustus' }} {{ request('tahun') ?? date('Y') }}<br>
-        Kepala Sekolah
-    </div>
+        <div class="footer">
+            <div>
+                Yogyakarta, {{ request('bulan') ?? 'Juli' }} {{ request('tahun') ?? date('Y') }}<br>
+                Kepala Sekolah
+            </div>
 
-    <div class="ttd-single">
-    @php
-        // kalau ada gambar cap_kepsek dari request (hasil upload base64), pakai itu
-        // kalau tidak ada, pakai gambar default dari folder images
-        $capKepsek = request('cap_kepsek') ?: asset('images/ttd_cap_kepsek.png');
-    @endphp
-    <img src="{{ $capKepsek }}" alt="Cap & TTD Kepala Sekolah" class="ttd-cap">
-</div>
+            <div class="ttd-single">
+                @php
+                    $capKepsek = request('cap_kepsek') ?: asset('images/ttd_cap_kepsek.png');
+                @endphp
+                <img src="{{ $capKepsek }}" alt="Cap & TTD Kepala Sekolah" class="ttd-cap">
+            </div>
 
-
-    <strong>{{ request('nama_kepsek') ?? 'Drs. Agus Waluyo, M.Eng.' }}</strong>
-    <div class="nip">NIP. {{ request('nip') ?? '196512271994121002' }}</div>
-</div>
-
-
+            <strong>{{ request('nama_kepsek') ?? 'Drs. Agus Waluyo, M.Eng.' }}</strong>
+            <div class="nip">NIP. {{ request('nip') ?? '196512271994121002' }}</div>
+        </div>
 
         <div class="jurusan">{{ strtoupper($siswa->jurusan) }}</div>
 

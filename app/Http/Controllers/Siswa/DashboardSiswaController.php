@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Konseling; // ✅ pastikan ini ada
 use App\Models\DokumenSiswa;
+use App\Models\Notifikasi;
 
 
 class DashboardSiswaController extends Controller
@@ -15,12 +16,19 @@ class DashboardSiswaController extends Controller
     {    
         $siswa = Auth::guard('siswa')->user();
 
+        $nis = auth('siswa')->user()->nis;
         // ✅ Ambil semua riwayat konseling siswa ini
         $konselings = Konseling::where('nis', $siswa->nis)
                         ->orderBy('tanggal', 'desc')
                         ->get();
 
-        return view('siswa.dashboard', compact('siswa', 'konselings'));
+        // Ambil notifikasi belum dibaca
+        $notifikasi = notifikasi::where('nis', $nis)
+                    ->where('is_read', false)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        return view('siswa.dashboard', compact('siswa', 'konselings', 'notifikasi'));
     }
 
     public function dataSiswa()

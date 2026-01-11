@@ -96,19 +96,22 @@ public function store(Request $request)
                          ->with('success', 'Data konseling berhasil dihapus.');
     }
 
-    public function proses(Request $request, $id)
+    // Method untuk memproses persetujuan (Setuju/Tolak)
+public function proses(Request $request, $id)
 {
     $request->validate([
         'status' => 'required|in:Disetujui,Ditolak',
-        'tanggapan_admin' => 'nullable|string'
+        'tanggapan_admin' => 'required|string|max:255', // Wajib diisi agar siswa jelas
     ]);
 
     $konseling = Konseling::findOrFail($id);
-    $konseling->status = $request->status;
-    $konseling->tanggapan_admin = $request->tanggapan_admin;
-    $konseling->save();
 
-    return redirect()->route('admin.konseling.index')->with('success', 'Status konseling berhasil diperbarui.');
+    $konseling->update([
+        'status' => $request->status,
+        'tanggapan_admin' => $request->tanggapan_admin, // Simpan pesan admin
+    ]);
+
+    return redirect()->back()->with('success', 'Status konseling berhasil diperbarui.');
 }
 public function show($id)
 {

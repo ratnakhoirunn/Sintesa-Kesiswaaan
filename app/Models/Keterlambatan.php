@@ -16,6 +16,8 @@ class Keterlambatan extends Model
         'jam_datang',
         'menit_terlambat',
         'keterangan',
+        'dokumen',
+        'status',
     ];
 
     public function siswa()

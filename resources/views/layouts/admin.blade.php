@@ -8,157 +8,79 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <link rel="icon" href="{{ asset('images/skaduta_logo.png') }}" type="image/png"/>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     
     <style>
-        /* Hapus semua tag <link> dan komentar dari sini */
+        /* =========================================
+           1. RESET & GLOBAL
+           ========================================= */
+        * { box-sizing: border-box; }
         body {
-            /* Pastikan penulisan nama font benar */
-            font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            background-color: #f4f7f6; /* Warna latar belakang umum */
-            display: flex; /* Mengaktifkan Flexbox untuk layout utama */
+            background-color: #f4f7f6;
             min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* =========================================
+           2. SIDEBAR STYLES
+           ========================================= */
         .sidebar {
             width: 300px;
-            background-color: #17375d; /* Warna biru gelap */
+            background-color: #17375d;
             color: #fff;
             padding: 20px 0;
             display: flex;
             flex-direction: column;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            position: fixed; /* Sidebar tetap di tempatnya */
+            position: fixed;
             height: 100%;
-            overflow-y: auto; /* Jika konten sidebar banyak, bisa discroll */
-        }
-        .sidebar .header {
-            display: flex;
-            align-items: center;
-            padding: 0 20px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-        .sidebar .header img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
-        .sidebar .header h3 {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-        .sidebar .profile {
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            margin-bottom: 20px;
-        }
-        .sidebar .profile img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
-            border: 2px solid #fff;
-        }
-        .sidebar .profile .info h4 {
-            margin: 0;
-            font-size: 1rem;
-        }
-        .sidebar .profile .info p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.7);
-        }
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar nav ul li {
-            margin-bottom: 5px;
-        }
-        .sidebar nav ul li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: background-color 0.3s;
-        }
-        .sidebar nav ul li a i { /* Untuk ikon */
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
-        .sidebar nav ul li a:hover,
-        .sidebar nav ul li a.active {
-            background-color: #0d2a4a; /* Warna hover/aktif */
-            border-left: 4px solid #4a90e2; /* Garis biru aktif */
-        }
-        .sidebar nav ul li.dropdown .dropdown-toggle {
-            position: relative;
-        }
-        .sidebar nav ul li.dropdown .dropdown-toggle i.fa-caret-down {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.8rem;
-        }
-        .sidebar nav ul li.dropdown .dropdown-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            background-color: #0d2a4a; /* Warna submenu */
-            display: none; /* Sembunyikan secara default */
-        }
-        .sidebar nav ul li.dropdown.active .dropdown-menu {
-            display: block; /* Tampilkan jika dropdown aktif */
-        }
-        .sidebar nav ul li.dropdown .dropdown-menu li a {
-            padding-left: 45px; /* Indentasi submenu */
-            font-size: 0.9rem;
-        }
-        .sidebar .logout {
-            margin-top: auto; /* Dorong ke bawah */
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar .logout a {
-            display: block;
-            text-align: center;
-            padding: 12px 20px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 0.95rem;
-            background-color: #e74c3c; /* Warna tombol logout */
-            margin: 0 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .sidebar .logout a:hover {
-            background-color: #c0392b;
+            overflow-y: auto;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
 
+        .sidebar .header { display: flex; align-items: center; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .header-logo { width: 40px; height: 40px; margin-right: 10px; }
+        .header-title { font-size: 14px; font-weight: 700; color: #fff; margin: 0; white-space: nowrap; }
 
-        /* Main Content */
+        .profile-admin { text-align: center; margin-bottom: 20px; }
+        .profile-admin-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; margin-bottom: 5px; }
+        .profile-admin-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+        .profile-admin-role { font-size: 12px; opacity: 0.85; }
+
+        .sidebar nav ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar nav ul li { margin-bottom: 5px; }
+        .sidebar nav ul li a { display: flex; align-items: center; padding: 12px 20px; color: #fff; text-decoration: none; font-size: 0.95rem; transition: 0.3s; }
+        .sidebar nav ul li a:hover, .sidebar nav ul li a.active { background-color: #0d2a4a; border-left: 4px solid #4a90e2; }
+        .sidebar nav ul li a i { margin-right: 10px; font-size: 1.1rem; width: 25px; text-align: center; }
+
+        .dropdown-toggle { position: relative; cursor: pointer; }
+        .dropdown-toggle i.fa-caret-down { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; }
+        .dropdown-menu { display: none; background-color: #0d2a4a; padding: 0; }
+        .dropdown.active .dropdown-menu { display: block; }
+        .dropdown-menu li a { padding-left: 55px; }
+
+        .logout { margin-top: auto; padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .logout a { display: block; text-align: center; padding: 12px; background: #e74c3c; color: #fff; border-radius: 5px; text-decoration: none; }
+
+        /* =========================================
+           3. MAIN CONTENT & NAVBAR
+           ========================================= */
         .main-content {
-            margin-left: 300px; /* Sesuaikan dengan lebar sidebar */
-            flex-grow: 1;
+            margin-left: 300px;
             padding: 30px;
-            background-color: #f4f7f6;
+            width: auto;
+            transition: margin-left 0.3s ease;
         }
+
         .navbar {
             background-color: #fff;
             padding: 15px 30px;
@@ -168,497 +90,141 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #ccc; 
+        }
+        .navbar h2 { margin: 0; color: #333; font-size: 1.2rem; }
+        .user-profile img { width: 35px; height: 35px; border-radius: 50%; margin-left: 15px; }
 
-        }
-        .navbar h2 {
-            margin: 0;
-            color: #333;
-            font-size: 1.2rem;
-        }
-        .navbar .user-profile {
-            display: flex;
-            align-items: center;
-        }
-        .navbar .user-profile img {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            margin-left: 15px;
+        .mobile-toggle {
+            display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #333; margin-right: 15px; padding: 0;
         }
 
+        /* =========================================
+           4. STYLE KHUSUS DASHBOARD (YANG HILANG)
+           ========================================= */
         .welcome-card {
-            background-color: #17375d; /* Biru gelap */
-            color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background-color: #17375d; color: #fff; padding: 30px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .welcome-card h1 {
-            margin: 0 0 5px;
-            font-size: 1.8rem;
-        }
-        .welcome-card p {
-            margin: 0;
-            font-size: 1rem;
-            color: rgba(255,255,255,0.8);
-        }
+        .welcome-card h1 { margin: 0 0 5px; font-size: 1.8rem; }
+        .welcome-card p { margin: 0; font-size: 1rem; color: rgba(255,255,255,0.8); }
 
         .info-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;
         }
         .info-card {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: space-between;
         }
-        .info-card .content {
-            text-align: left;
-        }
-        .info-card .content p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #777;
-        }
-        .info-card .content h3 {
-            margin: 5px 0 0;
-            font-size: 1.6rem;
-            color: #333;
-        }
+        .info-card .content p { margin: 0; font-size: 0.9rem; color: #777; }
+        .info-card .content h3 { margin: 5px 0 0; font-size: 1.6rem; color: #333; }
+        
+        /* Style Icon yang membuat gambar hitam besar jadi rapi lagi */
         .info-card .icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #e0f0ff; /* Warna latar belakang ikon */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 60px; height: 60px; border-radius: 50%; background-color: #e0f0ff; display: flex; justify-content: center; align-items: center;
         }
-        .info-card .icon img {
-            width: 30px;
-            height: 30px;
-        }
+        .info-card .icon img { width: 30px; height: 30px; }
 
-        /* Grafik */
-        .chart-card {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-        }
-        .chart-card h3 {
-            margin-top: 0;
-            color: #333;
-            font-size: 1.1rem;
-        }
-        /* Style untuk chart, butuh library JS Chart.js */
-        .chart-container {
-            height: 300px;
-            width: 100%;
-        }
-
-        /* Dokumen Siswa & Tindakan Konseling Cards */
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr; /* Grafik lebih lebar dari sidebar kanan */
-            gap: 30px;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 30px;
         }
-        .right-column-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        .chart-card, .admin-action-card, .konseling-action-card {
+            background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px;
         }
-        .admin-action-card, .konseling-action-card {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        .right-column-cards { display: flex; flex-direction: column; gap: 20px; }
+        
+        .action-item, .notification-item {
+            display: flex; align-items: center; margin-bottom: 15px; font-size: 0.95rem;
         }
-        .admin-action-card h3, .konseling-action-card h3 {
-            margin-top: 0;
-            color: #333;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+        .action-item img { width: 25px; height: 25px; margin-right: 15px; }
+        .notification-item {
+            background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; color: #664d03;
         }
-        .action-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            color: #555;
+        .notification-item i { margin-right: 15px; font-size: 1.2rem; }
+        .chart-container { height: 300px; width: 100%; }
+
+        /* =========================================
+           5. RESPONSIF MOBILE
+           ========================================= */
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            
+            .main-content { margin-left: 0; padding: 15px; }
+            .mobile-toggle { display: block; }
+            
+            .navbar { padding: 10px 15px; }
+            .navbar h2 { font-size: 1rem; }
+
+            /* Dashboard Grid jadi 1 kolom di HP */
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
-        .action-item img {
-            width: 25px;
-            height: 25px;
-            margin-right: 15px;
-        }
-        .action-item:last-child {
-            margin-bottom: 0;
-        }
-        .konseling-action-card .notification-item {
-            display: flex;
-            align-items: center;
-            background-color: #fff3cd; /* Warna kuning */
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            color: #664d03;
-        }
-        .konseling-action-card .notification-item i { /* Untuk ikon */
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-
-         .pagination svg {
-            /* Perkecil lebar ikon (misalnya dari default 1.5rem menjadi 1rem) */
-            width: 1rem; 
-            /* Perkecil tinggi ikon */
-            height: 1rem; 
-            /* Penyesuaian vertikal agar ikon sejajar dengan teks (opsional) */
-            margin-top: -3px; 
-        }
-
-    .profile-admin {
-    text-align: center;
-    margin-top: 10px;
-    padding-top: 0;
-}
-
-/* Ukuran foto lebih kecil */
-.profile-admin-img {
-    width: 70px;        /* 🔥 foto diperkecil */
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 5px; /* 🔥 jarak lebih kecil */
-    margin-top: -5px;   /* 🔥 foto sedikit naik */
-}
-
-/* Bikin teks lebih naik */
-.profile-admin-text {
-    margin-top: -5px;   /* 🔥 naikkan nama & role */
-}
-
-.profile-admin-name {
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 2px; /* rapat */
-}
-
-.profile-admin-role {
-    font-size: 12px;
-    margin: 0;
-    opacity: .85;
-}
-.header-title {
-    font-size: 14px !important;
-    font-weight: 700;
-    white-space: nowrap;
-    color: #ffffff; /* tulisan putih */
-    margin: 0;
-}
-
-.header-white {
-    background: #17375d;   /* biru */
-    color: #ffffff;        /* tulisan putih */
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    border-bottom: 2px solid #17375d;
-}
-
-/* ============================= */
-/* RESPONSIVE SIDEBAR */
-/* ============================= */
-.mobile-toggle {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-}
-
-/* MOBILE */
-@media (max-width: 991px) {
-    body {
-        overflow-x: hidden;
-    }
-
-    .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        z-index: 1050;
-    }
-
-    .sidebar.show {
-        transform: translateX(0);
-    }
-
-    .main-content {
-        margin-left: 0 !important;
-        padding: 20px;
-    }
-
-    .mobile-toggle {
-        display: block;
-    }
-}
-
     </style>
 </head>
 <body>
+
     <div class="sidebar">
        <div class="header header-white">
-        <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK" class="header-logo">
-        <h3 class="header-title">SINTESA SMKN 2 YOGYAKARTA</h3>
-    </div>
+            <img src="{{ asset('images/skaduta_logo.png') }}" alt="Logo SMK" class="header-logo">
+            <h3 class="header-title">SINTESA SMKN 2 YOGYAKARTA</h3>
+       </div>
 
-     <div class="profile-admin">
-    <img 
-        src="{{ auth('guru')->user()->foto 
-                ? asset('uploads/foto_guru/' . auth('guru')->user()->foto) 
-                : asset('images/profil_admin_tem.jfif') }}" 
-        alt="Foto Guru"
-        class="profile-admin-img"
-    />
-
-    <div class="profile-admin-text">
-        <h4 class="profile-admin-name">
-            {{ auth('guru')->user()->nama ?? 'Guru' }}
-        </h4>
-
-        <p class="profile-admin-role">
-            {{ ucfirst(str_replace('_', ' ', auth('guru')->user()->role)) }}
-        </p>
-    </div>
-</div>
+       <div class="profile-admin">
+            <img src="{{ auth('guru')->user()->foto ? asset('uploads/foto_guru/' . auth('guru')->user()->foto) : asset('images/profil_admin_tem.jfif') }}" 
+                 alt="Foto Guru" class="profile-admin-img" />
+            <div class="profile-admin-text">
+                <h4 class="profile-admin-name">{{ auth('guru')->user()->nama ?? 'Guru' }}</h4>
+                <p class="profile-admin-role">{{ ucfirst(str_replace('_', ' ', auth('guru')->user()->role)) }}</p>
+            </div>
+       </div>
 
        <nav>
-    <ul>
-
-        {{-- ===================================
-              MENU UNTUK ADMIN
-        =================================== --}}
-        @if(auth('guru')->user()->role == 'admin')
-            
-            <li>
-                <a href="{{ route('admin.dashboard') }}" 
-                    class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('admin.datasiswa.index') }}" 
-                    class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}">
-                    <i class="fas fa-users"></i> Data Siswa
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('admin.kartupelajar.index') }}" 
-                    class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}">
-                    <i class="fas fa-id-card"></i> Kartu Pelajar
-                </a>
-            </li>
-
-            <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'open' : '' }}">
-                <a href="#" class="dropdown-toggle">
-                    <i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu" style="{{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'display:block;' : '' }}">
-                    <li>
-                        <a href="{{ route('admin.konseling.index') }}" 
-                            class="{{ request()->is('admin/konseling*') ? 'active' : '' }}">
-                            Konseling
-                        </a>
+            <ul>
+                @if(auth('guru')->user()->role == 'admin')
+                    <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{{ route('admin.datasiswa.index') }}" class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}"><i class="fas fa-users"></i> Data Siswa</a></li>
+                    <li><a href="{{ route('admin.kartupelajar.index') }}" class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
+                    <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'open' : '' }}">
+                        <a href="#" class="dropdown-toggle"><i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ route('admin.konseling.index') }}">Konseling</a></li>
+                            <li><a href="{{ route('admin.keterlambatan.index') }}">Keterlambatan</a></li>
+                        </ul>
                     </li>
-                    <li>
-                        <a href="{{ route('admin.keterlambatan.index') }}" 
-                        class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
-                            Keterlambatan dan Perizinan
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="{{ route('admin.dokumensiswa.index') }}" 
-                    class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
-                    <i class="fas fa-file-alt"></i> Dokumen Siswa
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('admin.prestasi.index') }}" 
-                    class="{{ request()->is('admin/prestasisiswa*') ? 'active' : '' }}">
-                    <i class="fas fa-trophy"></i> Prestasi Siswa
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('admin.role.index') }}" 
-                    class="{{ request()->is('admin/role*') ? 'active' : '' }}">
-                    <i class="fas fa-user-cog"></i> Manajemen Role
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('admin.password.index') }}" 
-                    class="{{ request()->is('admin/password*') ? 'active' : '' }}">
-                    <i class="fas fa-key"></i> Kelola Password
-                </a>
-            </li>
-
-        @endif
-
-
-
-        {{-- ===================================
-              MENU UNTUK GURU BK
-        =================================== --}}
-        @if(auth('guru')->user()->role == 'guru_bk')
-
-            <li>
-                <a href="{{ route('bk.dashboard') }}"
-                    class="{{ request()->is('bk/dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard BK
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('bk.konseling.index') }}"
-                    class="{{ request()->is('bk/konseling*') ? 'active' : '' }}">
-                    <i class="fas fa-comments"></i> Kelola Konseling
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('bk.keterlambatan.index') }}"
-                    class="{{ request()->is('bk/keterlambatan*') ? 'active' : '' }}">
-                    <i class="fas fa-clock"></i> Kelola Keterlambatan
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ route('bk.dokumen.index') }}"
-                    class="{{ request()->is('bk/dokumen*') ? 'active' : '' }}">
-                    <i class="fas fa-file-alt"></i> Dokumen Siswa
-                </a>
-            </li>
-
-             <li>
-                <a href="{{ route('bk.prestasi.index') }}"
-                    class="{{ request()->is('bk/dokumen*') ? 'active' : '' }}">
-                    <i class="fas fa-trophy"></i> Prestasi Siswa
-                </a>
-            </li>
-
-        @endif
-
-
-
-        {{-- ===================================
-              MENU UNTUK Kesiswaan
-        =================================== --}}
-        @if(auth('guru')->user()->role == 'kesiswaan')
-
-            <li><a href="{{ route('kesiswaan.dashboard') }}"
-                class="{{ request()->is('kesiswaan/dashboard') ? 'active' : '' }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a></li>
-
-            <li><a href="{{ route('admin.datasiswa.index') }}"
-                class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}">
-                <i class="fas fa-users"></i> Data Siswa
-            </a></li>
-
-            <li><a href="{{ route('admin.kartupelajar.index') }}"
-                class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}">
-                <i class="fas fa-id-card"></i> Kartu Pelajar
-            </a></li>
-
-            <li><a href="{{ route('admin.keterlambatan.index') }}"
-                class="{{ request()->is('admin/keterlambatan*') ? 'active' : '' }}">
-                <i class="fas fa-clock"></i> Keterlambatan
-            </a></li>
-
-            <li><a href="{{ route('admin.dokumensiswa.index') }}"
-                class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
-                <i class="fas fa-file-alt"></i> Dokumen Siswa
-            </a></li>
-
-            <li><a href="{{ route('admin.prestasi.index') }}"
-                class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}">
-                <i class="fas fa-trophy"></i> Prestasi Siswa
-            </a></li>
-
-        @endif
-                {{-- ===================================
-                    MENU UNTUK WALI KELAS
-                =================================== --}}
-                @if(auth('guru')->user()->role == 'guru' && auth('guru')->user()->walikelas != null)
-
-                    <li>
-                        <a href="{{ route('wali.dashboard') }}"
-                            class="{{ request()->is('walikelas/dashboard') ? 'active' : '' }}">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('wali.datasiswa') }}"
-                            class="{{ request()->is('walikelas/datasiswa*') ? 'active' : '' }}">
-                            <i class="fas fa-users"></i> Data Siswa
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('wali.kartupelajar.index') }}"
-                            class="{{ request()->is('walikelas/kartu*') ? 'active' : '' }}">
-                            <i class="fas fa-id-card"></i> Kartu Pelajar
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('wali.dokumensiswa') }}"
-                            class="{{ request()->is('walikelas/dokumen*') ? 'active' : '' }}">
-                            <i class="fas fa-file-alt"></i> Dokumen Siswa
-                        </a>
-                    </li>
-
-                     <li>
-                        <a href="{{ route('wali.prestasi.index') }}"
-                            class="{{ request()->is('walikelas/prestasi*') ? 'active' : '' }}">
-                            <i class="fas fa-trophy"></i> Prestasi Siswa
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('wali.password.index') }}"
-                            class="{{ request()->is('walikelas/password*') ? 'active' : '' }}">
-                            <i class="fas fa-lock"></i> Kelola Password
-                        </a>
-                    </li>
-
+                    <li><a href="{{ route('admin.dokumensiswa.index') }}" class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
+                    <li><a href="{{ route('admin.prestasi.index') }}" class="{{ request()->is('admin/prestasisiswa*') ? 'active' : '' }}"><i class="fas fa-trophy"></i> Prestasi Siswa</a></li>
+                    <li><a href="{{ route('admin.role.index') }}" class="{{ request()->is('admin/role*') ? 'active' : '' }}"><i class="fas fa-user-cog"></i> Manajemen Role</a></li>
+                    <li><a href="{{ route('admin.password.index') }}" class="{{ request()->is('admin/password*') ? 'active' : '' }}"><i class="fas fa-key"></i> Kelola Password</a></li>
                 @endif
-    </ul>
-</nav>
+                
+                @if(auth('guru')->user()->role == 'guru_bk')
+                    <li><a href="{{ route('bk.dashboard') }}" class="{{ request()->is('bk/dashboard') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard BK</a></li>
+                    <li><a href="{{ route('bk.konseling.index') }}"><i class="fas fa-comments"></i> Konseling</a></li>
+                    <li><a href="{{ route('bk.keterlambatan.index') }}"><i class="fas fa-clock"></i> Keterlambatan</a></li>
+                    <li><a href="{{ route('bk.dokumen.index') }}"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
+                    <li><a href="{{ route('bk.prestasi.index') }}"><i class="fas fa-trophy"></i> Prestasi</a></li>
+                @endif
 
+                @if(auth('guru')->user()->role == 'kesiswaan')
+                    <li><a href="{{ route('kesiswaan.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{{ route('admin.datasiswa.index') }}"><i class="fas fa-users"></i> Data Siswa</a></li>
+                    <li><a href="{{ route('admin.kartupelajar.index') }}"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
+                    <li><a href="{{ route('admin.keterlambatan.index') }}"><i class="fas fa-clock"></i> Keterlambatan</a></li>
+                    <li><a href="{{ route('admin.dokumensiswa.index') }}"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
+                    <li><a href="{{ route('admin.prestasi.index') }}"><i class="fas fa-trophy"></i> Prestasi</a></li>
+                @endif
 
-        <div class="logout">
+                @if(auth('guru')->user()->role == 'guru' && auth('guru')->user()->walikelas != null)
+                    <li><a href="{{ route('wali.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{{ route('wali.datasiswa') }}"><i class="fas fa-users"></i> Data Siswa</a></li>
+                    <li><a href="{{ route('wali.kartupelajar.index') }}"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
+                    <li><a href="{{ route('wali.dokumensiswa') }}"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
+                    <li><a href="{{ route('wali.prestasi.index') }}"><i class="fas fa-trophy"></i> Prestasi Siswa</a></li>
+                    <li><a href="{{ route('wali.password.index') }}"><i class="fas fa-lock"></i> Password</a></li>
+                @endif
+            </ul>
+       </nav>
+
+       <div class="logout">
             <a href="{{ route('logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </div>
+       </div>
     </div>
 
     <div class="main-content">
@@ -670,10 +236,6 @@
             <div class="user-profile">
                 <img src="{{ asset('images/profil_admin_tem.jfif') }}" alt="Admin Profile">
             </div>
-            <div class="menu-toggle" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-            </div>
-
         </div>
 
         @yield('content')
@@ -682,38 +244,31 @@
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
-
         dropdownToggles.forEach(toggle => {
             toggle.addEventListener("click", function (e) {
                 e.preventDefault();
-
-                // Tutup semua dropdown lain dulu
-                document.querySelectorAll(".sidebar nav ul li.dropdown")
-                    .forEach(drop => drop.classList.remove("active"));
-
-                // Toggle dropdown yang diklik
+                document.querySelectorAll(".sidebar nav ul li.dropdown").forEach(drop => {
+                    if (drop !== this.parentElement) drop.classList.remove("active");
+                });
                 this.parentElement.classList.toggle("active");
             });
         });
     });
-</script>
 
-<script>
-function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('show');
-}
-
-/* Auto close sidebar ketika klik di luar (mobile) */
-document.addEventListener('click', function(e) {
-    const sidebar = document.querySelector('.sidebar');
-    const toggle = document.querySelector('.mobile-toggle');
-
-    if (window.innerWidth <= 991) {
-        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
-            sidebar.classList.remove('show');
-        }
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('show');
     }
-});
-</script>
+
+    document.addEventListener('click', function(e) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = document.querySelector('.mobile-toggle');
+        if (window.innerWidth <= 991 && sidebar.classList.contains('show')) {
+            if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                sidebar.classList.remove('show');
+            }
+        }
+    });
+    </script>
 </body>
 </html>

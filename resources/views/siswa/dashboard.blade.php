@@ -5,336 +5,383 @@
 @section('content')
 
 @php
-use App\Models\DokumenSiswa;
+    use App\Models\DokumenSiswa;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\DB;
+
+    // === LOGIC DATA ===
+    $nis = Auth::guard('siswa')->user()->nis;
+    $siswa = Auth::guard('siswa')->user();
+
+    // 1. Ambil Notifikasi (Logic Baru)
+    $notifikasis = [];
+    try {
+        if (\Illuminate\Support\Facades\Schema::hasTable('notifikasis')) {
+            $notifikasis = \App\Models\Notifikasi::where('nis', $nis)
+                            ->where('is_read', 0)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+        }
+    } catch (\Throwable $e) { $notifikasis = []; }
+
+    // 2. Data Dokumen & Progress
+    $dokumens = DokumenSiswa::where('nis', $nis)->get();
+    $targetWajib = 5; // Default jumlah wajib
+    $uploaded = $dokumens->whereNotNull('file_path')->count();
+    
+    // Hitung persentase
+    $percent = $targetWajib > 0 ? round(($uploaded / $targetWajib) * 100) : 0;
+    if($percent > 100) $percent = 100;
 @endphp
 
 <style>
-    body {
-        background-color: #f5f7fa;
-    }
+    /* === GLOBAL STYLES === */
+    body { background-color: #f5f7fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-    /* ====== Header Biru Sambutan ====== */
+    /* === HEADER SAMBUTAN === */
     .welcome-card {
-        background-color: #17375d;
-        color: #fff;
-        border-radius: 10px;
-        padding: 20px 25px;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        background: linear-gradient(135deg, #17375d 0%, #102a48 100%);
+        color: #fff; border-radius: 12px; padding: 25px 30px; margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(23, 55, 93, 0.2); position: relative; overflow: hidden;
     }
-
-    .welcome-card h2 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 600;
+    .welcome-card::after {
+        content: ''; position: absolute; top: -50%; right: -10%; width: 200px; height: 200px;
+        background: rgba(255, 255, 255, 0.05); border-radius: 50%;
     }
+    .welcome-card h2 { margin: 0; font-size: 22px; font-weight: 700; }
+    .welcome-card p { margin-top: 8px; font-size: 15px; opacity: 0.9; }
 
-    .welcome-card p {
-        margin-top: 6px;
-        font-size: 14px;
-        opacity: 0.9;
+    /* === NOTIFIKASI ALERT === */
+    .notif-box {
+        background-color: #fff8e1; border-left: 5px solid #ffc107;
+        color: #856404; border-radius: 8px; padding: 15px 20px;
+        margin-bottom: 20px; display: flex; align-items: start; gap: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.5s ease;
     }
+    .notif-icon {
+        background: #ffc107; color: #fff; width: 35px; height: 35px;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 16px; flex-shrink: 0;
+    }
+    .notif-content h4 { margin: 0 0 4px 0; font-size: 16px; font-weight: 700; color: #d39e00; }
+    .notif-content p { margin: 0; font-size: 14px; line-height: 1.4; color: #666; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ====== Grid Kartu ====== */
+    /* === GRID LAYOUT === */
     .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
         gap: 20px;
     }
 
-    /* ====== Card Style dengan header biru ====== */
+    /* === CARD STYLE === */
     .card-box {
-        background: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        overflow: hidden;
-        transition: transform 0.2s ease;
+        background: #ffffff; border-radius: 12px; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex; flex-direction: column; height: 100%;
     }
-
-    .card-box:hover {
-        transform: translateY(-3px);
-    }
-
+    .card-box:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    
     .card-header {
-        background-color: #17375d;
-        color: white;
-        font-weight: 600;
-        font-size: 15px;
-        padding: 10px 15px;
-        text-align: left;
+        background-color: #17375d; color: white; font-weight: 600;
+        font-size: 14px; padding: 12px 15px; text-transform: uppercase; letter-spacing: 0.5px;
     }
+    .card-content { padding: 20px; text-align: center; background: #fff; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
-    .card-content {
-        padding: 15px;
-        text-align: center;
-        background: #fff;
+    /* === KOMPONEN KARTU === */
+    .barcode-box { 
+        background: #f8f9fa; border: 1px solid #e9ecef; 
+        border-radius: 8px; padding: 15px 10px; margin-top: 5px; width: 100%;
     }
+    
+    .progress-bar-wrapper { width: 100%; margin-top: 10px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: #e9ecef; border-radius: 20px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: #0d6efd; border-radius: 20px; transition: width 0.5s ease; }
 
-    /* ====== Barcode ====== */
-    .barcode-box {
-        background: #f1f4ff;
-        border-radius: 8px;
-        padding: 12px 5px;
-        margin-top: 8px;
-    }
-
-    /* ====== Progress Bar ====== */
-    .progress-bar {
-        background: #e9ecef;
-        border-radius: 8px;
-        height: 10px;
-        overflow: hidden;
-        margin: 10px 0;
-    }
-
-    .progress {
-        background: #007bff;
-        height: 10px;
-        width: 90%;
-        border-radius: 8px;
-    }
-
-    /* ====== Status Aktif ====== */
     .status-circle {
-        background: #e6f5e9;
-        color: #28a745;
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 22px;
-        margin: 10px auto;
+        background: #d4edda; color: #155724; border-radius: 50%; width: 50px; height: 50px;
+        display: flex; justify-content: center; align-items: center; font-size: 24px; margin-bottom: 10px;
     }
 
-    /* ====== Tombol Cetak Kartu ====== */
     .btn-cetak {
-        background-color: #17375d;
-        color: white;
-        padding: 10px 18px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: background 0.2s ease;
+        background-color: #17375d; color: white; padding: 12px 25px; border: none;
+        border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;
+        transition: background 0.2s ease; width: 100%;
     }
+    .btn-cetak:hover { background-color: #0f2740; }
 
-    .btn-cetak:hover {
-        background-color: #0f2740;
-    }
-
-    /* ====== Jadwal Konseling ====== */
+    /* === TABEL JADWAL === */
     .jadwal-box {
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        overflow: hidden;
-        margin-top: 20px;
+        background: #fff; border-radius: 12px; overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 25px; border: 1px solid #eee;
     }
-
     .jadwal-header {
-        background: #17375d;
-        color: white;
-        font-weight: 600;
-        padding: 12px 15px;
+        background-color: #17375d; color: white; font-weight: 600; padding: 15px 20px; font-size: 16px;
     }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
+    
+    /* Responsive Table Wrapper */
+    .table-responsive {
+        width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
     }
+    
+    table { width: 100%; border-collapse: collapse; min-width: 600px; /* Agar scroll muncul di HP */ }
+    th, td { padding: 15px; text-align: left; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    th { background: #f8f9fa; color: #17375d; font-weight: 700; white-space: nowrap; }
+    td { color: #555; }
+    tr:last-child td { border-bottom: none; }
 
-    table th, table td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-        font-size: 14px;
+    /* Status Badges */
+    .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+    .bg-menunggu { background: #fff3cd; color: #856404; }
+    .bg-proses { background: #cff4fc; color: #055160; }
+    .bg-selesai { background: #d1e7dd; color: #0f5132; }
+
+    /* === MEDIA QUERIES (RESPONSIF HP) === */
+    @media (max-width: 768px) {
+        .welcome-card { padding: 20px; text-align: center; }
+        .welcome-card h2 { font-size: 18px; }
+        
+        .dashboard-grid {
+            grid-template-columns: 1fr; /* 1 Kolom di HP */
+            gap: 15px;
+        }
+
+        .notif-box {
+            flex-direction: column; align-items: flex-start;
+        }
+        .notif-icon { margin-bottom: 10px; }
+
+        .card-content { padding: 15px; }
+        
+        th, td { padding: 10px; font-size: 13px; }
     }
-
-    table th {
-        background: #f7f9fc;
-        color: #17375d;
-        font-weight: 600;
-    }
-
-    .jadwal-box {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    margin-top: 20px;
-}
-
-.jadwal-header {
-    background-color: #123B6B;
-    color: white;
-    font-weight: 600;
-    padding: 10px 20px;
-    border-bottom: 1px solid #0f2e58;
-}
-
-.jadwal-box table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.jadwal-box th, .jadwal-box td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-}
-
-.jadwal-box th {
-    background: #f4f6f8;
-}
-
-.status-menunggu {
-    background-color: #fff8e1;
-    color: #b58900;
-    padding: 3px 10px;
-    border-radius: 10px;
-}
-
-.status-proses {
-    background-color: #e3f2fd;
-    color: #1565c0;
-    padding: 3px 10px;
-    border-radius: 10px;
-}
-
-.status-selesai {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-    padding: 3px 10px;
-    border-radius: 10px;
-}
-
-/* Progress Bar Wrapper */
-.progress-bar {
-    width: 100%;
-    height: 10px;
-    background: #e9ecef;
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-/* Progress Fill */
-.progress {
-    height: 100%;
-    background: #0d6efd;
-    border-radius: 20px;
-    transition: width 0.4s ease;
-}
-
-
-
 </style>
 
+{{-- === 1. AREA NOTIFIKASI === --}}
+@foreach($notifikasis as $notif)
+    <div class="notif-box">
+        <div class="notif-icon"><i class="fas fa-bell"></i></div>
+        <div class="notif-content">
+            <h4>{{ $notif->judul }}</h4>
+            <p>{{ $notif->pesan }}</p>
+        </div>
+    </div>
+@endforeach
+
+{{-- === 2. WELCOME CARD === --}}
 <div class="welcome-card">
     <h2>Selamat Datang, {{ $siswa->nama_lengkap }}</h2>
-    <p>{{ $siswa->jurusan }}</p>
+    <p>{{ $siswa->jurusan }} | {{ $siswa->rombel }}</p>
 </div>
 
+{{-- === 3. GRID DASHBOARD === --}}
 <div class="dashboard-grid">
-    {{-- Barcode --}}
+    
+    {{-- Card 1: Barcode --}}
     <div class="card-box">
         <div class="card-header">Barcode NIS</div>
         <div class="card-content">
             <div class="barcode-box">
-                {!! DNS1D::getBarcodeHTML(Auth::guard('siswa')->user()->nis, 'C128', 2, 40) !!}
+                {{-- Mencegah error jika library DNS1D bermasalah --}}
+                @if(class_exists('DNS1D'))
+                    {!! DNS1D::getBarcodeHTML($nis, 'C128', 2, 45) !!}
+                @else
+                    [Barcode Library Missing]
+                @endif
             </div>
-            <p style="margin-top:8px; font-weight:bold;">{{ Auth::guard('siswa')->user()->nis }}</p>
+            <p style="margin-top:10px; font-weight:700; color:#333; letter-spacing:1px;">{{ $nis }}</p>
         </div>
     </div>
 
- {{-- Ambil data dokumen langsung di blade --}}
-@php
-    $nis = Auth::guard('siswa')->user()->nis;
-
-    // Ambil dokumen siswa
-    $dokumens = DokumenSiswa::where('nis', $nis)->get();
-
-    // Hitung progress
-    $total = $dokumens->count();
-    $uploaded = $dokumens->whereNotNull('file_path')->count();
-    $percent = $total > 0 ? round(($uploaded / $total) * 100) : 0;
-@endphp
-
-<div class="card-box"
-     onclick="window.location='{{ route('siswa.dokumensiswa') }}'"
-     style="cursor:pointer;">
-    
-    <div class="card-header">Status Kelengkapan Data</div>
-
-    <div class="card-content">
-        <div class="progress-bar">
-            <div class="progress" style="width: {{ $percent }}%;"></div>
+    {{-- Card 2: Status Dokumen --}}
+    <div class="card-box" onclick="window.location='{{ route('siswa.dokumensiswa') }}'" style="cursor:pointer;">
+        <div class="card-header">Kelengkapan Data</div>
+        <div class="card-content">
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: {{ $percent }}%;"></div>
+                </div>
+            </div>
+            <h3 style="font-weight:700; color:#0d6efd; margin-top:15px; font-size:24px;">
+                {{ $percent }}%
+            </h3>
+            <small style="color:#666;">{{ $uploaded }} dari {{ $targetWajib }} Dokumen</small>
         </div>
-
-        <p style="font-weight:600; color:#007bff; margin-top:8px;">
-            {{ $percent }}%
-        </p>
     </div>
-</div>
 
-    {{-- Cetak Kartu Pelajar --}}
+    {{-- Card 3: Cetak Kartu --}}
     <div class="card-box">
-        <div class="card-header">Cetak Kartu Pelajar</div>
+        <div class="card-header">Kartu Pelajar</div>
         <div class="card-content">
             <button class="btn-cetak" onclick="window.location.href='{{ route('siswa.kartupelajar.index') }}'">
-                🖨 Cetak Kartu
+                <i class="fas fa-print" style="margin-right:8px;"></i> Cetak Kartu Pelajar
             </button>
         </div>
     </div>
 
-    {{-- Status Aktif --}}
+    {{-- Card 4: Status Akademik --}}
     <div class="card-box">
-        <div class="card-header">Status di Semester - Ganjil T.A. 2025/2026</div>
+        <div class="card-header">Status Akademik</div>
         <div class="card-content">
             <div class="status-circle">
-                <i class="fa fa-check"></i>
+                <i class="fas fa-user-check"></i>
             </div>
-            <p style="font-weight:600; color:#28a745;">Aktif</p>
+            <p style="font-weight:700; color:#155724; font-size:16px; margin:0;">Aktif</p>
+            <small style="color:#666; margin-top:5px;">T.A. 2025/2026</small>
         </div>
     </div>
 </div>
 
-{{-- Riwayat Konseling --}}
+{{-- === 4. TABEL RIWAYAT KONSELING (DASHBOARD) === --}}
+<style>
+    /* Style Khusus Dashboard Table */
+    .jadwal-box {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        overflow: hidden;
+        margin-top: 30px;
+        border: 1px solid #eef2f6;
+    }
+
+    .jadwal-header {
+        background: #123B6B;
+        color: white;
+        padding: 15px 25px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .link-lihat-semua {
+        color: #e0f2fe;
+        font-size: 12px;
+        text-decoration: none;
+        background: rgba(255,255,255,0.1);
+        padding: 5px 12px;
+        border-radius: 20px;
+        transition: 0.3s;
+    }
+    .link-lihat-semua:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .table-dashboard {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px; /* Mencegah gepeng di HP */
+    }
+
+    .table-dashboard th {
+        background: #f8f9fa;
+        color: #555;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        padding: 12px 20px;
+        border-bottom: 2px solid #eee;
+        text-align: left;
+    }
+
+    .table-dashboard td {
+        padding: 12px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 14px;
+        color: #333;
+        vertical-align: middle;
+    }
+
+    /* Badge Status Kecil */
+    .badge-sm {
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+        font-weight: 600;
+        display: inline-block;
+    }
+    .bg-menunggu { background: #fff8e1; color: #b58900; border: 1px solid #ffeeba; }
+    .bg-disetujui { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+    .bg-ditolak { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .bg-selesai { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+
+</style>
+
 <div class="jadwal-box">
-    <div class="jadwal-header">Riwayat Konseling</div>
-    <div style="padding:15px;">
-        <table>
+    <div class="jadwal-header">
+        <div>
+            <i class="fas fa-history" style="margin-right:8px;"></i> Riwayat Konseling Terbaru
+        </div>
+        <a href="{{ route('siswa.konseling.index') }}" class="link-lihat-semua">
+            Lihat Semua <i class="fas fa-arrow-right" style="font-size:10px; margin-left:3px;"></i>
+        </a>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table-dashboard">
             <thead>
                 <tr>
-                    <th>Tanggal Pengajuan</th>
-                    <th>Topik Konseling</th>
-                    <th>Kegiatan Layanan</th>
-                    <th>Status</th>
+                    <th width="25%">Waktu</th>
+                    <th width="25%">Guru BK</th>
+                    <th width="30%">Topik Masalah</th>
+                    <th width="20%">Status</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($konselings as $konseling)
+                {{-- Ambil 5 data terbaru saja untuk dashboard --}}
+                @forelse ($konselings->take(5) as $konseling)
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($konseling->tanggal)->format('d M Y') }}</td>
-                        <td>{{ $konseling->topik }}</td>
-                        <td>{{ $konseling->kegiatan_layanan ?? '-' }}</td>
                         <td>
-                            <span class="status 
-                                {{ $konseling->status == 'Menunggu' ? 'status-menunggu' : 
-                                   ($konseling->status == 'Diproses' ? 'status-proses' : 'status-selesai') }}">
-                                {{ $konseling->status }}
+                            <div style="font-weight:600; color:#123B6B;">
+                                {{ \Carbon\Carbon::parse($konseling->tanggal)->format('d M Y') }}
+                            </div>
+                            <div style="font-size:12px; color:#666;">
+                                <i class="far fa-clock"></i> {{ \Carbon\Carbon::parse($konseling->jam_pengajuan)->format('H:i') }} WIB
+                            </div>
+                        </td>
+                        <td>
+                            <div style="font-weight:500;">
+                                {{ $konseling->guru->nama ?? '-' }}
+                            </div>
+                            <div style="font-size:11px; color:#888;">
+                                {{ $konseling->jenis_layanan ?? 'Konseling' }}
+                            </div>
+                        </td>
+                        <td>
+                            {{ Str::limit($konseling->topik, 30) }}
+                        </td>
+                        <td>
+                            @php
+                                $statusClass = 'bg-menunggu';
+                                if($konseling->status == 'Disetujui') $statusClass = 'bg-disetujui';
+                                elseif($konseling->status == 'Ditolak') $statusClass = 'bg-ditolak';
+                                elseif($konseling->status == 'Selesai') $statusClass = 'bg-selesai';
+                            @endphp
+                            <span class="badge-sm {{ $statusClass }}">
+                                {{ ucfirst($konseling->status) }}
                             </span>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" style="text-align:center;">Belum ada pengajuan konseling.</td>
+                        <td colspan="4" style="text-align:center; padding: 40px 20px; color:#999;">
+                            <div style="background:#f8f9fa; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px;">
+                                <i class="far fa-calendar-times" style="font-size: 24px; color:#ccc;"></i>
+                            </div>
+                            <p style="margin:0; font-weight:500;">Belum ada riwayat konseling.</p>
+                            <a href="{{ route('siswa.konseling.create') }}" style="font-size:13px; color:#123B6B; font-weight:600; text-decoration:none; margin-top:5px; display:inline-block;">
+                                + Ajukan Sekarang
+                            </a>
+                        </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
-
 @endsection
