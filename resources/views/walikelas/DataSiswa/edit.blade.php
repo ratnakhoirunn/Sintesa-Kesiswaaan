@@ -4,7 +4,6 @@
 @section('content')
 
 <style>
-    /* Copy dari show.blade + ubahan untuk input */
     .card-siswa {
         background-color: #ffffff;
         border-radius: 10px;
@@ -17,7 +16,7 @@
     .section-title {
         background-color: #1e3a67;
         color: white;
-        padding: 12px 20px;
+        padding: 15px 20px;
         font-weight: 600;
         font-size: 1.1rem;
         width: 100%;
@@ -25,8 +24,13 @@
         border-top-right-radius: 10px;
     }
 
+    /* Form body yang fleksibel */
     .form-body {
-        padding: 30px 50px;
+        padding: 20px;
+    }
+
+    @media (min-width: 768px) {
+        .form-body { padding: 30px 50px; }
     }
 
     .foto-wrapper {
@@ -46,7 +50,7 @@
         font-weight: 600;
         color: #333;
         font-size: 0.9rem;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         display: block;
     }
 
@@ -54,90 +58,102 @@
         width: 100%;
         border: 1px solid #ccc;
         border-radius: 8px;
-        padding: 8px 10px;
+        padding: 10px 12px;
         font-size: 0.95rem;
         background-color: #f9f9f9;
         transition: 0.3s;
+        margin-bottom: 15px; /* Spasi antar input di mobile */
     }
 
     input:focus, select:focus, textarea:focus {
         outline: none;
         border-color: #1e3a67;
         background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(30, 58, 103, 0.1);
     }
 
+    /* Grid System Responsif */
     .form-row {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px 40px;
-        margin-bottom: 20px;
+        grid-template-columns: 1fr; /* 1 kolom di mobile */
+        gap: 0;
+        margin-bottom: 0;
     }
 
+    @media (min-width: 768px) {
+        .form-row {
+            grid-template-columns: repeat(2, 1fr); /* 2 kolom di laptop */
+            gap: 20px 40px;
+            margin-bottom: 20px;
+        }
+    }
+
+    /* Container Box Detail */
     .detail-container {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column; /* Stack vertikal di mobile */
         gap: 20px;
         margin-top: 30px;
     }
 
+    @media (min-width: 992px) {
+        .detail-container {
+            flex-direction: row; /* Berdampingan di layar lebar */
+        }
+    }
+
     .detail-box {
         flex: 1;
-        min-width: 350px;
         background-color: #f9fafc;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        border: 1px solid #eee;
     }
 
     .detail-box .header {
         background-color: #1e3a67;
         color: white;
         font-weight: 600;
-        padding: 10px 15px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
+        padding: 12px 15px;
     }
 
     .detail-box .body {
         padding: 20px;
     }
 
-    .btn-blue {
+    /* Tombol Responsif */
+    .btn-blue, .btn-gray {
         display: inline-block;
-        background-color: #1e3a67;
-        color: white;
-        padding: 10px 18px;
-        border-radius: 5px;
-        border: none;
-        transition: 0.3s;
+        padding: 12px 24px;
+        border-radius: 8px;
         font-weight: 600;
-        text-decoration: none;
-    }
-
-    .btn-blue:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-gray {
-        display: inline-block;
-        background-color: #4a4a4a;
-        color: white;
-        padding: 10px 18px;
-        border-radius: 5px;
         text-decoration: none;
         border: none;
         transition: 0.3s;
-        font-weight: 600;
+        cursor: pointer;
+        margin: 5px;
+        width: 100%; /* Lebar penuh di mobile */
     }
 
-    .btn-gray:hover {
-        background-color: #3a3a3a;
+    @media (min-width: 768px) {
+        .btn-blue, .btn-gray { width: auto; }
     }
+
+    .btn-blue { background-color: #1e3a67; color: white; }
+    .btn-blue:hover { background-color: #2c5282; }
+    .btn-gray { background-color: #edf2f7; color: #4a5568; }
+    .btn-gray:hover { background-color: #e2e8f0; }
 
     .scrollable-content {
-        max-height: 80vh;
+        max-height: 85vh;
         overflow-y: auto;
-        padding-right: 10px;
+        padding-right: 5px;
+    }
+
+    /* Perbaikan kolom penuh untuk Alamat */
+    .full-width {
+        grid-column: 1 / -1;
     }
 </style>
 
@@ -261,7 +277,7 @@
                 </div>
 
                 <div class="form-row">
-                    <div style="grid-column: span 2;">
+                    <div class="full-width">
                         <label>Alamat Lengkap</label>
                         <textarea name="alamat" rows="3">{{ old('alamat', $siswa->alamat) }}</textarea>
                     </div>

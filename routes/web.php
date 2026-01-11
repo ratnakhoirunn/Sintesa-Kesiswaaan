@@ -284,8 +284,11 @@ Route::prefix('wali')
         // 📌 PRESTASI SISWA WALI KELAS
         Route::prefix('prestasi')->name('prestasi.')->group(function () {
             Route::get('/', [WaliPrestasiController::class, 'index'])->name('index');
+            Route::get('/create', [WaliPrestasiController::class, 'create'])->name('create');
+            Route::post('/', [WaliPrestasiController::class, 'store'])->name('store');
             Route::get('/{nis}', [WaliPrestasiController::class, 'show'])->name('show');
-});
+            Route::delete('/{id}/delete', [WaliPrestasiController::class, 'destroy'])->name('destroy');
+        });
 
     });
 

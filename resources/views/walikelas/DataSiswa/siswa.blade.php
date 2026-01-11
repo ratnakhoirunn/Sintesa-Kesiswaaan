@@ -4,226 +4,56 @@
 @section('page_title', 'Data Siswa Kelas ' . $rombel)
 
 @section('content')
+{{-- Notifikasi --}}
 @if(session('success'))
-    <div style="background:#d4edda; color:#155724; padding:10px; border-radius:5px; margin-bottom:15px;">
+    <div class="alert alert-success">
         {{ session('success') }}
     </div>
 @endif
 
-<div class="filter-container" style="margin-bottom:20px;">
-   {{-- INFORMASI ROMBEL WALI --}}
-    <div style="background:#1e3a67; padding:18px; border-radius:8px; color:#fff;">
-        <div style="font-size:1.1rem; font-weight:600;">
-            Rombel yang Anda ampu : {{ $rombel }}
+<div class="filter-wrapper-main">
+    {{-- Banner Informasi Rombel --}}
+    <div class="rombel-info-banner">
+        <div class="rombel-text">
+            <i class="fas fa-chalkboard-teacher"></i> Rombel yang Anda ampu : <strong>{{ $rombel }}</strong>
         </div>
 
-        {{-- FORM SEARCH (Tanpa dropdown kelas karena otomatis filter) --}}
-        <form action="{{ route('wali.kartupelajar.index') }}" method="GET" style="margin-top:12px; display:flex; gap:8px;">
-            <input name="q" type="text" placeholder="Cari nama / NIS..." 
-                   value="{{ request('q') }}"
-                   style="flex:1; padding:10px 12px; border-radius:6px; border:none; outline:none;">
+        {{-- Form Search --}}
+        <form action="{{ route('wali.kartupelajar.index') }}" method="GET" class="search-form-wali">
+            <div class="search-box">
+                <input name="q" type="text" placeholder="Cari nama / NIS..." value="{{ request('q') }}">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+        </form>
+    </div>
 
-            <button type="submit" style="background:#fff; color:#1e3a67; padding:8px 12px; border-radius:6px; border:none;">
-                Cari
+    {{-- Info Jumlah & Tombol Aksi Massal --}}
+    <div class="secondary-actions">
+        <div class="info-text">
+            <strong>Jumlah siswa di {{ $rombel }}:</strong> {{ $jumlah }}
+        </div>
+        
+        <form action="{{ route('wali.datasiswa.naikkanSemua') }}" method="POST"
+              onsubmit="return confirm('Yakin ingin menaikkan semua siswa di rombel ini?');">
+            @csrf
+            <button class="btn-naik-massal">
+                <i class="fas fa-arrow-circle-up"></i> Naikkan Semua Siswa
             </button>
         </form>
     </div>
- 
-    <div style="margin-top:6px; text-align:right;">
-        <strong>Jumlah siswa di {{ $rombel }}:</strong> {{ $jumlah }}
-    </div>
-
-       <div style="margin-top:10px; text-align:right;">
-    <form action="{{ route('wali.datasiswa.naikkanSemua') }}" method="POST"
-          onsubmit="return confirm('Yakin ingin menaikkan semua siswa di rombel ini?');">
-        @csrf
-        <button class="btn btn-success" style="background:#8e44ad; color:white; padding:7px 14px; border-radius:8px;">
-            <i class="fas fa-arrow-circle-up"></i> Naikkan Semua Siswa
-        </button>
-    </form>
-    </div>
 </div>
 
-<style>
-.table { 
-    width:100%; 
-    border-collapse:collapse; 
-    background:#fff; 
-    border-radius:8px; 
-    overflow:hidden; 
-}
-
-.table thead { 
-    background:#2c3e50; 
-    color:#fff; 
-}
-
-.table th, 
-.table td { 
-    padding:10px; 
-    border-top:1px solid #eee; 
-    font-size:14px; 
-    vertical-align: middle;     /* ➜ Biar sejajar vertikal (tidak mencong) */
-    text-align: left;           /* ➜ Semua teks rata kiri */
-    white-space: nowrap;        /* ➜ Mencegah teks turun baris */
-}
-
-/* Kolom nomor tetap rata tengah */
-.table th:nth-child(1),
-.table td:nth-child(1) {
-    text-align:center;
-}
-
-.table tbody tr:hover { 
-    background:#f8f9fa; 
-}
-
-.search-box { 
-    display:flex; 
-    background:#f8f9fa; 
-    border-radius:12px; 
-    box-shadow:0 3px 6px rgba(0,0,0,0.06); 
-}
-
-.search-box input { 
-    border:none; 
-    padding:10px 12px; 
-    background:transparent; 
-    width:260px; 
-}
-
-.search-box button { 
-    background:transparent; 
-    border:none; 
-    padding:8px 12px; 
-    cursor:pointer; 
-}
-/* Container aksi */
-.aksi-container {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-}
-
-/* === GAYA UMUM UNTUK SEMUA TOMBOL === */
-.aksi-lihat,
-.aksi-edit,
-.aksi-hapus,
-.aksi-toggle,
-.aksi-naik {
-    display: flex;
-    flex-direction: column;   /* ikon di atas, teks di bawah */
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-/* Ikon semua aksi */
-.aksi-lihat i,
-.aksi-edit i,
-.aksi-hapus i,
-.aksi-toggle i,
-.aksi-naik i {
-    font-size: 18px;
-    margin-bottom: 3px;
-}
-
-/* === WARNA TETAP SAMA === */
-
-/* Lihat (biru) */
-.aksi-lihat { color: #007bff; }
-
-/* Edit (oranye) */
-.aksi-edit { color: #ff9800; }
-
-/* Hapus (merah) */
-.aksi-hapus { color: #e74c3c; }
-
-/* Toggle akses (warna sudah di inline dari kode kamu) */
-
-/* Naik kelas (ungu, sama seperti admin) */
-.aksi-naik { color: #8e44ad; }
-
-/* Hover tetap sama */
-.aksi-lihat:hover,
-.aksi-edit:hover,
-.aksi-hapus:hover,
-.aksi-naik:hover,
-.aksi-toggle:hover {
-    opacity: 0.7;
-}
-
-
-/* WRAPPER GROUP */
-.filter-group {
-    margin-bottom: 20px;
-}
-
-.filter-group label {
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 6px;
-    display: block;
-}
-
-/* SEARCH BOX */
-.search-box {
-    display: flex;
-    align-items: center;
-    background: #ffffff;
-    border: 1px solid #ddd;
-    padding: 0 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    transition: 0.2s ease-in-out;
-}
-
-.search-box:hover {
-    border-color: #b5b5b5;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
-}
-
-.search-box input {
-    width: 100%;
-    padding: 10px 8px;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    background: transparent;
-}
-
-.search-box button {
-    border: none;
-    background: none;
-    cursor: pointer;
-    padding: 6px;
-    font-size: 18px;
-    color: #555;
-    transition: 0.2s;
-}
-
-.search-box button:hover {
-    color: #000;
-}
-
-</style>
-
-
-<div class="table-container">
+<div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th style="width:5%; text-align:center;">No</th>
-                <th style="width:15%;">NIS</th>
-                <th style="width:15%;">NISN</th>
+                <th style="width:50px;">No</th>
+                <th>NIS</th>
+                <th>NISN</th>
                 <th>Nama Lengkap</th>
-                <th style="width:15%;">Jenis Kelamin</th>
-                <th style="width:20%;text-align:center;">Email</th>
-                <th style="width:15%; text-align:center;">Aksi</th>
+                <th>Jenis Kelamin</th>
+                <th>Email</th>
+                <th style="text-align:center;">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -236,64 +66,253 @@
                 <td>{{ $s->jenis_kelamin }}</td>
                 <td>{{ $s->email }}</td>
                 <td>
-                 
-    <div class="aksi-container">
+                    <div class="aksi-container">
+                        {{-- Tombol Lihat --}}
+                        <a href="{{ route('wali.datasiswa.show', $s->nis) }}" class="aksi-lihat" title="Lihat">
+                            <i class="fas fa-eye"></i><span>Lihat</span>
+                        </a>
 
-                {{-- Tombol Lihat --}}
-                <a href="{{ route('wali.datasiswa.show', $s->nis) }}" class="aksi-lihat">
-                    <i class="fas fa-eye"></i> Lihat
-                </a>
+                        {{-- Tombol Edit --}}
+                        <a href="{{ route('wali.datasiswa.edit', $s->nis) }}" class="aksi-edit" title="Edit">
+                            <i class="fas fa-edit"></i><span>Edit</span>
+                        </a>
 
-                {{-- Tombol Edit --}}
-                <a href="{{ route('wali.datasiswa.edit', $s->nis) }}" class="aksi-edit">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
+                        {{-- Tombol Hapus --}}
+                        <form action="{{ route('wali.datasiswa.destroy', $s->nis) }}" method="POST" 
+                              onsubmit="return confirm('Yakin ingin menghapus siswa ini?');">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="aksi-hapus" title="Hapus">
+                                <i class="fas fa-trash"></i><span>Hapus</span>
+                            </button>
+                        </form>
 
-                {{-- Tombol Hapus --}}
-                <form action="{{ route('wali.datasiswa.destroy', $s->nis) }}" method="POST" 
-                    onsubmit="return confirm('Yakin ingin menghapus siswa ini?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="aksi-hapus" style="background:none; border:none;">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
-                </form>
+                        {{-- Toggle Akses --}}
+                        <form action="{{ route('wali.datasiswa.toggleAkses', $s->nis) }}" method="POST">
+                            @csrf
+                            @if($s->akses_edit)
+                                <button type="submit" class="aksi-toggle" style="color:#16a085;" title="Kunci Akses">
+                                    <i class="fas fa-unlock"></i><span>Aktif</span>
+                                </button>
+                            @else
+                                <button type="submit" class="aksi-toggle" style="color:#e74c3c;" title="Buka Akses">
+                                    <i class="fas fa-lock"></i><span>Nonaktif</span>
+                                </button>
+                            @endif
+                        </form>
 
-                {{-- Toggle Akses Edit --}}
-                <form action="{{ route('wali.datasiswa.toggleAkses', $s->nis) }}" method="POST">
-                    @csrf
-                    @if($s->akses_edit)
-                        <button type="submit" class="aksi-toggle" style="color:#16a085;">
-                            <i class="fas fa-unlock"></i> Aktif
-                        </button>
-                    @else
-                        <button type="submit" class="aksi-toggle" style="color:#e74c3c;">
-                            <i class="fas fa-lock"></i> Nonaktif
-                        </button>
-                    @endif
-                </form>
-
-                <form action="{{ route('wali.datasiswa.naikkanSatu', $s->nis) }}" method="POST"
-                onsubmit="return confirm('Naikkan kelas siswa ini?');">
-                @csrf
-                <button type="submit" class="aksi-naik" >
-                    <i class="fas fa-arrow-circle-up"></i> Naikkan
-                </button>
-            </form>
-    </div>
+                        {{-- Tombol Naik Satu --}}
+                        <form action="{{ route('wali.datasiswa.naikkanSatu', $s->nis) }}" method="POST"
+                              onsubmit="return confirm('Naikkan kelas siswa ini?');">
+                            @csrf
+                            <button type="submit" class="aksi-naik" title="Naikkan Kelas">
+                                <i class="fas fa-arrow-circle-up"></i><span>Naikkan</span>
+                            </button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @empty
             <tr>
-                <td colspan="6" style="text-align:center; padding:12px;">Tidak ada data siswa pada rombel ini.</td>
+                <td colspan="7" style="text-align:center; padding:20px;">Tidak ada data siswa pada rombel ini.</td>
             </tr>
             @endforelse
         </tbody>
     </table>
 </div>
 
-{{-- pagination --}}
-<div style="margin-top:18px; display:flex; justify-content:center;">
+{{-- Pagination --}}
+<div class="pagination-wrapper">
     {{ $siswas->appends(request()->query())->links('pagination::simple-tailwind') }}
 </div>
+
+<style>
+    /* =======================
+       LAYOUT & COMPONENTS
+    ======================= */
+    .alert {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .filter-wrapper-main {
+        margin-bottom: 25px;
+    }
+
+    /* Banner Rombel */
+    .rombel-info-banner {
+        background: #1e3a67;
+        padding: 20px;
+        border-radius: 10px;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .rombel-text {
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    /* Search Wali */
+    .search-form-wali {
+        flex: 1;
+        max-width: 400px;
+    }
+
+    .search-box {
+        display: flex;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .search-box input {
+        border: none;
+        padding: 10px 15px;
+        flex: 1;
+        outline: none;
+        color: #333;
+    }
+
+    .search-box button {
+        background: #f8f9fa;
+        border: none;
+        padding: 0 15px;
+        color: #1e3a67;
+        cursor: pointer;
+    }
+
+    /* Secondary Actions (Jumlah & Tombol Ungu) */
+    .secondary-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn-naik-massal {
+        background: #8e44ad;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .btn-naik-massal:hover {
+        background: #732d91;
+        transform: translateY(-1px);
+    }
+
+    /* =======================
+       TABLE RESPONSIVE
+    ======================= */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+    .table thead {
+        background: #2c3e50;
+        color: #fff;
+    }
+
+    .table th, .table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #edf2f7;
+        font-size: 14px;
+    }
+
+    /* =======================
+       AKSI BUTTONS (Vertical Style)
+    ======================= */
+    .aksi-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .aksi-lihat, .aksi-edit, .aksi-hapus, .aksi-toggle, .aksi-naik {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition: 0.2s;
+    }
+
+    .aksi-container i {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+
+    .aksi-container span {
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .aksi-lihat { color: #007bff; }
+    .aksi-edit { color: #ff9800; }
+    .aksi-hapus { color: #e74c3c; }
+    .aksi-naik { color: #8e44ad; }
+
+    .aksi-container button:hover, .aksi-container a:hover {
+        opacity: 0.6;
+    }
+
+    /* =======================
+       MOBILE OPTIMIZATION
+    ======================= */
+    @media (max-width: 768px) {
+        .rombel-info-banner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .search-form-wali {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .secondary-actions {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .btn-naik-massal {
+            width: 100%;
+        }
+    }
+
+    .pagination-wrapper {
+        margin-top: 25px;
+        display: flex;
+        justify-content: center;
+    }
+</style>
 @endsection
