@@ -329,7 +329,7 @@
 
         <div class="footer">
             <div>
-                Yogyakarta, {{ request('bulan') ?? 'Juli' }} {{ request('tahun') ?? date('Y') }}<br>
+                Yogyakarta, {{ \Carbon\Carbon::create(2025, 7, 1)->translatedFormat('F Y') }}<br>
                 Kepala Sekolah
             </div>
 
