@@ -3,329 +3,274 @@
 @section('title', 'Dokumen Siswa | SINTESA')
 @section('page_title', 'Dokumen Siswa')
 
+@section('content')
 <style>
-/* 🎨 Gaya CSS untuk Tampilan yang Sangat Rapi dan Rapat */
+    /* --- Root & Reset --- */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #1e40af 0%, #17375d 100%);
+        --soft-bg: #f8fafc;
+        --border-color: #e2e8f0;
+    }
 
-/* --- Umum --- */
-body {
-    background-color: #f7f9fc;
-}
+    body { 
+        background-color: var(--soft-bg); 
+        font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+    }
 
-/* ====== CARD STYLE ====== */
-.card {
-    border-radius: 12px !important;
-    overflow: hidden;
-    border: 1px solid #e0e7ff;
-}
+    /* ====== CARD STYLE ====== */
+    .card-custom {
+        border-radius: 16px !important;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+        background: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
 
-.card-header {
-    font-size: 1rem;
-    letter-spacing: 0.3px;
-    padding: 15px 20px;
-    border-bottom: none !important;
-}
+    .header-gradient {
+        background: var(--primary-gradient) !important;
+        padding: 24px 30px;
+        border: none;
+        color: #fff
+    }
 
-.card-header.bg-primary {
-    background-color: #007bff !important;
-    color: white !important;
-    font-weight: 700;
-}
+    /* ====== TOTAL BOX ====== */
+    .total-info {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 12px;
+        text-align: center;
+        min-width: 120px;
+        color: #fff
+    }
 
-.card-body {
-    background-color: white;
-    /* Perbaikan: Tambahkan padding atas agar konten tidak menempel ke header */
-    padding: 5px 0 0 0; 
-}
+    /* ====== TABLE OPTIMIZATION ====== */
+    .table-responsive {
+        border-radius: 0 0 16px 16px;
+    }
+    
+    .table-custom { 
+        margin-bottom: 0; 
+        width: 100%;
+    }
+    
+    .table-custom tr {
+        transition: all 0.2s ease;
+    }
 
-/* ====== TABLE STYLE (Inti Perapian & Kerapatan) ====== */
-table.table {
-    width: 100%;
-    margin-bottom: 0;
-}
+    .table-custom tr:hover {
+        background-color: #f1f5f9;
+    }
 
-/* Menggunakan Flexbox untuk Kesejajaran Vertikal Penuh dan BARIS YANG RENGGANG CUKUP */
-table.table tr {
-    transition: background-color 0.2s ease-in-out;
-    display: flex;
-    align-items: center;
-    height: 50px; /* Tinggi baris ideal */
-    border-bottom: 1px solid #f0f0f0;
-    padding: 0 10px;
-}
-/* Perbaikan: Atur padding atas/bawah yang lebih aman untuk baris pertama */
-table.table tr:first-child {
-    padding-top: 5px; 
-    padding-bottom: 5px;
-}
+    .table-custom td {
+        padding: 20px 25px !important;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--border-color);
+    }
 
-table.table tr:hover {
-    background-color: #f5f9ff;
-    transform: none;
-}
+    .table-custom tr:last-child td {
+        border-bottom: none;
+    }
 
-table.table tr:last-child {
-    border-bottom: none;
-}
+    /* ====== CONTENT ELEMENTS ====== */
+    .doc-name {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 1rem;
+        display: block;
+    }
 
-table.table td {
-    padding: 6px 8px !important;
-    vertical-align: middle;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-}
+    .doc-meta {
+        font-size: 0.8rem;
+        color: #94a3b8;
+    }
 
-/* 🎯 Penyesuaian Lebar Kolom untuk Mengurangi Jarak Horizontal */
-/* Icon */
-.table td:nth-child(1) {
-    width: 50px;
-    justify-content: center;
-}
+    .doc-icon-wrapper {
+        width: 48px;
+        height: 48px;
+        background: #eff6ff;
+        color: #3b82f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 1.3rem;
+    }
 
-/* Jenis Dokumen (Fleksibel, Tetap Beri Sedikit Batasan Lebar Maksimal) */
-.table td:nth-child(2) {
-    width: 35%; 
-    padding-left: 0 !important;
-    font-weight: 500;
-    color: #333;
-}
+    /* ====== BADGES ====== */
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
 
-/* Status (Lebar Tetap) */
-.table td:nth-child(3) {
-    width: 160px; 
-    justify-content: center;
-}
+    .status-success { 
+        background: #dcfce7; 
+        color: #15803d; 
+        border: 1px solid #bbf7d0; 
+    }
 
-/* Tombol Aksi (Lebar Tetap) */
-.table td:nth-child(4) {
-    flex-grow: 1; 
-    min-width: 250px; 
-    justify-content: flex-end;
-    padding-right: 15px !important;
-}
+    .status-warning { 
+        background: #fff7ed; 
+        color: #c2410c; 
+        border: 1px solid #ffedd5; 
+    }
 
-/* ====== ICONS ====== */
-.doc-icon {
-    color: #007bff;
-    background: #e9f2ff;
-    padding: 7px 9px;
-    border-radius: 8px;
-    font-size: 1rem;
-}
+    /* ====== ACTION BUTTONS ====== */
+    .btn-action-group { 
+        display: flex; 
+        gap: 10px; 
+        justify-content: flex-end; 
+    }
 
+    .btn-base {
+        height: 40px;
+        padding: 0 18px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        border: none;
+        text-decoration: none !important;
+    }
 
-/* ====== STATUS STYLE (Badge) ====== */
-.status-badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.8rem;
-    font-weight: 600;
-    white-space: nowrap;
-}
+    .btn-view-soft { 
+        background: #f1f5f9; 
+        color: #475569; 
+    }
+    
+    .btn-view-soft:hover { 
+        background: #e2e8f0; 
+        color: #0f172a; 
+    }
 
-.status-success {
-    background-color: #e6fff0;
-    color: #1a7a40 !important;
-}
+    .btn-upload-primary { 
+        background: #3b82f6; 
+        color: white; 
+    }
+    
+    .btn-upload-primary:hover { 
+        background: #2563eb; 
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
 
-.status-danger {
-    background-color: #ffe8e8;
-    color: #c0392b !important;
-}
+    .btn-change-success { 
+        background: #10b981; 
+        color: white; 
+    }
+    
+    .btn-change-success:hover { 
+        background: #059669; 
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
 
-.status-badge i {
-    font-size: 0.8rem;
-    margin-left: 4px;
-}
+    input[type="file"] { display: none; }
 
-/* ====== ACTION BUTTONS (Tombol Aksi yang Rapi dan Seragam) ====== */
-.action-buttons {
-    display: flex;
-    gap: 6px; 
-}
-
-/* Style umum untuk tombol dan label upload */
-.action-buttons a,
-.action-buttons label {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none !important;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    height: 32px; 
-    transition: all 0.2s ease;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.action-buttons a:hover,
-.action-buttons label:hover {
-    opacity: 0.9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Tombol Lihat (Primary/Blue) */
-.btn-view {
-    background-color: #0d6efd !important;
-    border-color: #0d6efd !important;
-    color: white !important;
-}
-
-/* Tombol Ganti File (Success/Green) */
-.btn-ganti {
-    background-color: #198754 !important;
-    border-color: #198754 !important;
-    color: white !important;
-}
-
-/* Tombol Upload File (Danger/Red) */
-.btn-upload {
-    background-color: #dc3545 !important;
-    border-color: #dc3545 !important;
-    color: white !important;
-}
-
-/* ====== HILANGKAN INPUT FILE BAWAAN ====== */
-input[type="file"] {
-    position: absolute;
-    left: -9999px;
-    opacity: 0;
-    visibility: hidden;
-    width: 0;
-    height: 0;
-}
-
-/* ====== DETAIL CARD (Accordion Style) ====== */
-.detail-card-header {
-    background-color: #2c7ef6 !important;
-    color: white;
-    font-weight: 600;
-    border-radius: 12px 12px 0 0 !important;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-}
-
-.detail-card-header:hover {
-    background-color: #0056b3 !important;
-}
-
-.detail-card-body {
-    padding: 20px !important;
-    border-top: 1px solid #e0e0e0;
-}
-
-.text-muted {
-    font-size: 0.9rem;
-}
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .btn-action-group { flex-direction: column; align-items: stretch; }
+        .header-gradient { flex-direction: column; text-align: center; gap: 15px; }
+        .doc-icon-wrapper { margin: 0 auto 10px; }
+        .table-custom td { text-align: center; }
+        .btn-base { justify-content: center; }
+    }
 </style>
 
-@section('content')
-<div class="container mt-4">
+<div class="container py-4">
 
-    {{-- 📑 Bagian Dokumen Terpenuhi --}}
-    <div class="card shadow-sm">
-        {{-- Header Dokumen --}}
-        <div class="card-header bg-primary text-white">
-            Dokumen Terpenuhi :
-            {{ $dokumens->whereNotNull('file_path')->count() }} dari {{ $dokumens->count() }}
+    {{-- Alert Notifikasi --}}
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show mb-4 border-0 shadow-sm" role="alert" style="border-radius:12px; background:#dcfce7; color:#15803d;">
+        <div class="d-flex align-items: center;">
+            <i class="fas fa-check-circle me-3 fa-lg"></i> 
+            <div><strong>Berhasil!</strong> {{ session('success') }}</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    {{-- 📑 Card Dokumen --}}
+    <div class="card-custom">
+        <div class="header-gradient text-white d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1 fw-bold">Total Dokumen</h4>
+                <p class="mb-0 opacity-75 small">Lengkapi dokumen persyaratan di bawah ini</p>
+            </div>
+            <div class="total-info">
+                <span class="d-block small fw-bold opacity-75">TERPENUHI</span>
+                <span class="h4 mb-0 fw-bold">{{ $dokumens->whereNotNull('file_path')->count() }} / {{ $dokumens->count() }}</span>
+            </div>
         </div>
 
-        {{-- Body Dokumen (Tabel) --}}
-        <div class="card-body">
-            <table class="table mb-0">
+        <div class="table-responsive">
+            <table class="table table-custom">
                 <tbody>
                     @foreach($dokumens as $dokumen)
                     <tr>
-                        {{-- Icon dokumen --}}
-                        <td class="ps-4">
-                            <i class="fas fa-file-alt doc-icon"></i>
+                        <td style="width: 80px;" class="d-none d-md-table-cell">
+                            <div class="doc-icon-wrapper">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
                         </td>
 
-                        {{-- Jenis dokumen --}}
-                        <td>{{ $dokumen->jenis_dokumen }}</td>
-
-                        {{-- Status --}}
                         <td>
+                            <span class="doc-name">{{ $dokumen->jenis_dokumen }}</span>
+                            <span class="doc-meta">Wajib diunggah (PDF/JPG/PNG)</span>
+                        </td>
+
+                        <td class="text-center">
                             @if($dokumen->file_path)
                                 <span class="status-badge status-success">
-                                    Diunggah <i class="fas fa-check-circle"></i>
+                                    <i class="fas fa-check-circle"></i> Sudah Unggah
                                 </span>
                             @else
-                                <span class="status-badge status-danger">
-                                    Belum Diunggah <i class="fas fa-times-circle"></i>
+                                <span class="status-badge status-warning">
+                                    <i class="fas fa-exclamation-circle"></i> Belum Ada
                                 </span>
                             @endif
                         </td>
 
-                        {{-- Tombol Aksi (Sudah Rapi dan Sejajar) --}}
                         <td>
-                            <div class="action-buttons">
-
-                                {{-- Tombol Lihat (Hanya Muncul jika sudah diunggah) --}}
+                            <div class="btn-action-group">
                                 @if($dokumen->file_path)
-                                    <a href="{{ asset('storage/' . $dokumen->file_path) }}"
-                                        target="_blank"
-                                        class="btn-view">
-                                        <i class="fas fa-eye me-1"></i> Lihat
+                                    <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank" class="btn-base btn-view-soft">
+                                        <i class="fas fa-eye"></i> Lihat
                                     </a>
                                 @endif
 
-                                {{-- Form Upload/Ganti --}}
-                                <form action="{{ route('siswa.dokumensiswa.upload', $dokumen->id) }}"
-                                      method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('siswa.dokumensiswa.upload', $dokumen->id) }}" method="POST" enctype="multipart/form-data" class="m-0">
                                     @csrf
-
-                                    {{-- Input file tersembunyi --}}
-                                    <input type="file" name="file"
-                                           id="fileInput{{ $dokumen->id }}"
-                                           onchange="this.form.submit()">
-
-                                    {{-- Label sebagai tombol (Upload/Ganti) --}}
+                                    <input type="file" name="file" id="file{{ $dokumen->id }}" onchange="this.form.submit()">
+                                    
                                     @if($dokumen->file_path)
-                                        <label for="fileInput{{ $dokumen->id }}" class="btn-ganti">
-                                            <i class="fas fa-edit me-1"></i> Ganti File
+                                        <label for="file{{ $dokumen->id }}" class="btn-base btn-change-success m-0" style="cursor: pointer;">
+                                            <i class="fas fa-sync-alt"></i> Ganti
                                         </label>
                                     @else
-                                        <label for="fileInput{{ $dokumen->id }}" class="btn-upload">
-                                            <i class="fas fa-upload me-1"></i> Upload File
+                                        <label for="file{{ $dokumen->id }}" class="btn-base btn-upload-primary m-0" style="cursor: pointer;">
+                                            <i class="fas fa-upload"></i> Unggah
                                         </label>
                                     @endif
                                 </form>
-
                             </div>
                         </td>
-
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-
-    {{-- 📋 Bagian Detail Data Administrasi (Dropdown/Accordion) --}}
-    <div class="card mt-4 shadow-sm border-0">
-        {{-- Header Detail --}}
-        <div class="detail-card-header" data-bs-toggle="collapse" data-bs-target="#detailData" aria-expanded="true" aria-controls="detailData">
-            <span>Detail Data Administrasi Siswa</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-
-        {{-- Body Detail --}}
-        <div class="collapse show" id="detailData">
-            <div class="detail-card-body">
-                <p class="text-muted mb-0">Data administrasi siswa akan ditampilkan di sini.</p>
-            </div>
-        </div>
-    </div>
-
 </div>
 @endsection

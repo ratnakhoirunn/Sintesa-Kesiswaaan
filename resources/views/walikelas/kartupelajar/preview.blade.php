@@ -233,7 +233,7 @@ body {
         @endunless
 
         {{-- Tombol kembali — semua role boleh --}}
-        <a href="{{ route('admin.kartupelajar.index') }}" 
+        <a href="{{ route('wali.kartupelajar.index') }}" 
             class="btn-custom btn-batal">
             ✖ Kembali
         </a>

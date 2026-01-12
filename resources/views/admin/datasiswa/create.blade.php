@@ -1,7 +1,11 @@
 @extends('layouts.admin')
 
+@section('title', 'Tambah Data Siswa')
+@section('page_title', 'Tambah Data Siswa')
+
 @section('content')
 <style>
+    /* Global Card Style */
     .card-siswa {
         background-color: #ffffff;
         border-radius: 10px;
@@ -26,6 +30,13 @@
         padding: 30px 50px;
     }
 
+    /* Padding adjustment for mobile */
+    @media (max-width: 768px) {
+        .form-body {
+            padding: 20px 15px;
+        }
+    }
+
     .foto-wrapper {
         text-align: center;
         margin-bottom: 30px;
@@ -43,10 +54,12 @@
         background-color: #1e3a67;
         color: white;
         border: none;
-        padding: 6px 16px;
+        padding: 8px 16px;
         border-radius: 5px;
         margin-top: 10px;
         font-size: 0.9rem;
+        cursor: pointer;
+        transition: 0.3s;
     }
 
     .upload-btn:hover {
@@ -57,39 +70,23 @@
         font-weight: 600;
         color: #333;
         font-size: 0.9rem;
+        margin-bottom: 6px;
+        display: block;
     }
 
     .form-control, .form-select {
         border-radius: 6px;
         border: 1px solid #ccc;
-        padding: 10px;
+        padding: 10px 12px;
         font-size: 0.95rem;
         width: 100%;
+        margin-bottom: 5px;
     }
 
-    .btn-primary {
-        background-color: #1e3a67;
-        border: none;
-        padding: 10px 25px;
-        border-radius: 5px;
-        font-weight: 500;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background-color: #2a4c7e;
-    }
-
-    .btn-secondary {
-        background-color: #f0f2f5;
-        color: #555;
-        border: 1px solid #ddd;
-        padding: 10px 25px;
-        border-radius: 5px;
-    }
-
-    .btn-secondary:hover {
-        background-color: #e0e2e5;
+    .form-control:focus, .form-select:focus {
+        outline: none;
+        border-color: #1e3a67;
+        box-shadow: 0 0 0 2px rgba(30, 58, 103, 0.1);
     }
 
     .form-row {
@@ -97,6 +94,14 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 20px 40px;
         margin-bottom: 20px;
+    }
+
+    /* Single column layout for mobile forms */
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
     }
 
     .detail-container {
@@ -108,10 +113,18 @@
 
     .detail-box {
         flex: 1;
-        min-width: 350px;
+        min-width: 300px;
         background-color: #f9fafc;
         border-radius: 10px;
+        overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Full width detail box on mobile */
+    @media (max-width: 768px) {
+        .detail-box {
+            min-width: 100%;
+        }
     }
 
     .detail-box .header {
@@ -131,10 +144,62 @@
         margin-bottom: 15px;
     }
 
+    .btn-primary {
+        background-color: #1e3a67;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: 500;
+        color: white;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #2a4c7e;
+    }
+
+    .btn-secondary {
+        background-color: #f0f2f5;
+        color: #555;
+        border: 1px solid #ddd;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s;
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #e0e2e5;
+    }
+
     .scrollable-content {
         max-height: 80vh;
         overflow-y: auto;
         padding-right: 10px;
+    }
+
+    /* Better scroll height on mobile */
+    @media (max-width: 768px) {
+        .scrollable-content {
+            max-height: 85vh;
+            padding-right: 5px; 
+        }
+        
+        .mt-4.text-center {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            margin-left: 0;
+            text-align: center;
+        }
     }
 </style>
 
@@ -146,15 +211,13 @@
             <form action="{{ route('admin.datasiswa.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <!-- FOTO SISWA -->
                 <div class="foto-wrapper">
                     <img id="preview-image" src="{{ asset('images/student.png') }}" alt="Foto Siswa">
-                    <input type="file" id="foto" name="foto" class="d-none" accept="image/*">
+                    <input type="file" id="foto" name="foto" class="d-none" accept="image/*" style="display:none;">
                     <br>
                     <button type="button" class="upload-btn" onclick="document.getElementById('foto').click()">Upload Foto</button>
                 </div>
 
-                <!-- FORM UTAMA -->
                 <div class="form-row">
                     <div>
                         <label>NIS</label>
@@ -263,13 +326,12 @@
                 </div>
 
                 <div class="form-row">
-                    <div style="grid-column: span 2;">
+                    <div style="grid-column: span 2; @media (max-width: 768px) { grid-column: span 1; }">
                         <label>Alamat Lengkap</label>
                         <textarea name="alamat" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
 
-                <!-- DETAIL SISWA & ALAMAT -->
                 <div class="detail-container">
                     <div class="detail-box">
                         <div class="header">BIODATA DETAIL SISWA</div>
@@ -326,7 +388,6 @@
                     </div>
                 </div>
 
-                <!-- ORANG TUA & WALI -->
                 <div class="detail-container">
                     <div class="detail-box">
                         <div class="header">BIODATA AYAH</div>
@@ -376,7 +437,7 @@
                                 </select>
                             </div>
                             <div class="form-group"><label>Status Hidup</label>
-                                <select name="status_hidup_ayah" class="form-control" required>
+                                <select name="status_hidup_ayah" class="form-control">
                                     <option value="">-- Pilih Status --</option>
                                     <option value="Masih Hidup">Masih Hidup</option>
                                     <option value="Sudah Meninggal">Sudah Meninggal</option>
@@ -396,6 +457,7 @@
                                 <label>Pendidikan</label>
                                 <select name="pendidikan_ibu" class="form-select">
                                     <option value="">Pilih Pendidikan</option>
+                                    <option value="Tidak Sekolah">Tidak Sekolah</option>
                                     <option value="SD">SD</option>
                                     <option value="SMP">SMP</option>
                                     <option value="SMA/SMK Sederajat">SMA/SMK Sederajat</option>
@@ -433,7 +495,7 @@
                                 </select>
                             </div>
                             <div class="form-group"><label>Status Hidup</label>
-                                <select name="status_hidup_ibu" class="form-control" required>
+                                <select name="status_hidup_ibu" class="form-control">
                                     <option value="">-- Pilih Status --</option>
                                     <option value="Masih Hidup">Masih Hidup</option>
                                     <option value="Sudah Meninggal">Sudah Meninggal</option>
@@ -455,6 +517,7 @@
                                 <label>Pendidikan</label>
                                 <select name="pendidikan_wali" class="form-select">
                                     <option value="">Pilih Pendidikan</option>
+                                    <option value="Tidak Sekolah">Tidak Sekolah</option>
                                     <option value="SD">SD</option>
                                     <option value="SMP">SMP</option>
                                     <option value="SMA/SMK Sederajat">SMA/SMK Sederajat</option>

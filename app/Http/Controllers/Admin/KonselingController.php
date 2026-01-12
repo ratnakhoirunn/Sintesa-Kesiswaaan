@@ -25,28 +25,37 @@ class KonselingController extends Controller
         return view('admin.konseling.create', compact('siswas'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nis' => 'required|string',
-            'nama_siswa' => 'required|string',
-            'kelas' => 'required|string',
-            'nama_ortu' => 'required|string',
-            'alamat_ortu' => 'required|string',
-            'no_telp_ortu' => 'required|string',
-            'tanggal' => 'required|date',
-            'topik' => 'required|string',
-            'latar_belakang' => 'nullable|string',
-            'kegiatan_layanan' => 'nullable|string',
-            'status' => 'required|string|in:Menunggu,Disetujui,Ditolak',
-            'tanggapan_admin' => 'nullable|string',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'siswa_nis' => 'required|exists:siswas,nis',
+        'rombel'    => 'required|string',
+        'tanggal'   => 'required|date',
+        'catatan'   => 'nullable|string',
+    ]);
 
-        Konseling::create($request->all());
+    // Ambil data siswa
+    $siswa = Siswa::where('nis', $request->siswa_nis)->firstOrFail();
 
-        return redirect()->route('admin.konseling.index')
-                         ->with('success', 'Data konseling berhasil ditambahkan.');
-    }
+    Konseling::create([
+        'nis'               => $siswa->nis,
+        'nama_siswa'        => $siswa->nama_lengkap,
+        'kelas'             => $request->rombel,
+        'nama_ortu'         => $siswa->nama_ortu ?? '-',
+        'alamat_ortu'       => $siswa->alamat_ortu ?? '-',
+        'no_telp_ortu'      => $siswa->no_telp_ortu ?? '-',
+        'tanggal'           => $request->tanggal,
+        'topik'             => 'Konseling Umum',
+        'latar_belakang'    => $request->catatan,
+        'kegiatan_layanan'  => 'Konseling Individu',
+        'status'            => 'Menunggu',
+        'tanggapan_admin'   => null,
+    ]);
+
+    return redirect()
+        ->route('admin.konseling.index')
+        ->with('success', 'Data konseling berhasil ditambahkan.');
+}
 
     public function edit($id)
     {
@@ -87,19 +96,22 @@ class KonselingController extends Controller
                          ->with('success', 'Data konseling berhasil dihapus.');
     }
 
-    public function proses(Request $request, $id)
+    // Method untuk memproses persetujuan (Setuju/Tolak)
+public function proses(Request $request, $id)
 {
     $request->validate([
         'status' => 'required|in:Disetujui,Ditolak',
-        'tanggapan_admin' => 'nullable|string'
+        'tanggapan_admin' => 'required|string|max:255', // Wajib diisi agar siswa jelas
     ]);
 
     $konseling = Konseling::findOrFail($id);
-    $konseling->status = $request->status;
-    $konseling->tanggapan_admin = $request->tanggapan_admin;
-    $konseling->save();
 
-    return redirect()->route('admin.konseling.index')->with('success', 'Status konseling berhasil diperbarui.');
+    $konseling->update([
+        'status' => $request->status,
+        'tanggapan_admin' => $request->tanggapan_admin, // Simpan pesan admin
+    ]);
+
+    return redirect()->back()->with('success', 'Status konseling berhasil diperbarui.');
 }
 public function show($id)
 {

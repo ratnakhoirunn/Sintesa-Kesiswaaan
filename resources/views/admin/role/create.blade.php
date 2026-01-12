@@ -4,134 +4,164 @@
 @section('page_title', 'Tambah Role')
 
 @section('content')
+
+{{-- Load FontAwesome --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-    body {
-        font-family: 'Poppins', sans-serif;
-    }
+    body { font-family: 'Poppins', sans-serif; }
 
     .form-wrapper {
         background: #ffffff;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         margin: 20px auto;
-        max-width: 950px;
+        max-width: 850px; /* Lebar maksimal agar tidak terlalu lebar di desktop */
     }
 
+    /* HEADER */
     .form-header {
-        background: #0a3d62;
+        background: #123B6B; /* Biru Konsisten */
         color: white;
         font-weight: 600;
-        padding: 14px 25px;
-        font-size: 17px;
-        letter-spacing: 0.5px;
+        padding: 18px 25px;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 3px solid #0a2240;
     }
 
-    .form-body {
-        padding: 35px 50px;
-    }
+    /* BODY */
+    .form-body { padding: 30px 40px; }
+
+    .form-group { margin-bottom: 20px; }
 
     .form-label {
-        font-weight: 500;
+        font-weight: 600;
         color: #333;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
     }
 
     .form-control {
-        border-radius: 6px;
-        border: 1px solid #ced4da;
-        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        padding: 12px 15px;
         font-size: 14px;
+        width: 100%;
+        box-sizing: border-box; /* Penting agar padding tidak melebarkan input */
+        transition: 0.3s;
+        background-color: #f9fafb;
     }
 
     .form-control:focus {
-        border-color: #0d6efd;
-        box-shadow: 0 0 0 2px rgba(13,110,253,0.2);
+        border-color: #123B6B;
+        background-color: #fff;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(18, 59, 107, 0.1);
     }
 
-    .row {
-        display: flex;
-        flex-wrap: wrap;
+    /* GRID SYSTEM (Responsive) */
+    .row-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 Kolom di Desktop */
         gap: 25px;
     }
 
-    .col-half {
-        flex: 1 1 calc(50% - 25px);
-        display: flex;
-        flex-direction: column;
-    }
-
+    /* BUTTONS */
     .btn-container {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end; /* Rata kanan di desktop */
         gap: 15px;
         margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
     }
 
-    .btn-submit {
-        background: #0a3d62;
-        color: white;
+    .btn {
         border: none;
-        border-radius: 6px;
-        padding: 10px 25px;
-        font-weight: 500;
-        transition: 0.3s;
-    }
-
-    .btn-submit:hover {
-        background: #082f4d;
-    }
-
-    .btn-back {
-        background: #6c757d;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        padding: 10px 25px;
-        font-weight: 500;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
         text-decoration: none;
-        transition: 0.3s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: 0.2s;
     }
 
-    .btn-back:hover {
-        background: #5a6268;
-    }
+    .btn-submit { background: #123B6B; color: white; }
+    .btn-submit:hover { background: #0f2e52; box-shadow: 0 4px 10px rgba(18, 59, 107, 0.2); }
 
+    .btn-back { background: #e5e7eb; color: #374151; }
+    .btn-back:hover { background: #d1d5db; color: #111; }
+
+    /* ===========================
+       MEDIA QUERIES (MOBILE)
+       =========================== */
     @media (max-width: 768px) {
-        .col-half {
-            flex: 1 1 100%;
+        .form-wrapper { margin: 10px; width: auto; }
+        
+        .form-body { padding: 25px; }
+
+        .row-grid {
+            grid-template-columns: 1fr; /* Stack jadi 1 kolom di HP */
+            gap: 15px;
         }
-        .form-body {
-            padding: 25px;
+
+        .btn-container {
+            flex-direction: column-reverse; /* Tombol Simpan di atas */
+        }
+
+        .btn {
+            width: 100%; /* Tombol lebar penuh */
         }
     }
 </style>
 
-<div class="form-wrapper shadow-sm">
-    <div class="form-header">TAMBAH ROLE PENGGUNA</div>
+<div class="form-wrapper">
+    
+    {{-- HEADER --}}
+    <div class="form-header">
+        <i class="fas fa-user-plus"></i> TAMBAH ROLE PENGGUNA
+    </div>
+
+    {{-- BODY --}}
     <div class="form-body">
         <form action="{{ route('admin.role.store') }}" method="POST">
             @csrf
-            <div class="row">
-                <div class="col-half">
-                    <label class="form-label">Nama Pengguna</label>
-                    <input type="text" name="nama_pengguna" class="form-control" placeholder="Masukkan nama pengguna" required>
+            
+            <div class="row-grid">
+                
+                {{-- Nama Pengguna --}}
+                <div class="form-group">
+                    <label class="form-label">Nama Pengguna <span style="color:red">*</span></label>
+                    <input type="text" name="nama_pengguna" class="form-control" placeholder="Masukkan nama lengkap" required>
                 </div>
 
-                <div class="col-half">
-                    <label class="form-label">NIP/NIS</label>
-                    <input type="text" name="nip_nis" class="form-control" placeholder="Masukkan NIP atau NIS" required>
+                {{-- NIP/NIS --}}
+                <div class="form-group">
+                    <label class="form-label">NIP / NIS <span style="color:red">*</span></label>
+                    <input type="text" name="nip_nis" class="form-control" placeholder="Nomor Induk Pegawai / Siswa" required>
                 </div>
 
-                <div class="col-half">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="Masukkan email pengguna" required>
+                {{-- Email --}}
+                <div class="form-group">
+                    <label class="form-label">Email <span style="color:red">*</span></label>
+                    <input type="email" name="email" class="form-control" placeholder="contoh@sekolah.sch.id" required>
                 </div>
 
-                <div class="col-half">
-                    <label class="form-label">Role</label>
+                {{-- Role Selection --}}
+                <div class="form-group">
+                    <label class="form-label">Role Pengguna <span style="color:red">*</span></label>
                     <select name="role" class="form-control" required>
                         <option value="">-- Pilih Role --</option>
                         <option value="admin">Admin</option>
@@ -141,13 +171,21 @@
                         <option value="Siswa">Siswa</option>
                     </select>
                 </div>
+
             </div>
 
+            {{-- Tombol Aksi --}}
             <div class="btn-container">
-                <button type="submit" class="btn-submit">💾 Simpan</button>
-                <a href="{{ route('admin.role.index') }}" class="btn-back">⬅ Kembali</a>
+                <a href="{{ route('admin.role.index') }}" class="btn btn-back">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </a>
+                <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-save"></i> Simpan Data
+                </button>
             </div>
+
         </form>
     </div>
 </div>
+
 @endsection

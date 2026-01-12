@@ -1,361 +1,219 @@
 @extends('layouts.admin')
 
-@section('title', 'Konseling')
-@section('page_title', 'Riwayat Konseling Siswa')
+@section('title', 'Manajemen Konseling')
+@section('page_title', 'Manajemen Konseling')
 
 @section('content')
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-    /* === HEADER === */
-    .header-keterlambatan {
-        background-color: #123B6B;
-        color: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 25px;
-        border-radius: 8px 8px 0 0;
-    }
+    /* ... (Style Container & Header sama seperti sebelumnya) ... */
+    .konseling-container { background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 30px; }
+    .header-konseling { background: #123B6B; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+    .header-konseling h4 { margin: 0; font-weight: 600; font-size: 1.2rem; }
+    
+    /* Toolbar & Filter */
+    .toolbar-wrapper { background: #f8f9fa; padding: 15px 30px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+    .btn-tambah { border: 2px solid #123B6B; color: #123B6B; background: #fff; padding: 8px 18px; border-radius: 8px; font-weight: 600; text-decoration: none; transition: 0.3s; font-size: 14px; }
+    .btn-tambah:hover { background: #123B6B; color: #fff; }
 
-    .header-keterlambatan h4 {
-        margin: 0;
-        font-weight: 600;
-    }
+    /* Tabel */
+    .table-responsive { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+    thead { background-color: #2c3e50; color: white; }
+    th, td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 13px; vertical-align: middle; }
+    tbody tr:hover { background-color: #f9fbfd; }
 
-    .tanggal-jam {
-        font-size: 14px;
-        text-align: right;
-    }
+    /* Badge & Aksi */
+    .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+    .bg-menunggu { background: #fff3cd; color: #856404; }
+    .bg-disetujui { background: #d1e7dd; color: #0f5132; }
+    .bg-ditolak { background: #f8d7da; color: #721c24; }
 
-    /* === FILTER === */
-    .filter-wrapper {
-        background: #f8f9fa;
-        padding: 15px 25px;
-        border: 1px solid #ddd;
-        border-top: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    /* Tombol Approval (Bulat) */
+    .btn-circle { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: 0.2s; margin-right: 5px; }
+    .btn-approve { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .btn-approve:hover { background: #22c55e; color: white; transform: scale(1.1); }
+    .btn-reject { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .btn-reject:hover { background: #ef4444; color: white; transform: scale(1.1); }
 
-    .filter-form {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+    /* Tanggapan Admin Display */
+    .admin-note { font-size: 12px; color: #555; background: #f3f4f6; padding: 8px; border-radius: 6px; border-left: 3px solid #123B6B; margin-top: 5px; display: inline-block; max-width: 200px; }
 
-    /* Tombol Tambah */
-    .btn-tambah {
-        border: 2px solid #123B6B;
-        color: #123B6B;
-        background-color: #fff;
-        padding: 8px 18px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-
-    .btn-tambah:hover {
-        background-color: #123B6B;
-        color: #fff;
-    }
-
-    /* === TABLE === */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-
-    thead {
-        background-color: #2c3e50;
-    }
-
-    th, td {
-        border: 1px solid #ddd;
-        padding: 6px 10px;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    th {
-        color: white;
-        font-weight: 600;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    /* === AKSI === */
-    .lihat { color: #007bff; font-weight: 600; margin-right: 8px; }
-    .edit { color: #ff9800; font-weight: 600; margin-right: 8px; }
-    .hapus { color: #e74c3c; font-weight: 600; }
-
-    .lihat:hover { color: #0056b3; }
-    .edit:hover { color: #e07b00; }
-    .hapus:hover { color: #c0392b; }
-
-    .lihat i, .edit i { margin-right: 3px; }
-
-    /* === TOMBOL KONFIRMASI === */
-    .btn-approve {
-        background: #28a745;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 12px;
-        cursor: pointer;
-        margin: 2px;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        transition: .2s;
-    }
-
-    .btn-approve:hover {
-        background: #218838;
-    }
-
-    .btn-reject {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 12px;
-        cursor: pointer;
-        margin: 2px;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        transition: .2s;
-    }
-
-    .btn-reject:hover {
-        background: #c82333;
-    }
-
-    .konfirmasi-wrapper {
-    display: flex;
-    gap: 8px; 
-    justify-content: center;
-    align-items: center;
-}
-
-.btn-approve, .btn-reject {
-    padding: 6px 14px;
-    border-radius: 6px;
-    border: none;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.btn-approve {
-    background: #28a745;
-    color: white;
-}
-
-.btn-approve:hover {
-    background: #218838;
-}
-
-.btn-reject {
-    background: #dc3545;
-    color: white;
-}
-
-.btn-reject:hover {
-    background: #c82333;
-}
-.filter-form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: ; /* FONT SAMA */
-}
-
-.filter-icon {
-    font-size: 20px;
-    color: #123B6B;
-}
-
-.filter-input {
-    font-family: 'Poppins', sans-serif; /* FONT NYA SAMA */
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.filter-btn {
-    font-family: 'Poppins', sans-serif; /* FONT SAMA */
-    padding: 7px 12px;
-    border: none;
-    background: #123B6B;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s;
-}
-
-.filter-btn:hover {
-    background: #0d2d52;
-}
-
-.tanggal-jam {
-    text-align: right;
-    font-size: 14px;
-    color: #fff;
-    font-weight: 600;
-    line-height: 1.2;
-}
-
+    /* === MODAL STYLE === */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; align-items: center; justify-content: center; }
+    .modal-box { background: white; width: 90%; max-width: 500px; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: slideDown 0.3s ease; }
+    .modal-header { background: #123B6B; color: white; padding: 15px 20px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 20px; }
+    .modal-footer { padding: 15px 20px; background: #f8f9fa; text-align: right; border-top: 1px solid #eee; }
+    .close-modal { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    
+    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>
 
-{{-- Header --}}
-<div class="header-keterlambatan">
-    <h4>Manajemen Konseling Siswa</h4>
-    <div class="tanggal-jam" id="tanggalJamSiswa"></div>
+{{-- ALERT SUCCESS --}}
+@if(session('success'))
+    <div style="background:#d1fae5; color:#065f46; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #a7f3d0;">
+        <i class="fas fa-check-circle"></i> {{ session('success') }}
+    </div>
+@endif
+
+<div class="konseling-container">
+    {{-- Header --}}
+    <div class="header-konseling">
+        <h4>📋 Manajemen Konseling</h4>
+        <div id="tanggalJamAdmin" style="text-align: right; font-size: 0.9rem;"></div>
+    </div>
+
+    {{-- Toolbar --}}
+    <div class="toolbar-wrapper">
+        <form method="GET" action="{{ route('admin.keterlambatan.index') }}" style="display:flex; gap:10px;">
+            <input type="date" name="tanggal" value="{{ request('tanggal') }}" style="padding:8px; border-radius:6px; border:1px solid #ccc;">
+            <button type="submit" style="background:#123B6B; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">Filter</button>
+        </form>
+        <a href="{{ route('admin.konseling.create') }}" class="btn-tambah">+ Tambah Data</a>
+    </div>
+
+    {{-- Tabel --}}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="20%">Siswa & Kelas</th>
+                    <th width="20%">Topik & Layanan</th>
+                    <th width="15%">Jadwal Request</th>
+                    <th width="10%">Status</th>
+                    <th width="20%">Konfirmasi / Tanggapan</th>
+                    <th width="10%">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($konselings as $index => $item)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>
+                            <b>{{ $item->nama_siswa }}</b><br>
+                            <span style="font-size:11px; color:#666;">{{ $item->kelas }}</span>
+                        </td>
+                        <td>
+                            <div style="color:#123B6B; font-weight:600;">{{ Str::limit($item->topik, 20) }}</div>
+                            <span style="font-size:11px; color:#888;">{{ $item->jenis_layanan ?? '-' }}</span>
+                        </td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}<br>
+                            <small>{{ \Carbon\Carbon::parse($item->jam_pengajuan)->format('H:i') }} WIB</small>
+                        </td>
+                        <td>
+                            @php
+                                $cls = 'bg-menunggu';
+                                if($item->status == 'Disetujui') $cls = 'bg-disetujui';
+                                elseif($item->status == 'Ditolak') $cls = 'bg-ditolak';
+                            @endphp
+                            <span class="badge {{ $cls }}">{{ ucfirst($item->status) }}</span>
+                        </td>
+                        
+                        {{-- LOGIKA APPROVAL --}}
+                        <td>
+                            @if($item->status == 'Menunggu')
+                                {{-- Tombol Membuka Modal --}}
+                                <button type="button" class="btn-circle btn-approve" onclick="openModal('{{ $item->id }}', 'Disetujui')" title="Setujui">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button type="button" class="btn-circle btn-reject" onclick="openModal('{{ $item->id }}', 'Ditolak')" title="Tolak">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            @else
+                                {{-- Jika sudah diproses, TAMPILKAN TANGGAPAN --}}
+                                <div class="admin-note">
+                                    <b>Admin:</b> {{ $item->tanggapan_admin }}
+                                </div>
+                            @endif
+                        </td>
+
+                        <td>
+                            <a href="{{ route('admin.konseling.show', $item->id) }}" style="color:#123B6B;"><i class="fas fa-eye"></i></a>
+                            <form action="{{ route('admin.konseling.destroy', $item->id) }}" method="POST" style="display:inline; margin-left:10px;">
+                                @csrf @method('DELETE')
+                                <button type="submit" style="border:none; background:none; color:red; cursor:pointer;" onclick="return confirm('Hapus?')"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">Belum ada data.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
-{{-- Filter --}}
-<div class="filter-wrapper">
-    <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="filter-form">
-    <i class="bi bi-calendar-date filter-icon"></i>
-    <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}" class="filter-input">
-    <button type="submit" class="filter-btn">Tampilkan</button>
-</form>
-
-
-    <a href="{{ route('admin.konseling.create') }}" class="btn-tambah">
-        + Tambah Data Konseling
-    </a>
-</div>
-
-<div class="p-4">
-<table class="table">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Nama Siswa</th>
-            <th>Kelas</th>
-            <th>Nama Ortu</th>
-            <th>Topik</th>
-            <th>Tanggal</th>
-            <th>Status</th>
-            <th>Aksi</th>
-            <th>Konfirmasi</th> 
-        </tr>
-    </thead>
-
-    <tbody>
-        @forelse($konselings as $index => $item)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td style="text-align:left;">{{ $item->nama_siswa }}</td>
-                <td>{{ $item->kelas }}</td>
-                <td>{{ $item->nama_ortu }}</td>
-                <td style="text-align:left;">{{ $item->topik }}</td>
-                <td>{{ $item->tanggal }}</td>
-
-                <td>
-                    @if ($item->status == 'Menunggu')
-                        <span class="badge bg-warning text-dark">Menunggu</span>
-                    @elseif ($item->status == 'Disetujui')
-                        <span class="badge bg-success">Disetujui</span>
-                    @else
-                        <span class="badge bg-danger">Ditolak</span>
-                    @endif
-                </td>
-
-                {{-- Aksi --}}
-                <td>
-                    <a href="{{ route('admin.konseling.show', $item->id) }}" class="lihat">
-                        <i class="fas fa-eye"></i> Lihat
-                    </a>
-                    <a href="{{ route('admin.konseling.edit', $item->id) }}" class="edit">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
-                    <form action="{{ route('admin.konseling.destroy', $item->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="hapus" style="background:none;border:none;cursor:pointer;"
-                            onclick="return confirm('Yakin ingin menghapus data ini?')">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </form>
-                </td>
-
-                {{-- Konfirmasi --}}
-                <td>
-    @if ($item->status == 'Menunggu')
-        <div class="konfirmasi-wrapper">
-            <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="status" value="Disetujui">
-                <button type="submit" class="btn-approve">
-                    <i class="fas fa-check"></i> Setujui
-                </button>
-            </form>
-
-            <form action="{{ route('admin.konseling.proses', $item->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="status" value="Ditolak">
-                <button type="submit" class="btn-reject">
-                    <i class="fas fa-times"></i> Tolak
-                </button>
-            </form>
+{{-- === MODAL POPUP APPROVAL === --}}
+<div class="modal-overlay" id="approvalModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span id="modalTitle">Konfirmasi Konseling</span>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
         </div>
-    @else
-        <span style="color:#555; font-weight:600;">-</span>
-    @endif
-</td>
+        
+        {{-- Form action akan di-set lewat JS --}}
+        <form id="approvalForm" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div class="modal-body">
+                {{-- Input Hidden Status --}}
+                <input type="hidden" name="status" id="inputStatus">
 
-            </tr>
-        @empty
-            <tr>
-                <td colspan="9" class="text-center">Belum ada data konseling</td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; font-weight:600; margin-bottom:5px;">Berikan Tanggapan / Catatan:</label>
+                    <textarea name="tanggapan_admin" id="inputTanggapan" rows="4" 
+                        style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px;" 
+                        placeholder="Contoh: Silakan datang ke ruang BK jam 10.00..." required></textarea>
+                    <small style="color:#666;">*Wajib diisi agar siswa mengetahui alasannya.</small>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal()" style="background:#ccc; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-right:5px;">Batal</button>
+                <button type="submit" style="background:#123B6B; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">Simpan & Proses</button>
+            </div>
+        </form>
+    </div>
 </div>
 
+{{-- SCRIPT --}}
 <script>
-function updateClock() {
-    const now = new Date();
+    function openModal(id, status) {
+        // Set Action URL Form secara dinamis
+        let url = "{{ route('admin.konseling.proses', ':id') }}";
+        url = url.replace(':id', id);
+        document.getElementById('approvalForm').action = url;
 
-    const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
+        // Set Status di Input Hidden
+        document.getElementById('inputStatus').value = status;
 
-    const tanggal = now.toLocaleDateString('id-ID', options);
-    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+        // Ubah Judul Modal & Placeholder sesuai status
+        if(status === 'Disetujui') {
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-check-circle"></i> Setujui Pengajuan';
+            document.getElementById('inputTanggapan').placeholder = "Berikan pesan untuk siswa (Misal: Datang tepat waktu ya...)";
+        } else {
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-times-circle"></i> Tolak Pengajuan';
+            document.getElementById('inputTanggapan').placeholder = "Berikan alasan penolakan (Misal: Jadwal penuh, coba hari lain...)";
+        }
 
-    document.getElementById('tanggalJamSiswa').innerHTML = `
-        ${tanggal}<br>${jam}
-    `;
-}
+        // Tampilkan Modal
+        document.getElementById('approvalModal').style.display = 'flex';
+    }
 
-// update setiap detik
-setInterval(updateClock, 1000);
-// panggil sekali saat awal load
-updateClock();
+    function closeModal() {
+        document.getElementById('approvalModal').style.display = 'none';
+    }
+
+    // Jam Digital
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('tanggalJamAdmin').innerHTML = now.toLocaleDateString('id-ID') + '<br>' + now.toLocaleTimeString('id-ID');
+    }, 1000);
 </script>
 
 @endsection

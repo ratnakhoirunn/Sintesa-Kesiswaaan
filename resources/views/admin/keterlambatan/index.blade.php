@@ -4,10 +4,14 @@
 @section('page_title', 'Keterlambatan dan Perizinan')
 
 @section('content')
+{{-- Load Icons & Fonts --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-    /* === HEADER === */
+    body { font-family: 'Poppins', sans-serif; }
+
+    /* HEADER */
     .header-keterlambatan {
         background-color: #123B6B;
         color: white;
@@ -17,244 +21,218 @@
         padding: 15px 25px;
         border-radius: 8px 8px 0 0;
     }
+    .header-keterlambatan h4 { margin: 0; font-weight: 600; font-size: 1.2rem; }
+    .tanggal-jam { text-align: right; font-size: 13px; color: #fff; font-weight: 600; line-height: 1.4; }
 
-    .header-keterlambatan h4 {
-        margin: 0;
-        font-weight: 600;
-    }
-
-    /* === FILTER === */
+    /* FILTER WRAPPER */
     .filter-wrapper {
-        background: #f8f9fa;
-        padding: 15px 25px;
-        border: 1px solid #ddd;
-        border-top: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        background: #f8f9fa; padding: 15px 25px;
+        border: 1px solid #ddd; border-top: none;
+        display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
     }
+    .filter-form { display: flex; align-items: center; gap: 10px; }
+    .filter-form input[type="date"] { border: 1px solid #ccc; padding: 8px 12px; border-radius: 6px; font-size: 14px; outline: none; }
+    .filter-form button { background-color: #123B6B; color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+    .filter-form button:hover { background-color: #0f2e52; }
 
-    .filter-form {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .filter-form input[type="date"] {
-        border: 1px solid #ccc;
-        padding: 8px 10px;
-        border-radius: 6px;
-        font-size: 14px;
-    }
-
-    .filter-form button {
-        background-color: #123B6B;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-    .filter-form button:hover {
-        background-color: #0f2e52;
-    }
-
-    /* Tombol Tambah */
     .btn-tambah {
-        border: 2px solid #123B6B;
-        color: #123B6B;
-        background-color: #fff;
-        padding: 8px 18px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: 0.3s;
+        border: 2px solid #123B6B; color: #123B6B; background-color: #fff;
+        padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: 0.3s;
+        display: inline-block; white-space: nowrap;
     }
+    .btn-tambah:hover { background-color: #123B6B; color: #fff; }
 
-    .btn-tambah:hover {
-        background-color: #123B6B;
-        color: #fff;
+    /* TABLE STYLES */
+    .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; }
+    thead { background-color: #2c3e50; }
+    th, td { border: 1px solid #ddd; padding: 12px 15px; text-align: center; font-size: 13px; vertical-align: middle; }
+    th { color: #fff; font-weight: 600; white-space: nowrap; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    
+    .td-nama { text-align: left !important; padding-left: 15px; min-width: 150px; }
+
+    /* STATUS BADGE */
+    .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; color: white; }
+    .bg-pending { background: #facc15; color: #854d0e; border: 1px solid #fde047; }
+    .bg-terima  { background: #16a34a; border: 1px solid #22c55e; }
+    .bg-tolak   { background: #dc2626; border: 1px solid #ef4444; }
+
+    /* ACTION BUTTONS (Lihat Bukti & Cetak) */
+    .btn-icon {
+        width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+        border-radius: 6px; text-decoration: none; transition: 0.2s; font-size: 14px;
     }
+    .btn-view { background: #e0f2fe; color: #0284c7; }
+    .btn-view:hover { background: #bae6fd; color: #0369a1; }
+    
+    .btn-print { background: #f0fdf4; color: #16a34a; }
+    .btn-print:hover { background: #dcfce7; color: #15803d; }
 
-    /* === TABLE === */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
+    /* APPROVAL BUTTONS (Terima / Tolak) */
+    .approval-wrapper { display: flex; gap: 6px; justify-content: center; }
+    .btn-approve {
+        background: #dcfce7; color: #166534; border: 1px solid #86efac;
+        padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;
     }
+    .btn-approve:hover { background: #22c55e; color: white; border-color: #22c55e; }
 
-    thead {
-        background-color: #2c3e50;
+    .btn-reject {
+        background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;
+        padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;
     }
+    .btn-reject:hover { background: #ef4444; color: white; border-color: #ef4444; }
 
-    th, td {
-        border: 1px solid #ddd;
-        padding: 6px 10px;
-        text-align: center;
-        font-size: 12px;
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        .header-keterlambatan { flex-direction: column; text-align: center; gap: 10px; }
+        .filter-wrapper { flex-direction: column; align-items: stretch; padding: 15px; }
+        .filter-form { width: 100%; display: flex; gap: 10px; }
+        .filter-form input[type="date"] { flex: 1; }
+        .btn-tambah { width: 100%; text-align: center; padding: 10px; }
+        .p-3 { padding: 15px !important; }
     }
-
-    th {
-        color: #fff;
-        font-weight: 600;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    /* Nama rata kiri */
-    .td-nama {
-        text-align: left !important;
-        padding-left: 10px;
-    }
-
-    /* Tombol Status */
-    .btn-status {
-        border: none;
-        padding: 6px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-    .btn-pending { background: #f1c40f; color: white; }
-    .btn-proses { background: #3498db; color: white; }
-    .btn-terima { background: #27ae60; color: white; }
-
-    /* Tombol Cetak */
-    .btn-cetak {
-        background: none;
-        border: none;
-        color: #123B6B;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-    }
-
-    .btn-cetak i {
-        font-size: 18px;
-    }
-
-    .tanggal-jam {
-    text-align: right;
-    font-size: 14px;
-    color: #fff;
-    font-weight: 600;
-    line-height: 1.2;
-}
 </style>
 
-<div class="card shadow-sm">
+<div class="card shadow-sm" style="background: white; border-radius: 8px; overflow: hidden;">
 
     {{-- Header --}}
     <div class="header-keterlambatan">
-        <h4>Manajemen Keterlambatan dan Perizinan Siswa</h4>
-        <div class="tanggal-jam" id="tanggalJamSiswa"></div>
+        <h4>Manajemen Keterlambatan Siswa</h4>
+        <div class="tanggal-jam" id="tanggalJamAdmin"></div>
     </div>
 
-    {{-- Filter Tanggal + Tambah --}}
+    {{-- Filter & Tambah --}}
     <div class="filter-wrapper">
         <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="filter-form">
-            <i class="bi bi-calendar-date" style="font-size: 20px; color:#123B6B;"></i>
+            <i class="fa-solid fa-calendar-days" style="color:#123B6B;"></i>
             <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}">
-            <button type="submit">Tampilkan</button>
+            <button type="submit">Filter</button>
         </form>
 
         <a href="{{ route('admin.keterlambatan.create') }}" class="btn-tambah">
-            + Tambah Data Keterlambatan
+            <i class="fa-solid fa-plus-circle"></i> Tambah Manual
         </a>
     </div>
 
     {{-- Tabel Data --}}
     <div class="p-3">
-        <p style="font-weight: 600; margin-top:10px;">Daftar pengajuan Surat Izin Terlambat (SIT) siswa</p>
+        <p style="font-weight: 600; margin-top:5px; margin-bottom: 15px; color: #333;">
+            Daftar pengajuan Surat Izin Terlambat (SIT) siswa
+        </p>
 
-        <table>
-            <thead>
-                <tr>
-                    <th style="width:5%;">No.</th>
-                    <th style="width:25%;">Nama</th>
-                    <th style="width:15%;">NIS</th>
-                    <th style="width:25%;">Kedatangan (terlambat)</th>
-                    <th style="width:20%;">Keterangan</th>
-                    <th style="width:15%;">Status</th>
-                    <th style="width:5%;">Cetak</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse ($keterlambatans as $index => $item)
+        <div class="table-responsive">
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-
-                        <td class="td-nama">
-                            {{ $item->siswa->nama_lengkap ?? '-' }}
-                        </td>
-
-                        <td>{{ $item->siswa->nis ?? '-' }}</td>
-
-                        <td>
-                            {{ \Carbon\Carbon::parse($item->jam_datang)->format('H.i') }}
-                            ({{ $item->menit_terlambat }} menit)
-                        </td>
-
-                        <td>{{ $item->keterangan ?? '-' }}</td>
-
-                        {{-- Status --}}
-                        <td>
-                            <form action="{{ route('admin.keterlambatan.updateStatus', $item->id) }}"
-                                  method="POST" style="display:flex; gap:4px; justify-content:center;">
-                                @csrf
-                                @method('PUT')
-
-                                <button name="status" value="pending" class="btn-status btn-pending">Pending</button>
-                                <button name="status" value="terima" class="btn-status btn-terima">Terima</button>
-                            </form>
-                        </td>
-
-                        {{-- Cetak --}}
-                        <td style="text-align:center;">
-                            <a href="{{ route('admin.keterlambatan.cetak', $item->id) }}" class="btn-print">
-                                <i class="fa-solid fa-print"></i> 
-                            </a>
-                        </td>
+                        <th width="5%">No.</th>
+                        <th width="20%">Nama Siswa</th>
+                        <th width="10%">Jam Datang</th>
+                        <th width="25%">Keterangan</th>
+                        <th width="10%">Bukti</th>
+                        <th width="15%">Status</th>
+                        <th width="15%">Aksi</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-muted">Tidak ada data keterlambatan</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @forelse ($keterlambatans as $index => $item)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+
+                            <td class="td-nama">
+                                <strong>{{ $item->siswa->nama_lengkap ?? '-' }}</strong><br>
+                                <span style="font-size: 11px; color: #666;">
+                                    {{ $item->siswa->rombel ?? '' }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span style="font-weight: 600; color: #d35400;">
+                                    {{ \Carbon\Carbon::parse($item->jam_datang)->format('H:i') }}
+                                </span>
+                            </td>
+
+                            <td style="text-align: left;">{{ Str::limit($item->keterangan, 30) }}</td>
+
+                            {{-- KOLOM BUKTI --}}
+                            <td>
+                                @if($item->dokumen)
+                                    <a href="{{ asset('uploads/dokumen_izin/' . $item->dokumen) }}" target="_blank" class="btn-icon btn-view" title="Lihat Bukti">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                @else
+                                    <span style="color:#ccc;">-</span>
+                                @endif
+                            </td>
+
+                            {{-- KOLOM STATUS --}}
+                            <td>
+                                @if($item->status == 'terima')
+                                    <span class="badge bg-terima">Diterima</span>
+                                @elseif($item->status == 'tolak')
+                                    <span class="badge bg-tolak">Ditolak</span>
+                                @else
+                                    <span class="badge bg-pending">Menunggu</span>
+                                @endif
+                            </td>
+
+                            {{-- KOLOM AKSI / APPROVAL --}}
+                            <td>
+                                @if($item->status == 'Menunggu' || $item->status == 'pending')
+                                    <div class="approval-wrapper">
+                                        {{-- Tombol Terima --}}
+                                        <form action="{{ route('admin.keterlambatan.updateStatus', $item->id) }}" method="POST">
+                                            @csrf @method('PUT')
+                                            <input type="hidden" name="status" value="terima">
+                                            <button type="submit" class="btn-approve" title="Terima Izin">
+                                                <i class="fa-solid fa-check"></i>
+                                            </button>
+                                        </form>
+
+                                        {{-- Tombol Tolak --}}
+                                        <form action="{{ route('admin.keterlambatan.updateStatus', $item->id) }}" method="POST">
+                                            @csrf @method('PUT')
+                                            <input type="hidden" name="status" value="tolak">
+                                            <button type="submit" class="btn-reject" title="Tolak Izin" onclick="return confirm('Yakin ingin menolak izin ini?')">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @elseif($item->status == 'terima')
+                                    {{-- Jika Diterima -> Bisa Cetak --}}
+                                    <a href="{{ route('admin.keterlambatan.cetak', $item->id) }}" class="btn-icon btn-print" target="_blank" title="Cetak Surat">
+                                        <i class="fa-solid fa-print"></i>
+                                    </a>
+                                @else
+                                    <span style="font-size:12px; color:#aaa;">Selesai</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-muted" style="padding: 30px;">
+                                <i class="fa-regular fa-folder-open" style="font-size: 24px; margin-bottom: 10px; display:block;"></i>
+                                Tidak ada data pengajuan izin pada tanggal ini.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
-function updateClock() {
-    const now = new Date();
-
-    const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-
-    const tanggal = now.toLocaleDateString('id-ID', options);
-    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
-
-    document.getElementById('tanggalJamSiswa').innerHTML = `
-        ${tanggal}<br>${jam}
-    `;
-}
-
-// update setiap detik
-setInterval(updateClock, 1000);
-// panggil sekali saat awal load
-updateClock();
+    function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const tanggal = now.toLocaleDateString('id-ID', options);
+        const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' }).replace('.', ':');
+        document.getElementById('tanggalJamAdmin').innerHTML = `${tanggal}<br>${jam} WIB`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 </script>
+
 @endsection

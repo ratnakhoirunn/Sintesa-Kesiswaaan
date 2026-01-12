@@ -1,9 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
+@section('title', 'Detail Data Siswa')
+@section('page_title', 'Detail Data Siswa')
 <style>
     /* ---------------------------------
-       Gaya CSS dari Form Create Anda
+       Gaya CSS Detail Siswa Responsif
     ------------------------------------*/
     .card-siswa {
         background-color: #ffffff;
@@ -29,6 +31,13 @@
         padding: 30px 50px;
     }
 
+    /* Penyesuaian padding untuk mobile */
+    @media (max-width: 768px) {
+        .form-body {
+            padding: 20px 15px;
+        }
+    }
+
     .foto-wrapper {
         text-align: center;
         margin-bottom: 30px;
@@ -44,68 +53,76 @@
     
     /* Gaya untuk tampilan detail */
     .detail-value {
-        padding: 1px 5px;
-        border-radius: 10px;
+        padding: 8px 12px; /* Sedikit diperbesar paddingnya agar lebih enak dilihat */
+        border-radius: 8px; /* Radius sedikit dikurangi agar lebih modern */
         background-color: #f9f9f9;
         border: 1px solid #ccc;
         font-size: 0.95rem;
         color: #333;
         font-weight: 500;
-        min-height: 40px; /* Menjaga konsistensi tinggi */
+        min-height: 40px; 
         display: flex;
         align-items: center;
+        word-break: break-word; /* Mencegah teks panjang keluar dari kotak */
     }
     
     label {
         font-weight: 600;
         color: #333;
         font-size: 0.9rem;
+        margin-bottom: 5px; /* Memberikan jarak antara label dan value */
+        display: block;
     }
 
     .btn-blue {
-    display: inline-block;
-    background-color: #1e3a67; /* biru Bootstrap */
-    color: white;
-    padding: 8px 16px;
-    border-radius: 5px;
-    text-decoration: none;
-    border: none;
-    transition: background-color 0.3s ease;
-    margin: 0 6px; /* jarak antar tombol */
-}
+        display: inline-block;
+        background-color: #1e3a67; 
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        border: none;
+        transition: background-color 0.3s ease;
+        margin: 0 6px; 
+    }
 
-.btn-blue:hover {
-    background-color: #0056b3; /* biru lebih gelap saat hover */
-    color: white;
-    text-decoration: none;
-}
+    .btn-blue:hover {
+        background-color: #0056b3; 
+        color: white;
+        text-decoration: none;
+    }
 
-.btn-gray {
-    display: inline-block;
-    background-color: #4a4a4a;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 5px;
-    text-decoration: none;
-    border: none;
-    transition: background-color 0.3s ease;
-    margin: 0 6px; /* jarak antar tombol */
-}
+    .btn-gray {
+        display: inline-block;
+        background-color: #4a4a4a;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        border: none;
+        transition: background-color 0.3s ease;
+        margin: 0 6px; 
+    }
 
-.btn-gray:hover {
-    background-color: #3a3a3a;
-    color: white;
-    text-decoration: none;
-}
-
-
-
+    .btn-gray:hover {
+        background-color: #3a3a3a;
+        color: white;
+        text-decoration: none;
+    }
 
     .form-row {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px 40px;
         margin-bottom: 20px;
+    }
+
+    /* Media query untuk form row menjadi 1 kolom di mobile */
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
     }
 
     .detail-container {
@@ -117,11 +134,18 @@
 
     .detail-box {
         flex: 1;
-        min-width: 350px;
+        min-width: 300px; /* Ukuran min-width sedikit dikurangi agar pas di layar kecil */
         background-color: #f9fafc;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Agar detail box memenuhi lebar layar di mobile */
+    @media (max-width: 768px) {
+        .detail-box {
+            min-width: 100%;
+        }
     }
 
     .detail-box .header {
@@ -145,6 +169,13 @@
         max-height: 80vh;
         overflow-y: auto;
         padding-right: 10px;
+    }
+    
+    /* Penyesuaian scrollable content di mobile agar tidak terlalu pendek */
+    @media (max-width: 768px) {
+        .scrollable-content {
+            max-height: 90vh;
+        }
     }
 </style>
 
@@ -230,7 +261,7 @@
             </div>
 
             <div class="form-row">
-                <div style="grid-column: span 2;">
+                <div style="grid-column: span 2; @media (max-width: 768px) { grid-column: span 1; }">
                     <label>Alamat Lengkap</label>
                     <div class="detail-value" style="min-height: 80px;">{{ $siswa->alamat ?? '-' }}</div>
                 </div>
