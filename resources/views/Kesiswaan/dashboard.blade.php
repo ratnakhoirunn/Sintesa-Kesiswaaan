@@ -43,9 +43,9 @@
     }
     .stat-card:hover { transform: translateY(-3px); }
 
-    .border-blue { border-left-color: #3b82f6; }
-    .border-orange { border-left-color: #f97316; }
-    .border-green { border-left-color: #10b981; }
+    .border-blue { border-left-color: #94B4C1; }
+    .border-orange { border-left-color: #94B4C1; }
+    .border-green { border-left-color: #94B4C1 ; }
 
     .stat-header { display: flex; justify-content: space-between; align-items: center; }
     .stat-icon {
@@ -101,8 +101,8 @@
 {{-- 1. WELCOME --}}
 <div class="welcome-card">
     <div class="welcome-content">
-        <h1>Dashboard Kesiswaan</h1>
-        <p>SMKN 2 Yogyakarta</p>
+        <h1>Selamat Datang, Kesiswaan</h1>
+        <p>Panel Informasi Kesiswaan SMKN 2 Yogyakarta</p>
     </div>
 </div>
 
@@ -214,21 +214,15 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     
-    // Fungsi Menyingkat Nama Jurusan
-    function singkatJurusan(nama) {
-        const mapping = {
-            'Teknik Kendaraan Ringan': 'TKR',
-            'Teknik Pemesinan': 'TP',
-            'Teknik Instalasi Tenaga Listrik': 'TITL',
-            'Teknik Komputer dan Jaringan': 'TKJ',
-            'Sistem Informasi Jaringan dan Aplikasi (Pengembangan Perangkat Lunak dan Gim)':'SIJA',
-            'Teknik Audio Video': 'TAV',
-            'Teknik Konstruksi dan Perumahan': 'TKP',
-            'Desain Pemodelan dan Informasi Bangunan': 'DPIB',
-            'Teknik Geomatika': 'GEO',
-            'Teknik Elektronika Industri': 'TEI'
-        };
-        return mapping[nama] || nama;
+    // Fungsi Menyingkat Nama Jurusan (DIUBAH AGAR PERSIS SEPERTI DASHBOARD ADMIN)
+    function singkatJurusan(name) {
+        return name
+            .replace(/Teknik/g, 'T.')
+            .replace(/dan/g, '&')
+            .split(' ')
+            .map(word => word.length > 3 ? word[0] : word)
+            .join('')
+            .toUpperCase();
     }
 
     const rawDataJurusan = {!! json_encode($dataJurusan) !!};

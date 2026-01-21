@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class SiswaImport implements ToModel, WithHeadingRow, WithValidation
 {
@@ -35,6 +36,7 @@ class SiswaImport implements ToModel, WithHeadingRow, WithValidation
                     'tanggal_lahir'  => $this->parseDate($row['tanggal_lahir'] ?? null),
                     'agama'          => $row['agama'] ?? null,
                     'alamat_lengkap' => $row['alamat_lengkap'] ?? null,
+                    'password'       => Hash::make('siswa123'),
                 ]
             );
 
