@@ -9,11 +9,11 @@
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
 
-    // === LOGIC DATA ===
+    // === LOGIC DATA (TIDAK BERUBAH) ===
     $nis = Auth::guard('siswa')->user()->nis;
     $siswa = Auth::guard('siswa')->user();
 
-    // 1. Ambil Notifikasi (Logic Baru)
+    // 1. Ambil Notifikasi
     $notifikasis = [];
     try {
         if (\Illuminate\Support\Facades\Schema::hasTable('notifikasis')) {
@@ -35,8 +35,11 @@
 @endphp
 
 <style>
-    /* === GLOBAL STYLES === */
-    body { background-color: #f5f7fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    /* === GLOBAL RESPONSIVE STYLES === */
+    body { background-color: #f5f7fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-font-smoothing: antialiased; }
+    
+    /* Agar padding tidak menambah lebar elemen */
+    * { box-sizing: border-box; }
 
     /* === HEADER SAMBUTAN === */
     .welcome-card {
@@ -64,13 +67,14 @@
         font-size: 16px; flex-shrink: 0;
     }
     .notif-content h4 { margin: 0 0 4px 0; font-size: 16px; font-weight: 700; color: #d39e00; }
-    .notif-content p { margin: 0; font-size: 14px; line-height: 1.4; color: #666; }
+    .notif-content p { margin: 0; font-size: 14px; line-height: 1.4; color: #666; word-wrap: break-word; }
     
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* === GRID LAYOUT === */
+    /* === GRID LAYOUT (RESPONSIVE OTOMATIS) === */
     .dashboard-grid {
         display: grid; 
+        /* Minmax 240px berarti jika layar < 500px dia otomatis jadi 1 kolom, jika lebar dia jadi banyak kolom */
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
         gap: 20px;
     }
@@ -88,12 +92,18 @@
         background-color: #17375d; color: white; font-weight: 600;
         font-size: 14px; padding: 12px 15px; text-transform: uppercase; letter-spacing: 0.5px;
     }
-    .card-content { padding: 20px; text-align: center; background: #fff; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    .card-content { 
+        padding: 20px; text-align: center; background: #fff; 
+        flex: 1; display: flex; flex-direction: column; 
+        justify-content: center; align-items: center; 
+    }
 
     /* === KOMPONEN KARTU === */
     .barcode-box { 
         background: #f8f9fa; border: 1px solid #e9ecef; 
         border-radius: 8px; padding: 15px 10px; margin-top: 5px; width: 100%;
+        /* Agar barcode panjang tidak merusak layout HP */
+        overflow-x: auto; display: flex; justify-content: center;
     }
     
     .progress-bar-wrapper { width: 100%; margin-top: 10px; }
@@ -109,8 +119,11 @@
         background-color: #17375d; color: white; padding: 12px 25px; border: none;
         border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;
         transition: background 0.2s ease; width: 100%;
+        /* Min height agar mudah dipencet di HP */
+        min-height: 44px; display: flex; align-items: center; justify-content: center;
     }
     .btn-cetak:hover { background-color: #0f2740; }
+    .btn-cetak:active { transform: scale(0.98); }
 
     /* === TABEL JADWAL === */
     .jadwal-box {
@@ -118,44 +131,61 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 25px; border: 1px solid #eee;
     }
     .jadwal-header {
-        background-color: #17375d; color: white; font-weight: 600; padding: 15px 20px; font-size: 16px;
+        background-color: #17375d; color: white; font-weight: 600; 
+        padding: 15px 20px; font-size: 16px;
+        display: flex; justify-content: space-between; align-items: center;
     }
     
+    .link-lihat-semua {
+        color: #e0f2fe; font-size: 12px; text-decoration: none;
+        background: rgba(255,255,255,0.1); padding: 5px 12px;
+        border-radius: 20px; transition: 0.3s; white-space: nowrap;
+    }
+    .link-lihat-semua:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
     /* Responsive Table Wrapper */
     .table-responsive {
-        width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+        width: 100%; 
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
     }
     
-    table { width: 100%; border-collapse: collapse; min-width: 600px; /* Agar scroll muncul di HP */ }
-    th, td { padding: 15px; text-align: left; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
-    th { background: #f8f9fa; color: #17375d; font-weight: 700; white-space: nowrap; }
-    td { color: #555; }
-    tr:last-child td { border-bottom: none; }
+    .table-dashboard { 
+        width: 100%; border-collapse: collapse; 
+        min-width: 600px; /* Memaksa scroll muncul di HP agar tabel tidak gepeng */
+    }
+    .table-dashboard th, .table-dashboard td { padding: 15px; text-align: left; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    .table-dashboard th { background: #f8f9fa; color: #17375d; font-weight: 700; white-space: nowrap; }
+    .table-dashboard td { color: #555; vertical-align: middle; }
+    .table-dashboard tr:last-child td { border-bottom: none; }
 
     /* Status Badges */
-    .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+    .badge-sm { 
+        padding: 5px 12px; border-radius: 20px; font-size: 11px; 
+        font-weight: 600; display: inline-block; white-space: nowrap; 
+    }
     .bg-menunggu { background: #fff3cd; color: #856404; }
-    .bg-proses { background: #cff4fc; color: #055160; }
-    .bg-selesai { background: #d1e7dd; color: #0f5132; }
+    .bg-disetujui { background: #d1e7dd; color: #0f5132; }
+    .bg-ditolak { background: #f8d7da; color: #721c24; }
+    .bg-selesai { background: #cff4fc; color: #055160; }
 
-    /* === MEDIA QUERIES (RESPONSIF HP) === */
+    /* === MEDIA QUERIES (OPTIMASI HP) === */
     @media (max-width: 768px) {
         .welcome-card { padding: 20px; text-align: center; }
         .welcome-card h2 { font-size: 18px; }
+        .welcome-card p { font-size: 13px; }
         
-        .dashboard-grid {
-            grid-template-columns: 1fr; /* 1 Kolom di HP */
-            gap: 15px;
-        }
+        /* Mengurangi gap antar kartu di HP */
+        .dashboard-grid { gap: 15px; }
 
-        .notif-box {
-            flex-direction: column; align-items: flex-start;
-        }
+        /* Notifikasi stack vertikal di HP */
+        .notif-box { flex-direction: column; align-items: flex-start; }
         .notif-icon { margin-bottom: 10px; }
 
         .card-content { padding: 15px; }
         
-        th, td { padding: 10px; font-size: 13px; }
+        /* Font tabel lebih kecil sedikit di HP */
+        .table-dashboard th, .table-dashboard td { padding: 12px 15px; font-size: 13px; }
     }
 </style>
 
@@ -184,14 +214,13 @@
         <div class="card-header">Barcode NIS</div>
         <div class="card-content">
             <div class="barcode-box">
-                {{-- Mencegah error jika library DNS1D bermasalah --}}
                 @if(class_exists('DNS1D'))
                     {!! DNS1D::getBarcodeHTML($nis, 'C128', 2, 45) !!}
                 @else
-                    [Barcode Library Missing]
+                    <span style="color:red; font-size:12px;">Library DNS1D Missing</span>
                 @endif
             </div>
-            <p style="margin-top:10px; font-weight:700; color:#333; letter-spacing:1px;">{{ $nis }}</p>
+            <p style="margin-top:10px; font-weight:700; color:#333; letter-spacing:1px; word-break: break-all;">{{ $nis }}</p>
         </div>
     </div>
 
@@ -216,7 +245,7 @@
         <div class="card-header">Kartu Pelajar</div>
         <div class="card-content">
             <button class="btn-cetak" onclick="window.location.href='{{ route('siswa.kartupelajar.index') }}'">
-                <i class="fas fa-print" style="margin-right:8px;"></i> Cetak Kartu Pelajar
+                <i class="fas fa-print" style="margin-right:8px;"></i> Cetak Kartu
             </button>
         </div>
     </div>
@@ -234,106 +263,29 @@
     </div>
 </div>
 
-{{-- === 4. TABEL RIWAYAT KONSELING (DASHBOARD) === --}}
-<style>
-    /* Style Khusus Dashboard Table */
-    .jadwal-box {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        overflow: hidden;
-        margin-top: 30px;
-        border: 1px solid #eef2f6;
-    }
-
-    .jadwal-header {
-        background: #123B6B;
-        color: white;
-        padding: 15px 25px;
-        font-weight: 600;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .link-lihat-semua {
-        color: #e0f2fe;
-        font-size: 12px;
-        text-decoration: none;
-        background: rgba(255,255,255,0.1);
-        padding: 5px 12px;
-        border-radius: 20px;
-        transition: 0.3s;
-    }
-    .link-lihat-semua:hover { background: rgba(255,255,255,0.2); color: #fff; }
-
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto;
-    }
-
-    .table-dashboard {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 600px; /* Mencegah gepeng di HP */
-    }
-
-    .table-dashboard th {
-        background: #f8f9fa;
-        color: #555;
-        font-weight: 600;
-        font-size: 12px;
-        text-transform: uppercase;
-        padding: 12px 20px;
-        border-bottom: 2px solid #eee;
-        text-align: left;
-    }
-
-    .table-dashboard td {
-        padding: 12px 20px;
-        border-bottom: 1px solid #f0f0f0;
-        font-size: 14px;
-        color: #333;
-        vertical-align: middle;
-    }
-
-    /* Badge Status Kecil */
-    .badge-sm {
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 11px;
-        font-weight: 600;
-        display: inline-block;
-    }
-    .bg-menunggu { background: #fff8e1; color: #b58900; border: 1px solid #ffeeba; }
-    .bg-disetujui { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
-    .bg-ditolak { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .bg-selesai { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
-
-</style>
-
+{{-- === 4. TABEL RIWAYAT KONSELING (RESPONSIVE WRAPPER) === --}}
 <div class="jadwal-box">
     <div class="jadwal-header">
         <div>
-            <i class="fas fa-history" style="margin-right:8px;"></i> Riwayat Konseling Terbaru
+            <i class="fas fa-history" style="margin-right:8px;"></i> Riwayat Konseling
         </div>
         <a href="{{ route('siswa.konseling.index') }}" class="link-lihat-semua">
             Lihat Semua <i class="fas fa-arrow-right" style="font-size:10px; margin-left:3px;"></i>
         </a>
     </div>
     
+    {{-- Wrapper ini penting agar tabel bisa di-scroll di HP --}}
     <div class="table-responsive">
         <table class="table-dashboard">
             <thead>
                 <tr>
                     <th width="25%">Waktu</th>
                     <th width="25%">Guru BK</th>
-                    <th width="30%">Topik Masalah</th>
+                    <th width="30%">Topik</th>
                     <th width="20%">Status</th>
                 </tr>
             </thead>
             <tbody>
-                {{-- Ambil 5 data terbaru saja untuk dashboard --}}
                 @forelse ($konselings->take(5) as $konseling)
                     <tr>
                         <td>
