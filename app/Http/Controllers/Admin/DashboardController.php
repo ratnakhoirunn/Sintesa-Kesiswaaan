@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\guru;
+use App\Models\Guru;
 use App\Models\Siswa;
 use App\Models\Konseling;
 use Illuminate\Support\Facades\DB;
@@ -19,56 +19,69 @@ class DashboardController extends Controller
      *  =============================== */
     public function adminDashboard(Request $request)
     {
-        // Ambil data statistik untuk dashboard admin
+        /** ===============================
+         *  STATISTIK UMUM
+         *  =============================== */
         $totalSiswa = Siswa::count();
-        $totalAdmin = guru::where('role', 'admin')->count();
+        $totalAdmin = Guru::where('role', 'admin')->count();
         $totalKonseling = Konseling::count();
+        $konselingMenunggu = Konseling::where('status', 'Menunggu')->count();
+        $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
 
- // Ambil filter angkatan dari query string (?angkatan=2025)
-    $filterTahun = $request->get('angkatan');
+        /** ===============================
+         *  FILTER ANGKATAN
+         *  =============================== */
+        $filterTahun = $request->get('angkatan'); // contoh: 2025
+        $kodeTahun = $filterTahun ? substr($filterTahun, -2) : null;
 
-    // Ambil daftar angkatan unik dari 2 digit depan NIS dan ubah jadi format tahun penuh
-    $angkatanList = Siswa::selectRaw('LEFT(nis, 2) as kode')
-        ->distinct()
-        ->get()
-        ->map(function ($item) {
-            return 2000 + (int)$item->kode; // contoh: 25 => 2025
-        })
-        ->sort()
-        ->values();
+        /** ===============================
+         *  DAFTAR ANGKATAN (ORM MURNI)
+         *  =============================== */
+        $angkatanList = Siswa::pluck('nis')
+            ->map(fn ($nis) => 2000 + (int) substr($nis, 0, 2))
+            ->unique()
+            ->sort()
+            ->values();
 
-    // Hitung statistik umum
-    $totalSiswa = Siswa::count();
-    $totalAdmin = guru::where('role', 'admin')->count();
-    $konselingMenunggu = Konseling::where('status', 'Menunggu')->count();
-    $keterlambatanBaru = Keterlambatan::where('status', 'pending')->count();
+        /** ===============================
+         *  DATA SISWA (FILTER OPSIONAL)
+         *  =============================== */
+        $siswaQuery = Siswa::query();
 
-    // === Data untuk Chart: Jumlah siswa per jurusan ===
-    $query = Siswa::select('jurusan', DB::raw('COUNT(*) as total'));
+        if ($kodeTahun) {
+            $siswaQuery->where('nis', 'like', $kodeTahun . '%');
+        }
 
-    // Jika filter angkatan dipilih, ubah tahun jadi dua digit dan filter
-    if ($filterTahun) {
-        $kodeTahun = substr($filterTahun, -2); // contoh: 2025 -> 25
-        $query->whereRaw('LEFT(nis, 2) = ?', [$kodeTahun]);
+        $siswa = $siswaQuery->get();
+
+        /** ===============================
+         *  DATA CHART (GROUP BY DI PHP)
+         *  =============================== */
+        $chartData = $siswa
+            ->groupBy('jurusan')
+            ->map(function ($items, $jurusan) {
+                return [
+                    'jurusan' => $jurusan,
+                    'total'   => $items->count(),
+                ];
+            })
+            ->values();
+
+        /** ===============================
+         *  KIRIM KE VIEW
+         *  =============================== */
+        return view('admin.dashboard', compact(
+            'totalSiswa',
+            'totalAdmin',
+            'totalKonseling',
+            'konselingMenunggu',
+            'keterlambatanBaru',
+            'angkatanList',
+            'filterTahun',
+            'chartData'
+        ));
     }
 
-    $chartData = $query
-        ->groupBy('jurusan')
-        ->orderBy('jurusan')
-        ->get();
-
-    // Kirim data ke view dashboard
-    return view('admin.dashboard', compact(
-        'totalSiswa',
-        'totalAdmin',
-        'totalKonseling',
-        'chartData',
-        'angkatanList',
-        'filterTahun',
-        'konselingMenunggu',
-        'keterlambatanBaru'
-    ));
-    }
 
 
     public function siswaDashboard()
@@ -136,6 +149,6 @@ class DashboardController extends Controller
      *  =============================== */
     public function role()
     {
-        return view('admin.role.index'); 
+        return view('admin.role.index');
     }
 }

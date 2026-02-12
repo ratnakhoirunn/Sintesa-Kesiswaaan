@@ -65,7 +65,7 @@ class SiswaPrestasiController extends Controller
         // Jika upload file → simpan file → kosongkan link
         if ($request->file('file')) {
             $fileName = time() . '_' . $request->file('file')->getClientOriginalName();
-            $request->file('file')->storeAs('public/prestasi', $fileName);
+            $request->file('file')->storeAs('prestasi', $fileName, 'public');
             $request->merge(['link' => null]);
         }
 
