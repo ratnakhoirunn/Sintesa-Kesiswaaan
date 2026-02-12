@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\DokumenSiswa;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Notifikasi;
 
 class DokumenSiswaController extends Controller
 {
@@ -170,5 +171,27 @@ class DokumenSiswaController extends Controller
         ->route('admin.dokumensiswa.index')
         ->with('success', 'Semua dokumen siswa berhasil dihapus.');
 }
+
+public function kirimPeringatan($nis)
+    {
+        // 1. Cek data siswa
+        $siswa = Siswa::where('nis', $nis)->first();
+
+        if (!$siswa) {
+            return back()->with('error', 'Siswa tidak ditemukan.');
+        }
+
+        // 2. Buat Notifikasi
+        Notifikasi::create([
+            'nis'      => $nis,
+            'judul'    => '⚠️ Peringatan Dokumen',
+            'pesan'    => 'Halo ' . $siswa->nama_lengkap . ', admin mendeteksi dokumen Anda belum lengkap. Mohon segera lengkapi di menu Upload Dokumen.',
+            'kategori' => 'warning',
+            'is_read'  => false
+        ]);
+
+        // 3. Kembali dengan pesan sukses
+        return back()->with('success', 'Peringatan berhasil dikirim ke ' . $siswa->nama_lengkap);
+    }
 
 }

@@ -1,10 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Data Siswa')
 @section('content')
+@section('title', 'Edit Data Siswa')
+@section('page_title', 'Edit Data Siswa')
 
 <style>
-    /* Copy dari show.blade + ubahan untuk input */
+    /* Global Card Style */
     .card-siswa {
         background-color: #ffffff;
         border-radius: 10px;
@@ -29,6 +30,13 @@
         padding: 30px 50px;
     }
 
+    /* Padding adjustment for mobile */
+    @media (max-width: 768px) {
+        .form-body {
+            padding: 20px 15px;
+        }
+    }
+
     .foto-wrapper {
         text-align: center;
         margin-bottom: 30px;
@@ -46,7 +54,7 @@
         font-weight: 600;
         color: #333;
         font-size: 0.9rem;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         display: block;
     }
 
@@ -54,16 +62,18 @@
         width: 100%;
         border: 1px solid #ccc;
         border-radius: 8px;
-        padding: 8px 10px;
+        padding: 10px 12px;
         font-size: 0.95rem;
         background-color: #f9f9f9;
         transition: 0.3s;
+        margin-bottom: 5px; /* Spacing for tighter layouts */
     }
 
     input:focus, select:focus, textarea:focus {
         outline: none;
         border-color: #1e3a67;
         background-color: #fff;
+        box-shadow: 0 0 0 2px rgba(30, 58, 103, 0.1);
     }
 
     .form-row {
@@ -71,6 +81,14 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 20px 40px;
         margin-bottom: 20px;
+    }
+
+    /* Single column layout for mobile forms */
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
     }
 
     .detail-container {
@@ -82,11 +100,18 @@
 
     .detail-box {
         flex: 1;
-        min-width: 350px;
+        min-width: 300px; /* Reduced min-width for better mobile fit */
         background-color: #f9fafc;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Full width detail box on mobile */
+    @media (max-width: 768px) {
+        .detail-box {
+            min-width: 100%;
+        }
     }
 
     .detail-box .header {
@@ -102,16 +127,27 @@
         padding: 20px;
     }
 
+    .detail-box .body > div { /* Targetting potential wrappers inside body if any */
+        margin-bottom: 15px;
+    }
+    
+    /* Ensure inputs inside detail box have bottom margin */
+    .detail-box .body input, 
+    .detail-box .body select {
+        margin-bottom: 15px;
+    }
+
     .btn-blue {
         display: inline-block;
         background-color: #1e3a67;
         color: white;
-        padding: 10px 18px;
-        border-radius: 5px;
+        padding: 12px 24px;
+        border-radius: 6px;
         border: none;
         transition: 0.3s;
         font-weight: 600;
         text-decoration: none;
+        cursor: pointer;
     }
 
     .btn-blue:hover {
@@ -122,12 +158,14 @@
         display: inline-block;
         background-color: #4a4a4a;
         color: white;
-        padding: 10px 18px;
-        border-radius: 5px;
+        padding: 12px 24px;
+        border-radius: 6px;
         text-decoration: none;
         border: none;
         transition: 0.3s;
         font-weight: 600;
+        cursor: pointer;
+        margin-left: 10px;
     }
 
     .btn-gray:hover {
@@ -138,6 +176,26 @@
         max-height: 80vh;
         overflow-y: auto;
         padding-right: 10px;
+    }
+
+    /* Better scroll height on mobile */
+    @media (max-width: 768px) {
+        .scrollable-content {
+            max-height: 85vh;
+            padding-right: 5px; 
+        }
+        
+        .mt-4.text-center {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn-blue, .btn-gray {
+            width: 100%;
+            margin-left: 0;
+            text-align: center;
+        }
     }
 </style>
 
@@ -155,7 +213,7 @@
                          src="{{ $siswa->foto ? asset('uploads/foto_siswa/'.$siswa->foto) : asset('images/student.png') }}" 
                          alt="Foto Siswa">
                     <br><br>
-                    <input type="file" name="foto" accept="image/*" onchange="previewImage(event)">
+                    <input type="file" name="foto" accept="image/*" onchange="previewImage(event)" style="width: auto; max-width: 100%;">
                 </div>
 
                 {{-- Baris utama data siswa --}}
@@ -196,47 +254,47 @@
                 </div>
 
                 <div class="form-row">
-                <div>
-                    <label>Rombel</label>
-                    <select name="rombel" class="form-select">
-                        <option value="">Pilih Rombel</option>
-                        @foreach ([
-                            'X DKV 1','X DKV 2','X DPIB 1','X DPIB 2','X DPIB 3',
-                            'X GEOMATIKA','X KGS','X MEKATRONIKA','X SIJA 1','X SIJA 2',
-                            'X TAV','X TITL 1','X TITL 2','X TITL 3','X TITL 4',
-                            'X TKR 1','X TKR 2','X TKR 3','X TKR 4',
-                            'X TP 1','X TP 2','X TP 3','X TP 4'
-                        ] as $rombel)
-                            <option value="{{ $rombel }}" {{ old('rombel', $siswa->rombel) == $rombel ? 'selected' : '' }}>
-                                {{ $rombel }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div>
+                        <label>Rombel</label>
+                        <select name="rombel" class="form-select">
+                            <option value="">Pilih Rombel</option>
+                            @foreach ([
+                                'X DKV 1','X DKV 2','X DPIB 1','X DPIB 2','X DPIB 3',
+                                'X GEOMATIKA','X KGS','X MEKATRONIKA','X SIJA 1','X SIJA 2',
+                                'X TAV','X TITL 1','X TITL 2','X TITL 3','X TITL 4',
+                                'X TKR 1','X TKR 2','X TKR 3','X TKR 4',
+                                'X TP 1','X TP 2','X TP 3','X TP 4'
+                            ] as $rombel)
+                                <option value="{{ $rombel }}" {{ old('rombel', $siswa->rombel) == $rombel ? 'selected' : '' }}>
+                                    {{ $rombel }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div>
-                    <label>Jurusan</label>
-                    <select name="jurusan" class="form-select">
-                        <option value="">Pilih Jurusan</option>
-                        @foreach ([
-                            'Desain Komunikasi Visual',
-                            'Desain Pemodelan dan Informasi Bangunan',
-                            'Teknik Geospasial',
-                            'Konstruksi Gedung dan Sanitasi',
-                            'Teknik Mekatronika',
-                            'Sistem Informasi Jaringan dan Aplikasi ( Pengembangan Perangkat Lunak dan Gim )',
-                            'Teknik Audio Video',
-                            'Teknik Instalasi Tenaga Listrik',
-                            'Teknik Kendaraan Ringan',
-                            'Teknik Pemesinan'
-                        ] as $jurusan)
-                            <option value="{{ $jurusan }}" {{ old('jurusan', $siswa->jurusan) == $jurusan ? 'selected' : '' }}>
-                                {{ $jurusan }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <div>
+                        <label>Jurusan</label>
+                        <select name="jurusan" class="form-select">
+                            <option value="">Pilih Jurusan</option>
+                            @foreach ([
+                                'Desain Komunikasi Visual',
+                                'Desain Pemodelan dan Informasi Bangunan',
+                                'Teknik Geospasial',
+                                'Konstruksi Gedung dan Sanitasi',
+                                'Teknik Mekatronika',
+                                'Sistem Informasi Jaringan dan Aplikasi ( Pengembangan Perangkat Lunak dan Gim )',
+                                'Teknik Audio Video',
+                                'Teknik Instalasi Tenaga Listrik',
+                                'Teknik Kendaraan Ringan',
+                                'Teknik Pemesinan'
+                            ] as $jurusan)
+                                <option value="{{ $jurusan }}" {{ old('jurusan', $siswa->jurusan) == $jurusan ? 'selected' : '' }}>
+                                    {{ $jurusan }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
 
                 <div class="form-row">
                     <div>
@@ -261,7 +319,7 @@
                 </div>
 
                 <div class="form-row">
-                    <div style="grid-column: span 2;">
+                    <div style="grid-column: span 2; @media (max-width: 768px) { grid-column: span 1; }">
                         <label>Alamat Lengkap</label>
                         <textarea name="alamat" rows="3">{{ old('alamat', $siswa->alamat) }}</textarea>
                     </div>
@@ -457,7 +515,7 @@
                 </div>
 
                 <div class="detail-container">
-                    <div class="detail-box">
+                    <div class="detail-box" style="flex:1;">
                         <div class="header">BIODATA WALI</div>
                         <div class="body">
                             <label>Nama Wali</label><input type="text" name="nama_wali" value="{{ old('nama_wali', $ortu->nama_wali ?? '') }}">
