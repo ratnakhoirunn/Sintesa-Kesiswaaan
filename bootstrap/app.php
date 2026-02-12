@@ -44,7 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'siswa' => \App\Http\Middleware\SiswaMiddleware::class,
             'auth'     => \App\Http\Middleware\Authenticate::class,
             'role'     => \App\Http\Middleware\RoleMiddleware::class,
-            'kesiswaan.readonly' => \App\Http\Middleware\KesiswaanReadonly::class,
+            'kesiswaan.readonly' => \App\Http\Middleware\KesiswaanReadOnly::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
             'cekAksesEdit' => \App\Http\Middleware\CekAksesEditSiswa::class,
             'walikelas' => \App\Http\Middleware\WaliMiddleware::class,
