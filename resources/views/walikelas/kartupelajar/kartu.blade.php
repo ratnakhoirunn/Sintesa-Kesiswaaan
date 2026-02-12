@@ -299,7 +299,7 @@
 
     <div class="footer">
     <div>
-        Yogyakarta, {{ request('bulan') ?? 'Agustus' }} {{ request('tahun') ?? date('Y') }}<br>
+        Yogyakarta, {{ request('bulan') ?? 'Juli' }} {{ request('tahun') ?? date('Y') }}<br>
         Kepala Sekolah
     </div>
 

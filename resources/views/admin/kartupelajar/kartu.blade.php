@@ -76,7 +76,7 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            font-size: 7px;
+            font-size: 8px;
             padding: 1px 0;
         }
 
@@ -84,7 +84,7 @@
         .content {
             display: flex;
             padding: 3px 6px;
-            font-size: 7px;
+            font-size: 9px;
             align-items: flex-start;
         }
 
@@ -93,8 +93,8 @@
             height: 2.5cm;
             border: 1px solid #000;
             text-align: center;
-            margin-right: 6px;
             overflow: hidden;
+             margin-left: 7px;
         }
 
         .foto img {
@@ -104,9 +104,9 @@
         }
 
         .barcode {
-            width: 1.9cm;
-            height: 0.6cm;
-            margin-top: 2px;
+            width: 2.3cm;   /* ini yang bikin barcode makin panjang */
+            height: 1.2cm;
+            margin-top: 0px;
             text-align: center;
         }
 
@@ -124,7 +124,7 @@
 
         .data table {
             width: 100%;
-            font-size: 6.3px;
+            font-size: 6px;
         }
 
         .data td {
@@ -132,12 +132,32 @@
             vertical-align: top;
         }
 
+        /* Kolom label: Nama, NIPD, dll */
+        .data td:nth-child(1) {
+            width: 15%;
+            white-space: nowrap; /* biar teks kiri tidak turun */
+            
+            
+        }
+
+        /* Kolom titik dua */
+        .data td:nth-child(2) {
+            width: 2%;
+            text-align: center;
+        }
+
+        /* Kolom isi (data siswa) */
+        .data td:nth-child(3) {
+            width: 65%;
+            white-space: normal; /* BOLEH turun ke bawah */
+        }
+
         /* ===== FOOTER ===== */
         .footer {
             position: absolute;
             bottom: 17px;
             right: 10px;
-            font-size: 5.5px;
+            font-size: 5.3px;
             line-height: 1.3;
             text-align: left;
         }
@@ -279,7 +299,7 @@
                     @endif
                 </div>
                 <div class="barcode">
-                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($siswa->nis, 'C39', 1, 30) }}" alt="Barcode">
+                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($siswa->nis, 'C39', 1, 45) }}" alt="Barcode">
                 </div>
             </div>
 
@@ -298,11 +318,10 @@
         </div>
 
     <div class="footer">
-    <div>
-        Yogyakarta, {{ request('bulan') ?? 'Agustus' }} {{ request('tahun') ?? date('Y') }}<br>
-        Kepala Sekolah
-    </div>
-
+            <div>
+                Yogyakarta, {{ \Carbon\Carbon::create(2025, 7, 1)->translatedFormat('F Y') }}<br>
+                Kepala Sekolah
+            </div>
     <div class="ttd-single">
     @php
         // kalau ada gambar cap_kepsek dari request (hasil upload base64), pakai itu

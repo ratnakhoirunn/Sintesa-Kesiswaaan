@@ -198,8 +198,10 @@
     </div>
 
     {{-- BUTTON FORM --}}
+    {{--nonalktikan button tambah prestasi--}}
     <button onclick="openModal()" class="btn-primary" style="padding:10px 18px; border-radius:12px; background:#1e3a8a; color:#fff; border:none;">
-        Tambah Prestasi
+        
+    Tambah Prestasi
     </button>
 
 

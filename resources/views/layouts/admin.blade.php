@@ -377,6 +377,46 @@
     border-bottom: 2px solid #17375d;
 }
 
+/* --------- RESPONSIVE UNTUK MOBILE ---------- */
+@media (max-width: 768px) {
+
+    /* Sidebar jadi overlay */
+    .sidebar {
+        width: 220px;
+        left: -220px;
+        position: fixed;
+        transition: left 0.3s ease;
+        z-index: 999;
+    }
+
+    /* Ketika sidebar dibuka */
+    .sidebar.open {
+        left: 0;
+    }
+
+    /* Konten jadi full width */
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    /* Navbar tambah tombol menu */
+    .navbar .menu-toggle {
+        display: block;
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .navbar h2 {
+        font-size: 1rem;
+    }
+}
+
+/* Tombol hamburger default hidden untuk desktop */
+.navbar .menu-toggle {
+    display: none;
+}
 
     </style>
 </head>
@@ -631,6 +671,10 @@
             <div class="user-profile">
                 <img src="{{ asset('images/profil_admin_tem.jfif') }}" alt="Admin Profile">
             </div>
+            <div class="menu-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+            </div>
+
         </div>
 
         @yield('content')
@@ -654,6 +698,13 @@
         });
     });
 </script>
+
+<script>
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+}
+</script>
+
 
 </body>
 </html>
