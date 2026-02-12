@@ -205,7 +205,8 @@ body {
         <iframe class="preview-frame" id="kartuFrame" src="{{ route('siswa.kartupelajar.frame', Auth::guard('siswa')->user()->nis) }}"></iframe>
 
         <div style="margin-top: 10px; text-align:center;">
-            <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">🖨 Cetak</button>
+            {{-- Button cetak pada preview siswa dinonaktifkan --}}
+           <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">🖨 Cetak</button> 
         </div>
     @endif
 

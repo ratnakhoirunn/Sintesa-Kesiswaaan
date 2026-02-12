@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Guru;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -14,39 +15,39 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Pengguna Admin
-        User::create([
-            'name' => 'Admin Utama',
-            'username' => '99999999',
-            'email' => 'admin@sintesa.id', // Perbaikan: Tambahkan email
+        Guru::create([
+            'nip' => '99999999',
+            'nama' => 'Admin Utama',
+            'email' => 'admin@sintesa.id',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
         ]);
 
-        // Pengguna Siswa
-        User::create([
-            'name' => 'Siswa Contoh',
-            'username' => '12345678',
-            'email' => 'siswa@sintesa.id', // Perbaikan: Tambahkan email
-            'password' => Hash::make('siswa123'),
-            'role' => 'siswa',
-        ]);
-
         // Pengguna Guru BK
-        User::create([
-            'name' => 'Guru BK Contoh',
-            'username' => '11223344',
-            'email' => 'gurubk@sintesa.id', // Perbaikan: Tambahkan email
+        Guru::create([
+            'nip' => '11223344',
+            'nama' => 'Guru BK',
+            'email' => 'gurubk@sintesa.id',
             'password' => Hash::make('gurubk123'),
             'role' => 'guru_bk',
         ]);
 
         // Pengguna Kesiswaan
-        User::create([
-            'name' => 'Kesiswaan Contoh',
-            'username' => '55667788',
-            'email' => 'kesiswaan@sintesa.id', // Perbaikan: Tambahkan email
+        Guru::create([
+            'nip' => '55667788',
+            'nama' => 'Kesiswaan',
+            'email' => 'kesiswaan@sintesa.id',
             'password' => Hash::make('kesiswaan123'),
             'role' => 'kesiswaan',
+        ]);
+
+        // Pengguna Guru
+        Guru::create([
+            'nip' => '6767676767',
+            'nama' => 'Guru',
+            'email' => 'guru@sintesa.id',
+            'password' => Hash::make('guru123'),
+            'role' => 'guru',
         ]);
     }
 }
