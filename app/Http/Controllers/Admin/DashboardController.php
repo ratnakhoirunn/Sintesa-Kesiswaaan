@@ -116,11 +116,16 @@ class DashboardController extends Controller
               }
           }
 
-          $tahunPrestasiList = DB::table('prestasis')
-              ->selectRaw("YEAR($kolomTanggal) as tahun")
-              ->distinct()
-              ->orderBy('tahun', 'desc')
-              ->pluck('tahun');
+        $tahunPrestasiList = DB::table('prestasis')
+            ->pluck($kolomTanggal)
+            ->filter()
+            ->map(function ($tanggal) {
+                return \Carbon\Carbon::parse($tanggal)->year;
+            })
+            ->unique()
+            ->sortDesc()
+            ->values();
+
       }
 
       /** ===============================
