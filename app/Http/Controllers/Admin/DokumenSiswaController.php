@@ -192,6 +192,5 @@ public function kirimPeringatan($nis)
 
         // 3. Kembali dengan pesan sukses
         return back()->with('success', 'Peringatan berhasil dikirim ke ' . $siswa->nama_lengkap);
-    }
-
+    }   
 }

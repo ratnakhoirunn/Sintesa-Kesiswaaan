@@ -49,26 +49,14 @@ class UserSeeder extends Seeder
             'password' => Hash::make('guru123'),
             'role' => 'guru',
         ]);
-
-        // Pengguna Siswa
-
-            Siswa::create([
-                'nis' => '343434343434',
-                'nisn' => rand(1000000000, 9999999999),
-                'nama_lengkap' => fake()->name(),
-                'email' => fake()->unique()->safeEmail(),
-                'no_whatsapp' => '08' . rand(1000000000, 9999999999),
-                'rombel' => 'X-' . rand(1, 5),
-                'jurusan' => fake()->randomElement(['RPL', 'TKJ', 'AKL', 'BDP']),
-                'tempat_lahir' => fake()->city(),
-                'tanggal_lahir' => fake()->date(),
-                'jenis_kelamin' => fake()->randomElement(['L', 'P']),
-                'agama' => fake()->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha']),
-                'nama_ortu' => fake()->name(),
-                'alamat' => fake()->address(),
-                'foto' => null,
-                'password' => Hash::make('password123'),
-                'is_default_password' => true,
-            ]);
+        // Pengguna Walikelas
+        Guru::create([
+            'nip' => '767676767676',
+            'nama' => 'Walikelas',
+            'email' => 'walikelas@sintesa.id',
+            'password' => Hash::make('walikelas123'),
+            'role' => 'walikelas',
+            'walikelas' => 'XII IPA 1',
+        ]);
     }
 }

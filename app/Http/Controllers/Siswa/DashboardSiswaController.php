@@ -88,4 +88,20 @@ class DashboardSiswaController extends Controller
     return view('siswa.dokumen.index', compact('siswa', 'dokumens'));
 }
 
+    public function bacaPeringatan($id)
+    {
+        $notif = Notifikasi::find($id);
+
+        if (!$notif) {
+            return back()->with('error', 'Notifikasi tidak ditemukan.');
+        }
+
+        // Update jadi sudah dibaca
+        $notif->update([
+            'is_read' => true
+        ]);
+
+        return back()->with('success', 'Notifikasi telah ditandai sebagai dibaca.');
+    }
+
 }
