@@ -193,12 +193,31 @@
 @foreach($notifikasis as $notif)
     <div class="notif-box">
         <div class="notif-icon"><i class="fas fa-bell"></i></div>
-        <div class="notif-content">
+        
+        <div class="notif-content" style="flex:1;">
             <h4>{{ $notif->judul }}</h4>
             <p>{{ $notif->pesan }}</p>
+
+            {{-- Tombol telah dibaca --}}
+            <form action="{{ route('siswa.baca-peringatan', $notif->id) }}" method="POST" style="margin-top:10px;">
+                @csrf
+                <button type="submit" 
+                        style="
+                            background:#17375d;
+                            color:white;
+                            border:none;
+                            padding:6px 14px;
+                            border-radius:6px;
+                            font-size:12px;
+                            cursor:pointer;
+                        ">
+                    ✅ Telah Dibaca
+                </button>
+            </form>
         </div>
     </div>
 @endforeach
+
 
 {{-- === 2. WELCOME CARD === --}}
 <div class="welcome-card">
