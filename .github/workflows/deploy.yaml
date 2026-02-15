@@ -18,4 +18,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ${{ secrets.APP_DIR }}
-            sudo git pull origin production
+            echo "${{ secrets.SSH_PASSWORD }}" | sudo -S git pull origin production
