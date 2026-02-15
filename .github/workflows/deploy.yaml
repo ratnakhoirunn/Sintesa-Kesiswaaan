@@ -19,3 +19,4 @@ jobs:
           script: |
             cd ${{ secrets.APP_DIR }}
             echo "${{ secrets.SSH_PASSWORD }}" | sudo -S git pull origin production
+            
