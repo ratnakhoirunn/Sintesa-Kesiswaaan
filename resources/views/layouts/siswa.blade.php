@@ -255,7 +255,7 @@
                     <p>Kamu masih menggunakan password default. Segera ubah untuk keamanan akunmu.</p>
                     <a href="{{ route('siswa.password.edit') }}" class="alert-button">Ganti Password Sekarang</a>
                 </div>
-               <button class="alert-close" onclick="closeAlert()"><i class="fas fa-times"></i></button>
+                <button class="alert-close" onclick="closeAlert()">×</button>
             </div>
         </div>
         @endif
@@ -324,4 +324,3 @@
     </script>
 </body>
 </html>
-

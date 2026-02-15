@@ -14,11 +14,9 @@ class DokumenController extends Controller
     // 🔹 Tampilkan halaman dokumen siswa
     public function index()
     {
-        // Ambil siswa yang login
         $siswa = Auth::guard('siswa')->user();
         $nis = $siswa->nis;
 
-        // Daftar dokumen wajib
         $jenisDokumen = [
             'Kartu Keluarga',
             'Akta Kelahiran',
@@ -27,7 +25,6 @@ class DokumenController extends Controller
             'Pas Foto'
         ];
 
-        // Pastikan setiap dokumen wajib ADA
         foreach ($jenisDokumen as $jenis) {
             DokumenSiswa::firstOrCreate(
                 ['nis' => $nis, 'jenis_dokumen' => $jenis],
@@ -35,13 +32,15 @@ class DokumenController extends Controller
             );
         }
 
-        // Ambil semua dokumen setelah dijamin lengkap 5 item
-        $dokumens = DokumenSiswa::where('nis', $nis)
-                    ->orderByRaw("FIELD(jenis_dokumen, 'Kartu Keluarga', 'Akta Kelahiran', 'KPSPKH', 'KIP', 'Pas Foto')")
-                    ->get();
+        $dokumens = DokumenSiswa::where('nis', $nis)->get()
+            ->sortBy(function ($dokumen) use ($jenisDokumen) {
+                return array_search($dokumen->jenis_dokumen, $jenisDokumen);
+            })
+            ->values();
 
         return view('siswa.dokumensiswa.index', compact('dokumens', 'siswa'));
     }
+
 
     // 🔹 Upload / ganti file
     public function upload(Request $request, $id)

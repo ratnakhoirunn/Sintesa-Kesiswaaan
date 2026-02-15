@@ -121,7 +121,7 @@
         .barcode {
             width: 2.3cm;
             height: 1.2cm;
-            margin-top: -5px; /* ?? Barcode naik ke atas mendekati foto */
+            margin-top: -5px; /* 🔹 Barcode naik ke atas mendekati foto */
             text-align: left;
         }
 
@@ -272,7 +272,7 @@
     $tahunFooter = request('tahun') ?? date('Y');
 @endphp
 
-    {{-- ?? HALAMAN DEPAN --}}
+    {{-- 📄 HALAMAN DEPAN --}}
     <div class="card">
         <div class="header">
             <div class="logo-left">
@@ -297,7 +297,7 @@
         <div class="title">KARTU PELAJAR</div>
 
         <div class="content">
-            {{-- ?? BAGIAN KIRI: Foto & Barcode dibungkus .left-section --}}
+            {{-- 🔹 BAGIAN KIRI: Foto & Barcode dibungkus .left-section --}}
             <div class="left-section">
                 <div class="foto">
                     @if($siswa->foto)
@@ -312,7 +312,7 @@
                 </div>
             </div>
             
-            {{-- ?? BAGIAN KANAN: Data Siswa --}}
+            {{-- 🔹 BAGIAN KANAN: Data Siswa --}}
             <div class="data">
                 <table>
                     <tr><td>Nama</td><td>:</td><td>{{ strtoupper($siswa->nama_lengkap) }}</td></tr>
@@ -327,11 +327,11 @@
             </div>
         </div>
 
-<div class="footer">
-<div>
-    Yogyakarta, {{ \Carbon\Carbon::create(2025, 7, 1)->translatedFormat('F Y') }}<br>
-    Kepala Sekolah
-</div>
+        <div class="footer">
+            <div>
+                Yogyakarta, {{ \Carbon\Carbon::create(2025, 7, 1)->translatedFormat('F Y') }}<br>
+                Kepala Sekolah
+            </div>
 
             <div class="ttd-single">
                 @php
@@ -343,11 +343,12 @@
             <strong>{{ request('nama_kepsek') ?? 'Drs. Agus Waluyo, M.Eng.' }}</strong>
             <div class="nip">NIP. {{ request('nip') ?? '196512271994121002' }}</div>
         </div>
+
         <div class="jurusan">{{ strtoupper($siswa->jurusan) }}</div>
 
     </div>
 
-    {{-- ?? HALAMAN BELAKANG --}}
+    {{-- 📘 HALAMAN BELAKANG --}}
     <div class="back">
         <div class="back-header">KETENTUAN</div>
         <div class="rules">

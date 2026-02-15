@@ -4,12 +4,20 @@
 
 @section('content')
 
+{{-- 1. LOAD FONT AWESOME VERSI 6 --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* ====== FONT & STRUKTUR DASAR ====== */
-.preview-container,
-.preview-container * {
+/* ====== PERBAIKAN UTAMA DISINI ====== */
+/* Terapkan font Poppins ke container, TAPI JANGAN ke tag <i> (ikon) */
+.preview-container {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Selector ini memastikan teks biasa kena Poppins, tapi ikon FontAwesome dibiarkan */
+.preview-container *:not(i) { 
     font-family: 'Poppins', sans-serif !important;
 }
 
@@ -20,6 +28,7 @@
     text-align: center;
     gap: 1rem;
     padding: 10px;
+    width: 100%;
 }
 
 /* ====== PREVIEW FRAME ====== */
@@ -30,28 +39,23 @@ iframe.preview-frame {
     border: none;
     background: transparent;
     margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    border-radius: 8px;
 }
 
 /* ====== AREA CETAK ====== */
 @page {
     size: A4;
-    margin-top: 0.5cm; /* ✅ Set jarak atas 0.5cm untuk setiap halaman */
+    margin-top: 0.5cm;
     margin-bottom: 0;
     margin-left: 0;
     margin-right: 0;
 }
 
-body {
-    background: none !important;
-}
+body { background: none !important; }
 
-/* Area utama print */
-#printArea {
-    display: none;
-    background: none;
-}
+#printArea { display: none; background: none; }
 
-/* Lembar cetak massal */
 .print-sheet {
     display: flex;
     flex-direction: column;
@@ -59,12 +63,11 @@ body {
     width: 21cm;
     height: auto;
     margin: 0 auto;
-    padding-top: 0.5cm; /* ✅ tambahan aman supaya isi turun sedikit */
+    padding-top: 0.5cm;
     box-sizing: border-box;
     background: none;
 }
 
-/* Tiap kartu */
 .print-card {
     width: 19.5cm;
     height: 5.4cm;
@@ -78,27 +81,18 @@ body {
     background: transparent !important;
 }
 
-/* Iframe di dalam kartu */
 .print-card iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    overflow: hidden;
-    background: transparent !important;
+    width: 100%; height: 100%; border: none; overflow: hidden; background: transparent !important;
 }
 
-/* ✅ Hilangkan background putih di dalam iframe */
-.print-card iframe html,
-.print-card iframe body {
-    background-color: transparent !important;
+.print-card:nth-of-type(4n) { page-break-after: always; }
+
+/* ====== TOMBOL AKSI ====== */
+.action-buttons {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+    margin-top: 10px; width: 100%; max-width: 750px;
 }
 
-/* ✅ Page break setiap 4 kartu */
-.print-card:nth-of-type(4n) {
-    page-break-after: always;
-}
-
-/* ====== GAYA TOMBOL ====== */
 .btn-custom {
     padding: 10px 22px;
     border: none;
@@ -108,74 +102,70 @@ body {
     font-size: 15px;
     cursor: pointer;
     transition: 0.2s ease;
-    margin: 0 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif; /* Pastikan teks tombol Poppins */
 }
 
-.btn-custom:hover {
-    opacity: 0.9;
+/* Pastikan Ikon FontAwesome (tag i) TIDAK tertimpa font-family */
+.btn-custom i {
+    font-family: "Font Awesome 6 Free" !important; /* Paksa font ikon */
+    font-weight: 900;
+    font-style: normal;
+    font-size: 1.1rem;
 }
 
-.btn-cetak {
-    background-color: #28a745;
+.btn-custom:hover { opacity: 0.9; color: white; }
+.btn-cetak { background-color: #28a745; }
+.btn-edit { background-color: #007bff; }
+.btn-batal { background-color: #6c757d; }
+.btn-orange { background-color: #f39c12; }
+
+/* ====== FORM EDIT ====== */
+#footerFormContainer { width: 100%; display: flex; justify-content: center; }
+
+#footerForm {
+    display: inline-block; background: #f0f4ff; padding: 20px;
+    border-radius: 8px; text-align: left; width: 100%; max-width: 750px;
+    box-sizing: border-box; border: 1px solid #dbeafe;
 }
 
-.btn-edit {
-    background-color: #007bff;
+.form-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px; margin-bottom: 20px;
 }
 
-.btn-batal {
-    background-color: #6c757d;
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-size: 0.9rem; font-weight: 600; color: #17375d; margin-bottom: 5px; }
+.form-group input { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
+
+/* ====== MEDIA QUERY MOBILE ====== */
+@media (max-width: 768px) {
+    iframe.preview-frame { height: 600px; }
+    .action-buttons { flex-direction: column; }
+    .btn-custom { width: 100%; margin: 0; }
+    .form-grid { grid-template-columns: 1fr; }
+    .container { padding-left: 10px; padding-right: 10px; }
 }
 
 /* ====== CETAK KHUSUS ====== */
 @media print {
-    html, body {
-        margin: 0;
-        padding: 0;
-        background: none !important;
-    }
-
-    body * {
-        visibility: hidden !important;
-        background: none !important;
-    }
-
-    #printArea, #printArea * {
-        visibility: visible !important;
-        background: none !important;
-    }
-
-    /* ✅ Semua halaman turun 0.5 cm */
+    html, body { margin: 0; padding: 0; background: none !important; }
+    body * { visibility: hidden !important; background: none !important; }
+    #printArea, #printArea * { visibility: visible !important; background: none !important; }
+    
     #printArea {
-        display: block !important;
-        position: absolute;
-        left: 0;
-        top: 0.5cm;
-        width: 100%;
-        margin: 0;
-        padding: 0;
+        display: block !important; position: absolute; left: 0; top: 0.5cm;
+        width: 100%; margin: 0; padding: 0;
     }
-
-    iframe {
-        overflow: hidden !important;
-        background: transparent !important;
-        color-adjust: exact !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    .noprint {
-        display: none !important;
-    }
-
-    /* ✅ Pastikan semua halaman punya jarak atas konsisten */
-    @page {
-        margin-top: 0.5cm;
-        background: none;
-    }
+    iframe { overflow: hidden !important; background: transparent !important; print-color-adjust: exact !important; }
+    .noprint { display: none !important; }
+    @page { margin-top: 0.5cm; background: none; }
 }
 </style>
-
 
 <div class="container py-3">
 
@@ -186,139 +176,122 @@ body {
     </div>
 
     <div class="preview-container noprint">
-    {{-- ✅ Preview layar --}}
+    
     @if(isset($siswas))
         {{-- === CETAK MASSAL === --}}
         @foreach($siswas as $siswa)
             <iframe class="preview-frame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
-            <hr style="width:100%; max-width:750px; border:1px dashed #ccc;">
+            <hr style="width:100%; max-width:750px; border:1px dashed #ccc; margin: 20px 0;">
         @endforeach
 
-        <button onclick="window.print()" class="btn-custom btn-cetak">🖨 Cetak Semua</button>
+        <div class="action-buttons">
+            <button onclick="window.print()" class="btn-custom btn-cetak">
+                <i class="fa-solid fa-print"></i> Cetak Semua
+            </button>
 
-{{-- HANYA ADMIN & BK YANG BOLEH EDIT --}}
-@unless(auth('guru')->user()->role === 'kesiswaan')
-    <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">🧾 Edit Data Kartu</button>
-@endunless
+            @unless(auth('guru')->user()->role === 'kesiswaan')
+                <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">
+                    <i class="fa-solid fa-cog"></i> Edit Data Kartu
+                </button>
+            @endunless
 
-<a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">✖ Kembali</a>
-
+            <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">
+                <i class="fa-solid fa-times"></i> Kembali
+            </a>
+        </div>
 
    @else
     {{-- === CETAK SATUAN === --}}
     <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
 
-    <div style="margin-top: 10px; text-align:center;">
-
-        {{-- Tombol Cetak — Semua role boleh --}}
-        <button onclick="document.getElementById('kartuFrame').contentWindow.print()" 
-                class="btn-custom btn-cetak">
-            🖨 Cetak
+    <div class="action-buttons">
+        
+        <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">
+            <i class="fa-solid fa-print"></i> Cetak
         </button>
 
-        {{-- HANYA ADMIN & BK yang boleh edit --}}
         @unless(auth('guru')->user()->role === 'kesiswaan')
-
-            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" 
-                class="btn-custom btn-edit">
-                ✏ Edit
+            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="btn-custom btn-orange">
+                <i class="fa-solid fa-user-pen"></i> Edit Siswa
             </a>
 
-            <button type="button" 
-                    class="btn-custom btn-edit" 
-                    onclick="toggleFooterForm()">
-                🧾 Edit Data Kartu
+            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">
+                <i class="fa-solid fa-cog"></i> Edit Data Kartu
             </button>
-
         @endunless
 
-        {{-- Tombol kembali — semua role boleh --}}
-        <a href="{{ route('admin.kartupelajar.index') }}" 
-            class="btn-custom btn-batal">
-            ✖ Kembali
+        <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
 
     </div>
 @endif
 
 
- {{-- ======================================
-   FORM EDIT DATA KARTU (Hanya Admin & BK)
-======================================= --}}
+{{-- FORM EDIT DATA KARTU --}}
 @unless(auth('guru')->user()->role === 'kesiswaan')
-
-<div id="footerFormContainer" style="display:none; margin-top:20px; text-align:center;">
-    <form id="footerForm" onsubmit="return updateFrameFooter();" 
-          style="display:inline-block; background:#f0f4ff; padding:20px; border-radius:8px; text-align:left;">
-
-        <h4 style="color:#17375d; margin-bottom:10px;">Edit Data Kartu</h4>
-
-        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <div>
+<div id="footerFormContainer" style="display:none; margin-top:20px;">
+    <form id="footerForm" onsubmit="return updateFrameFooter();">
+        <h4 style="color:#17375d; margin-bottom:15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+            <i class="fa-solid fa-pen-to-square"></i> Edit Atribut Kartu
+        </h4>
+        <div class="form-grid">
+            <div class="form-group">
                 <label>Bulan:</label>
-                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}"
-                       required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}" required>
             </div>
-
-            <div>
+            <div class="form-group">
                 <label>Tahun:</label>
-                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}"
-                       required style="padding:5px 10px; border-radius:6px;">
+                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}" required>
             </div>
-
-            <div>
+            <div class="form-group">
                 <label>Nama Kepala Sekolah:</label>
-                <input type="text" name="nama_kepsek" id="nama_kepsek"
-                       placeholder="Drs. Agus Waluyo, M.Eng."
-                       required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="nama_kepsek" id="nama_kepsek" placeholder="Nama Kepsek" required>
             </div>
-
-            <div>
+            <div class="form-group">
                 <label>NIP:</label>
-                <input type="text" name="nip" id="nip"
-                       placeholder="196512271994121002"
-                       required style="padding:5px 10px; border-radius:6px;">
+                <input type="text" name="nip" id="nip" placeholder="NIP" required>
             </div>
-
-            <div>
-                <label>Gambar Cap & TTD Kepala Sekolah:</label>
-                <input type="file" id="cap_kepsek" accept="image/*"
-                       style="padding:5px 10px; border-radius:6px;">
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label>Gambar Cap & TTD:</label>
+                <input type="file" id="cap_kepsek" accept="image/*" style="background: #fff;">
+                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah.</small>
             </div>
         </div>
-
-        <div style="margin-top: 10px; text-align:center;">
-            <button type="submit" class="btn-custom btn-cetak">💾 Simpan Perubahan</button>
-            <button type="button" class="btn-custom btn-batal" onclick="toggleFooterForm()">Batal</button>
+        <div style="margin-top: 15px; text-align:center; display: flex; gap: 10px; justify-content: center;">
+            <button type="submit" class="btn-custom btn-cetak" style="flex:1;">
+                <i class="fa-solid fa-save"></i> Simpan
+            </button>
+            <button type="button" class="btn-custom btn-batal" onclick="toggleFooterForm()" style="flex:1;">
+                Batal
+            </button>
         </div>
-
     </form>
 </div>
-
 @endunless
 
-
 </div>
 
-    {{-- ✅ Area cetak massal --}}
-    @if(isset($siswas))
-    <div id="printArea">
-        <div class="print-sheet">
-            @foreach($siswas as $siswa)
-            <div class="print-card">
-                <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
-            </div>
-            @endforeach
+{{-- AREA CETAK --}}
+@if(isset($siswas))
+<div id="printArea">
+    <div class="print-sheet">
+        @foreach($siswas as $siswa)
+        <div class="print-card">
+            <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
         </div>
+        @endforeach
     </div>
-    @endif
+</div>
+@endif
 
 </div>
 
-    <script>
+<script>
 function toggleFooterForm() {
     const form = document.getElementById('footerFormContainer');
-    form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+    form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'flex' : 'none';
+    if(form.style.display === 'flex') { form.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 }
 
 function updateFrameFooter() {
@@ -339,24 +312,21 @@ function updateFrameFooter() {
     } else {
         refreshFrames(bulan, tahun, nama_kepsek, nip, '');
     }
-
     toggleFooterForm();
-    alert('✅ Data kartu berhasil diperbarui!');
     return false;
 }
 
 function refreshFrames(bulan, tahun, nama_kepsek, nip, cap_kepsek) {
     const previewFrames = document.querySelectorAll('.preview-frame');
     const printFrames = document.querySelectorAll('#printArea iframe');
-
+    document.body.style.cursor = 'wait';
     [...previewFrames, ...printFrames].forEach(frame => {
-        const baseSrc = frame.src.split('?')[0];
-        frame.src = `${baseSrc}?bulan=${encodeURIComponent(bulan)}&tahun=${encodeURIComponent(tahun)}&nama_kepsek=${encodeURIComponent(nama_kepsek)}&nip=${encodeURIComponent(nip)}&cap_kepsek=${cap_kepsek}`;
+        let src = frame.src;
+        if(src.indexOf('?') !== -1) { src = src.split('?')[0]; }
+        frame.src = `${src}?bulan=${encodeURIComponent(bulan)}&tahun=${encodeURIComponent(tahun)}&nama_kepsek=${encodeURIComponent(nama_kepsek)}&nip=${encodeURIComponent(nip)}&cap_kepsek=${cap_kepsek}`;
     });
+    setTimeout(() => { document.body.style.cursor = 'default'; }, 500);
 }
 </script>
 
 @endsection
-
-
-

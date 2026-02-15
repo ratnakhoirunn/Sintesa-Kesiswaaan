@@ -12,60 +12,76 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class KeterlambatanSiswaController extends Controller
 {
     public function index()
-{
-    $siswa = Auth::guard('siswa')->user();
+    {
+        $siswa = Auth::guard('siswa')->user();
 
-    // Hitung total keterlambatan dan poin pelanggaran
-    $jumlah = Keterlambatan::where('nis', $siswa->nis)->count();
-    $poin = $jumlah * 5; // bisa kamu ubah sesuai aturan sekolah
+        // Hitung total keterlambatan
+        $jumlah = Keterlambatan::where('nis', $siswa->nis)->count();
+        // Poin bisa disesuaikan logikanya
+        $poin = $jumlah * 5; 
 
-    // Ambil data keterlambatan milik siswa
-    $riwayat = Keterlambatan::where('nis', $siswa->nis)
-        ->orderBy('tanggal', 'desc')
-        ->get();
+        // Ambil data keterlambatan milik siswa
+        $riwayat = Keterlambatan::where('nis', $siswa->nis)
+            ->orderBy('tanggal', 'desc')
+            ->get();
 
-    // Kirim semua ke view
-    return view('siswa.keterlambatan.index', compact('siswa', 'jumlah', 'poin', 'riwayat'));
-}
-
-
+        return view('siswa.keterlambatan.index', compact('siswa', 'jumlah', 'poin', 'riwayat'));
+    }
 
     public function ajukan(Request $request)
     {
+        // 1. VALIDASI INPUT (Termasuk File)
         $request->validate([
+            'tanggal'    => 'required|date',
+            'jam_datang' => 'required',
             'keterangan' => 'required|string|max:255',
+            'dokumen'    => 'nullable|image|mimes:jpeg,png,jpg,pdf|max:2048', // Maks 2MB
         ]);
 
         $siswa = Auth::guard('siswa')->user();
+        $filename = null;
 
-        // Buat pengajuan baru
+        // 2. LOGIKA UPLOAD FILE
+        if ($request->hasFile('dokumen')) {
+            $file = $request->file('dokumen');
+            
+            // Buat nama file unik: TAHUNBULANTANGGAL_JAMMENITDETIK_NAMAASLI
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            // Simpan ke folder: public/uploads/dokumen_izin
+            $file->move(public_path('uploads/dokumen_izin'), $filename);
+        }
+
+        // 3. SIMPAN KE DATABASE
         Keterlambatan::create([
-            'nis' => $siswa->nis,
-            'nama_siswa' => $siswa->nama_lengkap,
-            'tanggal' => Carbon::now()->format('Y-m-d'),
-            'jam_datang' => Carbon::now()->format('H:i:s'),
-            'menit_terlambat' => rand(5, 30), // misal dummy data menit
-            'keterangan' => $request->keterangan,
-            'status' => 'pending',
+            'nis'             => $siswa->nis,
+            'nama_siswa'      => $siswa->nama_lengkap,
+            // Gunakan data dari input form, bukan Carbon::now()
+            'tanggal'         => $request->tanggal, 
+            'jam_datang'      => $request->jam_datang,
+            'menit_terlambat' => 0, // Default 0, nanti admin yang set atau hitung otomatis
+            'keterangan'      => $request->keterangan,
+            'dokumen'         => $filename, // Simpan nama file di sini
+            'status'          => 'menunggu',
         ]);
 
-        return back()->with('success', 'Pengajuan SIT berhasil dikirim. Menunggu persetujuan admin.');
+        return back()->with('success', 'Pengajuan izin berhasil dikirim.');
     }
 
-public function cetakSIT($id)
-{   
-    // Ambil data dulu
-    $data = Keterlambatan::where('id', $id)
-                ->where('status', 'terima')
-                ->firstOrFail();
+    public function cetakSIT($id)
+    {   
+        $siswa = Auth::guard('siswa')->user();
 
-    // Load PDF setelah data ada
-    $pdf = Pdf::loadView('siswa.keterlambatan.cetak_sit', compact('data'))
-              ->setPaper('A4', 'portrait');
+        // Ambil data (Pastikan punya siswa tersebut dan statusnya terima)
+        $data = Keterlambatan::where('id', $id)
+                        ->where('nis', $siswa->nis)
+                        ->where('status', 'terima')
+                        ->firstOrFail();
 
-    // Return PDF tampil di browser
-    return $pdf->stream('SIT.pdf');
-}
+        // Load PDF
+        $pdf = Pdf::loadView('siswa.keterlambatan.cetak_sit', compact('data'))
+                      ->setPaper('A4', 'portrait');
 
-
+        return $pdf->stream('SIT.pdf');
+    }
 }

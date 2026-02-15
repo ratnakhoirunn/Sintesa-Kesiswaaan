@@ -315,6 +315,8 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     Route::get('/dashboard', [DashboardSiswaController::class, 'dashboard'])->name('dashboard');
     Route::get('/datasiswa', [DashboardSiswaController::class, 'dataSiswa'])->name('datasiswa');
     Route::get('/orangtua', [DashboardSiswaController::class, 'dataOrangtua'])->name('orangtua');
+        Route::post('/notifikasi-baca/{id}', [DashboardSiswaController::class, 'bacaPeringatan'])->name('baca-peringatan');
+
 
     Route::get('/profil', [SiswaDataController::class, 'show'])->name('profil.show');
     Route::get('/profil/{nis}/edit', [SiswaDataController::class, 'edit'])->name('profil.edit');

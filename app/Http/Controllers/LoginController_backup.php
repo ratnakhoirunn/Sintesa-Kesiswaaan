@@ -50,7 +50,13 @@ class LoginController_backup extends Controller
                 return redirect()->intended(route('siswa.dashboard'));
             } elseif ($userRole === 'bk') {
                 return redirect()->intended('/bk/dashboard');
-            }
+            } elseif ($userRole === 'guru') {
+                return redirect()->intended('/guru/dashboard');
+            } elseif ($userRole === 'walikelas') {
+                return redirect()->intended('/walikelas/dashboard');
+            } elseif ($userRole === 'kesiswaan') {
+                return redirect()->intended('/kesiswaan/dashboard');
+             }
 
             // Jika role tidak dikenal, logout dan kembali ke login
             Auth::logout();

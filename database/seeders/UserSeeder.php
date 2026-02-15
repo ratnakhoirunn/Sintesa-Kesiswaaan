@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Guru;
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Siswa;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -48,6 +48,15 @@ class UserSeeder extends Seeder
             'email' => 'guru@sintesa.id',
             'password' => Hash::make('guru123'),
             'role' => 'guru',
+        ]);
+        // Pengguna Walikelas
+        Guru::create([
+            'nip' => '767676767676',
+            'nama' => 'Walikelas',
+            'email' => 'walikelas@sintesa.id',
+            'password' => Hash::make('walikelas123'),
+            'role' => 'walikelas',
+            'walikelas' => 'XII IPA 1',
         ]);
     }
 }

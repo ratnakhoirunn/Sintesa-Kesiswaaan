@@ -1,444 +1,281 @@
 @extends('layouts.siswa')
 
-@section('title', 'Keterlambatan dan Perizinan Siswa')
-@section('page_title', 'Keterlambatan dan Perizinan Siswa')
+@section('title', 'Keterlambatan & Perizinan')
+@section('page_title', 'Dashboard Keterlambatan')
 
 @section('content')
+
+{{-- Import Font & Icons --}}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 <style>
-/* ===== WRAPPER UTAMA ===== */
-.bg-gradient-to-b {
-    background: linear-gradient(to bottom, #e8f0ff, #ffffff);
-    padding: 30px;
-    border-radius: 25px;
-}
-
-/* ===== HEADER PROFIL ===== */
-.header-siswa {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.header-siswa .info {
-    line-height: 1.2;
-}
-
-.header-siswa h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: #1e3a8a;
-    margin-bottom: 3px;
-}
-
-.header-siswa p {
-    font-size: 14px;
-    color: #6b7280;
-}
-
-/* ===== FOTO PROFIL KECIL ===== */
-.header-siswa img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #60a5fa;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-}
-
-/* ===== STATISTIK ===== */
-.stat-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.stat-box {
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    color: #fff;
-    font-weight: 600;
-    box-shadow: 0px 4px 10px rgba(0,0,0,.15);
-    transition: .2s;
-}
-
-.stat-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0px 6px 15px rgba(0,0,0,.22);
-}
-
-.stat-blue {
-    background: #1e3a8a;
-}
-
-.stat-red {
-    background: #dc2626;
-}
-
-.stat-box p {
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.stat-box h2 {
-    font-size: 28px;
-    margin: 0;
-}
-
-/* ===== FORM ===== */
-.form-control {
-    background: #f3f6fa;
-    border: 1px solid #d4d8e0;
-    padding: 10px 12px;
-    border-radius: 10px;
-}
-
-.form-control:focus {
-    border-color: #1e3a8a;
-    background: #ffffff;
-    box-shadow: 0 0 0 2px rgba(30,58,138,.25);
-}
-
-label {
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: #1e3a8a;
-    font-size: 14px;
-}
-
-/* ===== TOMBOL ===== */
-.btn-primary {
-    background: #1e3a8a !important;
-    padding: 10px 22px;
-    border-radius: 12px;
-    font-weight: 600;
-    color: white;
-    border: none;
-}
-
-.btn-primary:hover {
-    background: #162d6d !important;
-}
-
-.btn-secondary {
-    background: #e2e8f0 !important;
-    padding: 10px 22px;
-    border-radius: 12px;
-    font-weight: 600;
-    color: #1e293b;
-    border: none;
-}
-
-.btn-secondary:hover {
-    background: #cfd8e3 !important;
-}
-
-/* ===== TABEL RIWAYAT ===== */
-table {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-thead {
-    background: #dbeafe;
-    color: #1e3a8a;
-}
-
-tbody tr:hover {
-    background: #f1f5f9;
-}
-
-/* ===== STATUS BADGE ===== */
-.badge {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    color: white;
-    font-weight: 600;
-}
-
-/* ===== OVERLAY MODAL ===== */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, .35);
-    backdrop-filter: blur(3px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-/* ===== CONTAINER MODAL ===== */
-.modal-box {
-    background: white;
-    width: 95%;
-    max-width: 650px;
-    padding: 25px;
-    border-radius: 25px;
-    box-shadow: 0 10px 35px rgba(0,0,0,.25);
-    position: relative;
-    animation: fadeIn .3s ease-out;
-}
-
-/* ===== ANIMASI ===== */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===== BUTTON CLOSE ===== */
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 32px;
-    height: 32px;
-    background: #f3f4f6;
-    border-radius: 50%;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    cursor: pointer;
-    color: #1e3a8a;
-    font-weight: bold;
-    transition: .2s;
-}
-
-.modal-close:hover {
-    background: #e0e7ff;
-    transform: scale(1.1);
-}
-
-/* ===== TITLE ===== */
-.modal-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1e3a8a;
-    margin-bottom: 20px;
-}
-
-/* ===== GRID FORM ===== */
-.modal-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
-
-/* ===== INPUT/SELECT/TEXT AREA ===== */
-.modal-input {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: 1px solid #cbd5e1;
-    background: #f7f9fc;
-    font-size: 14px;
-    transition: .2s;
-}
-
-.modal-input:focus {
-    border-color: #1e3a8a;
-    background: #fff;
-    box-shadow: 0 0 0 2px rgba(30,58,138,.25);
-    outline: none;
-}
-
-/* ===== TEXTAREA FULL WIDTH ===== */
-.modal-textarea {
-    grid-column: span 2;
-    resize: none;
-}
-
-/* ===== LABEL ===== */
-.modal-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e3a8a;
-    margin-bottom: 6px;
-    display: block;
-}
-
-/* ===== BUTTON UPLOAD ===== */
-.upload-btn {
-    border: 2px dashed #64748b;
-    padding: 12px;
-    border-radius: 14px;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-    transition: .2s;
-    color: #475569;
-    font-weight: 500;
-}
-
-.upload-btn:hover {
-    border-color: #1e3a8a;
-    background: #f0f5ff;
-    color: #1e3a8a;
-}
-
-/* ===== BUTTON AJUKAN ===== */
-.submit-btn {
-    width: 100%;
-    background: #1e3a8a;
-    color: white;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    border-radius: 14px;
-    border: none;
-    cursor: pointer;
-    transition: .2s;
-}
-
-.submit-btn:hover {
-    background: #162d6d;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
-/* ===== MOBILE RESPONSIVE ===== */
-@media(max-width: 600px) {
-    .modal-form-grid {
-        grid-template-columns: 1fr;
-    }
-    .modal-textarea {
-        grid-column: span 1;
+    :root {
+        --primary-color: #1e3a8a;
+        --primary-hover: #162d6d;
+        --secondary-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-dark: #1e293b;
+        --text-muted: #64748b;
+        --border-radius: 16px;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
 
-}
+    body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; }
 
-/* ===== WRAPPER RIWAYAT ===== */
-.riwayat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end; /* Sejajarkan di bagian bawah */
-    margin-bottom: 12px;
-}
+    /* ===== MAIN WRAPPER ===== */
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-bottom: 40px;
+    }
 
-.riwayat-wrapper {
-    margin-top: 40px;
-}
+    /* ===== HEADER CARD (REVISI: Lebih Kompak) ===== */
+    .header-card {
+        background: linear-gradient(135deg, #1e3a8a, #17375d);
+        color: white;
+        padding: 20px 25px; /* Padding dikecilkan */
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
 
-/* ===== TITLE RIWAYAT ===== */
-.riwayat-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1e3a8a;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+    /* Hiasan background abstrak */
+    .header-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -10%;
+        width: 150px;
+        height: 150px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+    }
 
-/* ===== TABEL ===== */
-.riwayat-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
-    font-size: 14px;
-    table-layout: fixed;
-}
+    .profile-section h2 { font-size: 18px; font-weight: 700; margin: 0; } /* Font Judul Dikecilkan */
+    .profile-section p { font-size: 12px; opacity: 0.9; margin: 2px 0 0 0; }
+    
+    .clock-section { text-align: right; }
+    .clock-time { font-size: 20px; font-weight: 700; line-height: 1; } /* Jam Dikecilkan */
+    .clock-date { font-size: 11px; opacity: 0.9; margin-top: 3px; }
 
-/* ===== HEADER TABEL ===== */
-.riwayat-table thead {
-    background: #dbeafe;
-    color: #1e3a8a;
-    text-transform: uppercase;
-    font-weight: 600;
-}
+    /* ===== STATISTIK GRID (REVISI: Ukuran Font) ===== */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
 
-.riwayat-table thead th {
-    padding: 14px;
-    letter-spacing: 0.5px;
-    text-align: left;
-}
+    .stat-card {
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: transform 0.3s ease;
+    }
 
-.riwayat-table thead th:nth-child(1) { width: 15%; } /* Tanggal */
-.riwayat-table thead th:nth-child(2) { width: 10%; } /* Waktu */
-.riwayat-table thead th:nth-child(3) { width: 50%; } /* Alasan (Paling Lebar) */
-.riwayat-table thead th:nth-child(4) { width: 25%; text-align: center; } /* Status (Pusat) */
+    .stat-card:hover { transform: translateY(-3px); }
 
-/* ===== BODY ===== */
-.riwayat-table tbody tr {
-    transition: .2s;
-}
+    .stat-icon {
+        width: 50px; height: 50px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px;
+    }
 
-.riwayat-table tbody tr:hover {
-    background: #f1f5f9;
-    transform: scale(1.01);
-}
+    .icon-blue { background: #e0f2fe; color: #0284c7; }
+    .icon-red { background: #fee2e2; color: #dc2626; }
 
-/* ===== CELL ===== */
-.riwayat-table td {
-    padding: 12px;
-    border-bottom: 1px solid #e5e7eb;
-    text-align: left; /* Rata kiri untuk semua data, kecuali Status */
-    vertical-align: top;
-}
+    .stat-info h3 { font-size: 24px; font-weight: 700; margin: 0; color: var(--text-dark); } /* Angka Dikecilkan */
+    .stat-info p { font-size: 12px; color: var(--text-muted); margin: 0; font-weight: 500; }
 
-.riwayat-table td:nth-child(4) {
-    text-align: center;
-}
+    /* ===== CONTENT CARD (TABEL) ===== */
+    .content-card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
 
-/* ===== STATUS BADGE ===== */
-.status-badge {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: white;
-    display: inline-block;
-}
+    .content-header {
+        padding: 15px 25px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 
-.status-pending {
-    background: #facc15; /* kuning */
-}
+    .content-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-.status-diproses {
-    background: #3b82f6; /* biru */
-}
+    .btn-action {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.3s;
+        box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2);
+    }
 
-.status-diterima {
-    background: #16a34a; /* hijau */
-}
+    .btn-action:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width: 600px) {
-    .riwayat-table {
+    /* ===== TABEL ===== */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    
+    thead { background: #f8fafc; }
+    
+    th {
+        text-align: left;
+        padding: 14px 20px;
         font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .riwayat-table thead th,
-    .riwayat-table td {
-        padding: 10px;
+    td {
+        padding: 14px 20px;
+        font-size: 13px;
+        color: var(--text-dark);
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
     }
-}
 
-.tanggal-jam {
-    text-align: right;
-    font-size: 14px;
-    color: #1e3a8a;
-    font-weight: 600;
-    line-height: 1.2;
-}
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background-color: #f8fafc; }
 
+    /* Status Badges */
+    .badge {
+        padding: 5px 12px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .badge-pending { background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
+    .badge-proses { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+    .badge-sukses { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
+    .badge-tolak  { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; } /* Tambahan untuk status ditolak */
+    
+    /* Tombol Cetak & Lihat Bukti */
+    .btn-xs {
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex; align-items: center; gap: 4px;
+        transition: 0.2s;
+    }
+    .btn-print { background: #15803d; color: white; }
+    .btn-print:hover { background: #14532d; }
+    
+    .btn-view { background: #e0f2fe; color: #0284c7; }
+    .btn-view:hover { background: #bae6fd; color: #0369a1; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+        display: none; justify-content: center; align-items: center; z-index: 9999;
+        opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.show { opacity: 1; }
+
+    .modal-box {
+        background: white;
+        width: 90%; max-width: 600px;
+        border-radius: 16px;
+        padding: 25px;
+        position: relative;
+        transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        max-height: 90vh; overflow-y: auto;
+    }
+    .modal-overlay.show .modal-box { transform: scale(1); }
+
+    .modal-header h3 { margin: 0 0 20px 0; color: var(--primary-color); font-size: 18px; }
+    .btn-close {
+        position: absolute; top: 20px; right: 20px;
+        background: #f1f5f9; border: none; width: 32px; height: 32px;
+        border-radius: 50%; font-size: 18px; cursor: pointer; color: var(--text-muted);
+        display: flex; align-items: center; justify-content: center;
+        transition: 0.2s;
+    }
+    .btn-close:hover { background: #e2e8f0; color: var(--text-dark); }
+
+    /* Form Styles */
+    .form-group { margin-bottom: 15px; }
+    .form-label { display: block; font-weight: 600; font-size: 12px; color: var(--text-dark); margin-bottom: 6px; }
+    .form-control {
+        width: 100%; padding: 10px 12px;
+        border: 1px solid #e2e8f0; border-radius: 8px;
+        font-family: inherit; font-size: 13px;
+        transition: 0.2s; background: #f8fafc;
+        box-sizing: border-box;
+    }
+    .form-control:focus { border-color: var(--primary-color); background: white; outline: none; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1); }
+    
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+    /* Upload Box */
+    .upload-box {
+        border: 2px dashed #cbd5e1; border-radius: 10px;
+        padding: 15px; text-align: center; cursor: pointer;
+        transition: 0.2s; color: var(--text-muted); font-size: 12px;
+    }
+    .upload-box:hover { border-color: var(--primary-color); background: #eff6ff; color: var(--primary-color); }
+
+    .btn-submit {
+        width: 100%; background: var(--primary-color); color: white;
+        padding: 12px; border: none; border-radius: 10px;
+        font-weight: 600; font-size: 14px; margin-top: 10px;
+        cursor: pointer; transition: 0.2s;
+    }
+    .btn-submit:hover { background: var(--primary-hover); }
+
+    /* ===== MOBILE RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .header-card { flex-direction: column; align-items: flex-start; gap: 10px; padding: 20px; }
+        .clock-section { text-align: left; }
+        .form-grid { grid-template-columns: 1fr; gap: 0; }
+        .content-header { flex-direction: column; align-items: stretch; }
+        .btn-action { justify-content: center; }
+        .modal-box { padding: 20px; width: 95%; }
+    }
 </style>
 
 @php
@@ -446,192 +283,269 @@ tbody tr:hover {
     Carbon::setLocale('id');
 @endphp
 
-<div class="bg-gradient-to-b from-blue-50 to-white p-6 rounded-2xl shadow-md transition-all duration-300">
+<div class="dashboard-container">
 
-    {{-- === Header Profil Siswa === --}}
-    <div class="header-siswa">
-    <div class="info">
-        <h2>{{ $siswa->nama_lengkap }}</h2>
-        <p>{{ $siswa->rombel }}</p>
+    {{-- ========================================================= --}}
+    {{-- === 1. ALERT ERROR VALIDASI (KODE YANG DISISIPKAN) === --}}
+    {{-- ========================================================= --}}
+    @if ($errors->any())
+        <div style="background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #fca5a5;">
+            <div style="font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <i class="bi bi-exclamation-circle-fill"></i> Gagal Menyimpan!
+            </div>
+            <ul style="margin: 5px 0 0 20px; font-size: 13px;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    {{-- ========================================================= --}}
+
+
+    {{-- === 2. HEADER KARTU (JUDUL BARU) === --}}
+    <div class="header-card">
+        <div class="profile-section">
+            <h2>Portal Perizinan</h2> <p>Kelola izin dan pantau status kehadiran Anda.</p>
+        </div>
+        <div class="clock-section">
+            <div class="clock-time" id="digitalClock">00:00:00</div>
+            <div class="clock-date" id="dateString">...</div>
+        </div>
+    </div>
+
+    {{-- === 3. STATISTIK KETERLAMBATAN (UKURAN DIPERKECIL) === --}}
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon icon-blue">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ $jumlah }}</h3>
+                <p>Total Terlambat</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon icon-red">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ $poin }}</h3>
+                <p>Poin Pelanggaran</p>
+            </div>
+        </div>
+    </div>
+
+    {{-- === 4. TABEL RIWAYAT === --}}
+    <div class="content-card">
+        <div class="content-header">
+            <div class="content-title">
+                <i class="bi bi-clock-history"></i> Riwayat Pengajuan SIT
+            </div>
+            
+            <button onclick="openModal()" class="btn-action">
+                <i class="bi bi-plus-circle-fill"></i> Ajukan Izin Baru
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="15%">Tanggal</th>
+                        <th width="10%">Jam</th>
+                        <th width="35%">Alasan</th>
+                        <th width="15%">Bukti</th> <th width="25%">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($riwayat as $data)
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600; color: #334155;">{{ Carbon::parse($data->tanggal)->translatedFormat('d M Y') }}</div>
+                        </td>
+                        <td>{{ Carbon::parse($data->jam_datang)->format('H:i') }}</td>
+                        <td>{{ Str::limit($data->keterangan, 40) }}</td>
+                        
+                        {{-- LOGIKA KOLOM BUKTI --}}
+                        <td>
+                            @if($data->dokumen)
+                                {{-- Asumsi 'dokumen' menyimpan path file. Sesuaikan path 'storage/' dengan config Anda --}}
+                                <a href="{{ asset('uploads/dokumen_izin/' . $data->dokumen) }}" target="_blank" class="btn-xs btn-view">
+                                    <i class="bi bi-eye"></i> Lihat
+                                </a>
+                            @else
+                                <span style="color:#cbd5e1;">-</span>
+                            @endif
+                        </td>
+
+                        <td>
+                            {{-- Jika Status DITERIMA --}}
+                            @if ($data->status == 'terima' || $data->status == 'Disetujui')
+                                <a href="{{ route('siswa.cetak.sit', $data->id) }}" class="btn-xs btn-print" target="_blank">
+                                    <i class="bi bi-printer-fill"></i> Cetak SIT
+                                </a>
+
+                            {{-- Jika Status DITOLAK --}}
+                            @elseif ($data->status == 'tolak' || $data->status == 'Ditolak')
+                                <span class="badge badge-tolak">
+                                    <i class="bi bi-x-circle"></i> Ditolak
+                                </span>
+
+                            {{-- Jika Status MENUNGGU / DIPROSES --}}
+                            @else
+                                {{-- Cek apakah Menunggu atau Diproses --}}
+                                @php
+                                    // Logika warna badge
+                                    $badgeClass = 'badge-pending'; // Default kuning
+                                    
+                                    if($data->status == 'diproses' || $data->status == 'Diproses') {
+                                        $badgeClass = 'badge-proses'; // Biru
+                                    }
+                                @endphp
+
+                                <span class="badge {{ $badgeClass }}">
+                                    @if($data->status == 'Menunggu' || $data->status == 'pending') 
+                                        <i class="bi bi-hourglass-split"></i>
+                                    @else 
+                                        <i class="bi bi-arrow-repeat"></i>
+                                    @endif
+                                    
+                                    {{ ucfirst($data->status) }}
+                                </span>
+                            @endif
+                        </td>
+                    @empty
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 40px; color: #94a3b8;">
+                            <i class="bi bi-inbox" style="font-size: 32px; display: block; margin-bottom: 10px;"></i>
+                            Belum ada riwayat pengajuan izin.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </div>
 
-
-    {{-- === Statistik Keterlambatan === --}}
-    <div class="stat-container">
-    <div class="stat-box stat-blue">
-        <p>Total Keterlambatan</p>
-        <h2>{{ $jumlah }}</h2>
-    </div>
-
-    <div class="stat-box stat-red">
-        <p>Point Pelanggaran</p>
-        <h2>{{ $poin }}</h2>
-    </div>
-</div>
-
-
-    <!-- === MODAL FORM IZIN === -->
+{{-- === MODAL FORM PENGAJUAN === --}}
 <div class="modal-overlay" id="modalIzin">
-
     <div class="modal-box">
+        <button class="btn-close" onclick="closeModal()">
+            <i class="bi bi-x-lg"></i>
+        </button>
 
-        <button class="modal-close" onclick="closeModal()">×</button>
-
-        <h3 class="modal-title">Formulir Pengajuan Izin Keterlambatan</h3>
+        <div class="modal-header">
+            <h3>Formulir Izin Keterlambatan</h3>
+        </div>
 
         <form method="POST" action="{{ route('siswa.keterlambatan.ajukan') }}" enctype="multipart/form-data">
             @csrf
-
-            <div class="modal-form-grid">
-
-                <div>
-                    <label class="modal-label">Nama Siswa</label>
-                    <input type="text" class="modal-input" value="{{ $siswa->nama_lengkap }}" readonly>
+            
+            {{-- Grid 2 Kolom --}}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Nama Siswa</label>
+                    <input type="text" class="form-control" value="{{ $siswa->nama_lengkap }}" readonly 
+                           style="background: #e2e8f0; cursor: not-allowed;">
                 </div>
-
-                <div>
-                    <label class="modal-label">Kelas</label>
-                    <input type="text" class="modal-input" value="{{ $siswa->rombel }}" readonly>
+                <div class="form-group">
+                    <label class="form-label">Kelas</label>
+                    <input type="text" class="form-control" value="{{ $siswa->rombel }}" readonly 
+                           style="background: #e2e8f0; cursor: not-allowed;">
                 </div>
-
-                <div>
-                    <label class="modal-label">Tanggal</label>
-                    <input type="date" name="tanggal" class="modal-input" required>
-                </div>
-
-                <div>
-                    <label class="modal-label">Waktu Kehadiran</label>
-                    <input type="time" name="jam_datang" class="modal-input" required>
-                </div>
-
-                <div class="modal-textarea">
-                    <label class="modal-label">Alasan Keterlambatan</label>
-                    <textarea name="keterangan" class="modal-input" rows="4" required></textarea>
-                </div>
-
-                <div class="modal-textarea">
-                    <label class="modal-label">Dokumen Pendukung (opsional)</label>
-                    <label class="upload-btn">
-                        Unggah Dokumen Pendukung
-                        <input type="file" name="dokumen" hidden>
-                    </label>
-                </div>
-
             </div>
 
-            <button type="submit" class="submit-btn">Ajukan Izin</button>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Tanggal Izin <span style="color:red">*</span></label>
+                    <input type="date" name="tanggal" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Estimasi Waktu Datang <span style="color:red">*</span></label>
+                    <input type="time" name="jam_datang" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Alasan Keterlambatan <span style="color:red">*</span></label>
+                <textarea name="keterangan" class="form-control" rows="3" placeholder="Jelaskan alasan Anda..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Dokumen Pendukung (Foto/Surat)</label>
+                <label class="upload-box">
+                    <i class="bi bi-cloud-arrow-up" style="font-size: 20px;"></i><br>
+                    <span>Klik untuk unggah file (Opsional)</span>
+                    <input type="file" name="dokumen" hidden onchange="previewFile(this)">
+                </label>
+                <small id="fileName" style="display:block; margin-top:5px; color:#15803d; font-size:12px;"></small>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="bi bi-send-fill"></i> Kirim Pengajuan
+            </button>
         </form>
     </div>
 </div>
 
-<button onclick="openModal()" class="btn-primary">
-    Ajukan Izin
-</button>
-
-
-
-   <div class="riwayat-wrapper">
-    <h3 class="riwayat-title">
-        <i class="bi bi-clock-history"></i> Riwayat Pengajuan SIT
-    </h3>
-    <div class="tanggal-jam" id="tanggalJamSiswa"></div>
-    <div class="overflow-x-auto">
-        <table class="riwayat-table">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Waktu</th>
-                    <th>Alasan</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($riwayat as $data)
-                <tr>
-                    <tr>
-                    <td>{{ Carbon::parse($data->tanggal)->translatedFormat('d M Y') }}</td>
-                    <td>{{ Carbon::parse($data->jam_datang)->format('H:i') }}</td>
-                    <td class="text-left">{{ $data->keterangan }}</td>
-                    <td>
-   @if ($data->status == 'terima')
-    <a href="{{ route('siswa.cetak.sit', $data->id) }}"
-        class="status-badge status-diterima"
-        style="text-decoration:none; cursor:pointer; display:inline-block;">
-        Cetak SIT
-    </a>
-@else
-    <span class="status-badge 
-        {{ $data->status == 'pending' ? 'status-pending' :
-           ($data->status == 'diproses' ? 'status-diproses' : 'status-diterima') }}">
-        {{ ucfirst($data->status) }}
-    </span>
-@endif
-
-</td>
-
-
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="4" class="p-3 text-gray-500 text-center">Belum ada data keterlambatan</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-{{-- === SweetAlert Success === --}}
-@if(session('success'))
+{{-- === SCRIPT === --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-Swal.fire({
-    icon: 'success',
-    title: 'Berhasil!',
-    text: "{{ session('success') }}",
-    confirmButtonColor: '#1e3a8a',
-    timer: 2500,
-    showConfirmButton: false
-});
-
-</script>
-@endif
-<script>
-function openModal() {
-    document.getElementById('modalIzin').style.display = 'flex';
-}
-
-function closeModal() {
-    document.getElementById('modalIzin').style.display = 'none';
-}
-</script>
 
 <script>
-function updateClock() {
-    const now = new Date();
+    // 1. Clock Script
+    function updateClock() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        
+        document.getElementById('dateString').innerText = now.toLocaleDateString('id-ID', options);
+        document.getElementById('digitalClock').innerText = now.toLocaleTimeString('id-ID', { 
+            hour: '2-digit', minute: '2-digit', second: '2-digit' 
+        }).replace(/\./g, ':');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
+    // 2. Modal Logic
+    function openModal() {
+        const modal = document.getElementById('modalIzin');
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
 
-    const tanggal = now.toLocaleDateString('id-ID', options);
-    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+    function closeModal() {
+        const modal = document.getElementById('modalIzin');
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
 
-    document.getElementById('tanggalJamSiswa').innerHTML = `
-        ${tanggal}<br>${jam}
-    `;
-}
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalIzin');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
 
-// update setiap detik
-setInterval(updateClock, 1000);
-// panggil sekali saat awal load
-updateClock();
+    // 3. File Preview
+    function previewFile(input) {
+        if (input.files && input.files[0]) {
+            document.getElementById('fileName').innerText = 'File terpilih: ' + input.files[0].name;
+        }
+    }
+
+    // 4. SweetAlert
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#1e3a8a',
+            timer: 3000
+        });
+    @endif
 </script>
 
 @endsection

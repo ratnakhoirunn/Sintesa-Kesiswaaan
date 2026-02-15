@@ -100,7 +100,7 @@
         // Definisikan path gambar di PHP (Anda mungkin perlu menambahkan ini di Controller atau di dalam blok Blade @php)
         $logoJogjaPath = public_path('images/jogja.png');
         $logoSmkPath = public_path('images/skaduta_logo.png');
-        $aksaraJawaPath = public_path('images/aksara_jawa.png');
+        $aksaraJawaPath = public_path('images/aksara_jawa_black.png');
 
         // Fungsi helper untuk Base64 Encoding
         // Digunakan untuk memastikan gambar muncul di PDF

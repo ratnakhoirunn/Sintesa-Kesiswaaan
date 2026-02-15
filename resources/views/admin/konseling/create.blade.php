@@ -5,68 +5,101 @@
 
 @section('content')
 <style>
+    /* ===========================
+       BASE STYLES (DESKTOP)
+       =========================== */
     .wrap-card {
         background: #ffffff;
-        padding: 20px;
+        padding: 0; /* Padding dipindah ke inner elements */
         border-radius: 10px;
         margin-top: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Tambah shadow halus */
+        overflow: hidden;
     }
 
+    /* HEADER */
     .header-box {
         background: #0e325f;
         color: white;
         padding: 18px 25px;
         font-weight: 600;
-        border-radius: 8px 8px 0 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
+    .header-box span {
+        font-size: 1.1rem;
+    }
+
+    .tanggal-jam {
+        text-align: right;
+        font-size: 13px;
+        color: #fff;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    /* FORM BODY */
     .form-body {
-        background: #fff;
-        padding: 25px;
-        border: 1px solid #ddd;
-        border-top: none;
-        border-radius: 0 0 8px 8px;
+        padding: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
     }
 
     label {
         font-weight: 600;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         display: block;
+        color: #333;
+        font-size: 0.95rem;
     }
 
     .form-control, select, textarea {
-        width: 100% !important;
-        border: 1px solid #bfbfbf;
-        border-radius: 8px;
-        padding: 12px;
-        font-size: 15px;
-        margin-bottom: 14px;
+        width: 100%;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        padding: 12px 15px;
+        font-size: 14px;
         box-sizing: border-box;
+        transition: 0.3s;
+        background-color: #fcfcfc;
     }
 
-
     .form-control:focus {
+        outline: none;
         border-color: #0e325f;
-        box-shadow: 0 0 5px rgba(14,50,95,0.4);
+        box-shadow: 0 0 0 3px rgba(14, 50, 95, 0.1);
+        background-color: #fff;
+    }
+
+    /* TOMBOL WRAPPER */
+    .btn-wrapper {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 15px;
     }
 
     .btn {
+        padding: 12px 24px;
         border-radius: 6px;
         font-weight: 600;
-        padding: 10px 18px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-block;
+        border: none;
+        transition: 0.3s;
     }
 
-   .btn-primary {
+    .btn-primary {
         background-color: #123B6B;
         color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
     }
 
     .btn-primary:hover {
@@ -76,18 +109,46 @@
     .btn-secondary {
         background-color: #6c757d;
         color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        text-decoration: none;
     }
 
-    .tanggal-jam {
-        text-align: right;
-        font-size: 14px;
-        color: #fff;
-        font-weight: 600;
-        line-height: 1.2;
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    /* ===========================
+       MEDIA QUERIES (MOBILE)
+       =========================== */
+    @media (max-width: 768px) {
+        /* Header Stack */
+        .header-box {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .header-box span {
+            font-size: 1.2rem;
+        }
+
+        .tanggal-jam {
+            text-align: center;
+        }
+
+        /* Form Body Padding Smaller */
+        .form-body {
+            padding: 20px;
+        }
+
+        /* Tombol Stack Vertikal */
+        .btn-wrapper {
+            flex-direction: column-reverse; /* Tombol Simpan di atas, Kembali di bawah */
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px; /* Area sentuh lebih besar */
+        }
     }
 </style>
 
@@ -104,30 +165,38 @@
             @csrf
 
             {{-- Nama & NIS Siswa --}}
-            <label for="siswa_nis">Nama Siswa</label>
-            <select id="siswa_nis" name="siswa_nis" class="form-control" required>
-                <option value="">-- Pilih Siswa --</option>
-                @foreach ($siswas as $siswa)
-                    <option value="{{ $siswa->nis }}">{{ $siswa->nama_lengkap }} ({{ $siswa->nis }})</option>
-                @endforeach
-            </select>
+            <div class="form-group">
+                <label for="siswa_nis">Nama Siswa</label>
+                <select id="siswa_nis" name="siswa_nis" class="form-control" required>
+                    <option value="">-- Pilih Siswa --</option>
+                    @foreach ($siswas as $siswa)
+                        <option value="{{ $siswa->nis }}">{{ $siswa->nama_lengkap }} ({{ $siswa->nis }})</option>
+                    @endforeach
+                </select>
+            </div>
 
             {{-- Rombel --}}
-            <label for="rombel">Rombel</label>
-            <input type="text" id="rombel" name="rombel" class="form-control" required>
+            <div class="form-group">
+                <label for="rombel">Rombel</label>
+                <input type="text" id="rombel" name="rombel" class="form-control" placeholder="Contoh: XII RPL 1" required>
+            </div>
 
             {{-- Catatan --}}
-            <label for="catatan">Catatan Konseling</label>
-            <textarea id="catatan" name="catatan" class="form-control" rows="3"></textarea>
+            <div class="form-group">
+                <label for="catatan">Catatan Konseling</label>
+                <textarea id="catatan" name="catatan" class="form-control" rows="4" placeholder="Tuliskan catatan konseling..."></textarea>
+            </div>
 
             {{-- Tanggal --}}
-            <label for="tanggal">Tanggal</label>
-            <input type="date" id="tanggal" name="tanggal" class="form-control" required>
+            <div class="form-group">
+                <label for="tanggal">Tanggal</label>
+                <input type="date" id="tanggal" name="tanggal" class="form-control" required>
+            </div>
 
-            {{-- Tombol --}}
-            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-                <a href="{{ route('admin.konseling.index') }}" class="btn-secondary">Kembali</a>
-                <button type="submit" class="btn-primary">Simpan Data</button>
+            {{-- Tombol Aksi --}}
+            <div class="btn-wrapper">
+                <a href="{{ route('admin.konseling.index') }}" class="btn btn-secondary">Kembali</a>
+                <button type="submit" class="btn btn-primary">Simpan Data</button>
             </div>
         </form>
     </div>
@@ -146,10 +215,10 @@ function updateClock() {
     };
 
     const tanggal = now.toLocaleDateString('id-ID', options);
-    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' }).replace('.', ':');
 
     document.getElementById('tanggalJamSiswa').innerHTML = `
-        ${tanggal}<br>${jam}
+        ${tanggal}<br>${jam} WIB
     `;
 }
 
