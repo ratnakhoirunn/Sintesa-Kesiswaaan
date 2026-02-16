@@ -236,8 +236,10 @@
     if (ctxBar) {
         let rawData = {!! json_encode($chartData) !!};
         rawData.sort((a, b) => b.total - a.total);
-
+        
         const shortenName = (name) => {
+            if (!name) return '-';
+
             return name
                 .replace(/Teknik/g, 'T.')
                 .replace(/dan/g, '&')
@@ -246,6 +248,7 @@
                 .join('')
                 .toUpperCase();
         };
+
 
         const fullLabels = rawData.map(item => item.jurusan);
         const shortLabels = rawData.map(item => shortenName(item.jurusan));
