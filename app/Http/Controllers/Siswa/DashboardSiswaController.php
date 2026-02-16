@@ -23,7 +23,7 @@ class DashboardSiswaController extends Controller
                         ->get();
 
         // Ambil notifikasi belum dibaca
-        $notifikasi = notifikasi::where('nis', $nis)
+        $notifikasi = Notifikasi::where('nis', $nis)
                     ->where('is_read', false)
                     ->orderBy('created_at', 'desc')
                     ->get();
