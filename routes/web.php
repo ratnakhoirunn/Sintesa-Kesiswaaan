@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\UserPasswordController;
 use App\Http\Controllers\Admin\SiswaAksesController;
 use App\Http\Controllers\Admin\PrestasiController;
 
-use App\Http\Controllers\bk\DashboardBKController;
+use App\Http\Controllers\BK\DashboardBKController;
 use App\Http\Controllers\Kesiswaan\KesiswaanDashboardController;
 use App\Http\Controllers\WaliKelas\WaliSiswaController;
 use App\Http\Controllers\WaliKelas\DokumenSiswaWaliController;
