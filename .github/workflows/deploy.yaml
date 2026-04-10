@@ -47,8 +47,8 @@ jobs:
 
             echo "${{ secrets.SSH_PASSWORD }}" | sudo -S git pull origin production
 
-            php artisan migrate --pretend
-            php artisan migrate --force
+            # php artisan migrate --pretend
+            # php artisan migrate --force
 
             php artisan config:cache
             php artisan route:cache
