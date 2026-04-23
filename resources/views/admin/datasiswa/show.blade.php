@@ -53,8 +53,8 @@
     
     /* Gaya untuk tampilan detail */
     .detail-value {
-        padding: 8px 12px; /* Sedikit diperbesar paddingnya agar lebih enak dilihat */
-        border-radius: 8px; /* Radius sedikit dikurangi agar lebih modern */
+        padding: 8px 12px; 
+        border-radius: 8px; 
         background-color: #f9f9f9;
         border: 1px solid #ccc;
         font-size: 0.95rem;
@@ -63,15 +63,21 @@
         min-height: 40px; 
         display: flex;
         align-items: center;
-        word-break: break-word; /* Mencegah teks panjang keluar dari kotak */
+        word-break: break-word;
     }
     
     label {
         font-weight: 600;
         color: #333;
         font-size: 0.9rem;
-        margin-bottom: 5px; /* Memberikan jarak antara label dan value */
+        margin-bottom: 5px; 
         display: block;
+    }
+
+    /* Penanda Bintang Merah */
+    .required {
+        color: #e74c3c;
+        margin-left: 2px;
     }
 
     .btn-blue {
@@ -117,7 +123,6 @@
         margin-bottom: 20px;
     }
 
-    /* Media query untuk form row menjadi 1 kolom di mobile */
     @media (max-width: 768px) {
         .form-row {
             grid-template-columns: 1fr;
@@ -134,14 +139,13 @@
 
     .detail-box {
         flex: 1;
-        min-width: 300px; /* Ukuran min-width sedikit dikurangi agar pas di layar kecil */
+        min-width: 300px;
         background-color: #f9fafc;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
 
-    /* Agar detail box memenuhi lebar layar di mobile */
     @media (max-width: 768px) {
         .detail-box {
             min-width: 100%;
@@ -171,7 +175,6 @@
         padding-right: 10px;
     }
     
-    /* Penyesuaian scrollable content di mobile agar tidak terlalu pendek */
     @media (max-width: 768px) {
         .scrollable-content {
             max-height: 90vh;
@@ -186,54 +189,52 @@
         <div class="form-body">
             
             <div class="foto-wrapper">
-                {{-- Tampilkan foto siswa jika ada, jika tidak, tampilkan placeholder --}}
                 <img id="preview-image" 
                      src="{{ $siswa->foto ? asset('uploads/foto_siswa/' . $siswa->foto) : asset('images/student.png') }}" 
                      alt="Foto Siswa">
                 <br>
-                {{-- Hapus tombol upload, ini hanya tampilan --}}
             </div>
 
             <div class="form-row">
                 <div>
-                    <label>NIS</label>
+                    <label>NIS <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nis ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>NISN</label>
+                    <label>NISN <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nisn ?? '-' }}</div>
                 </div>
             </div>
 
             <div class="form-row">
                 <div>
-                    <label>Nama Lengkap</label>
+                    <label>Nama Lengkap <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nama_lengkap ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>Jenis Kelamin</label>
+                    <label>Jenis Kelamin <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->jenis_kelamin ?? '-' }}</div>
                 </div>
             </div>
 
             <div class="form-row">
                 <div>
-                    <label>Email</label>
+                    <label>Email <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->email ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>No. WhatsApp</label>
+                    <label>No. WhatsApp <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->no_whatsapp ?? '-' }}</div>
                 </div>
             </div>
 
             <div class="form-row">
                 <div>
-                    <label>Rombel</label>
+                    <label>Rombel <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->rombel ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>Jurusan</label>
+                    <label>Jurusan <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->jurusan ?? '-' }}</div>
                 </div>
             </div>
@@ -255,14 +256,14 @@
                     <div class="detail-value">{{ $siswa->agama ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>Nama Orang Tua (Utama)</label>
+                    <label>Nama Orang Tua (Utama) <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nama_ortu ?? '-' }}</div>
                 </div>
             </div>
 
             <div class="form-row">
                 <div style="grid-column: span 2; @media (max-width: 768px) { grid-column: span 1; }">
-                    <label>Alamat Lengkap</label>
+                    <label>Alamat Lengkap <span class="required">*</span></label>
                     <div class="detail-value" style="min-height: 80px;">{{ $siswa->alamat ?? '-' }}</div>
                 </div>
             </div>
@@ -288,7 +289,6 @@
                 <div class="detail-box">
                     <div class="header">DATA ALAMAT SISWA</div>
                     <div class="body">
-                        {{-- Ambil data dari kolom Siswa Model --}}
                         @php $alamat = $siswa->detailSiswa; @endphp
                         <div class="form-group"><label>Nama Jalan</label><div class="detail-value">{{ $alamat->nama_jalan ?? '-' }}</div></div>
                         <div class="form-group"><label>RT</label><div class="detail-value">{{ $alamat->rt ?? '-' }}</div></div>
@@ -300,7 +300,6 @@
                 </div>
             </div>
 
-            {{-- Menggunakan $siswa->orangTua->kolom_data (Asumsi relasi orangTua sudah dibuat) --}}
             @php
                 $ortu = $siswa->orangTua ?? null;
             @endphp
@@ -309,8 +308,8 @@
                 <div class="detail-box">
                     <div class="header">BIODATA AYAH</div>
                     <div class="body">
-                        <div class="form-group"><label>Nama Ayah</label><div class="detail-value">{{ $ortu->nama_ayah ?? '-' }}</div></div>
-                        <div class="form-group"><label>NIK</label><div class="detail-value">{{ $ortu->nik_ayah ?? '-' }}</div></div>
+                        <div class="form-group"><label>Nama Ayah <span class="required">*</span></label><div class="detail-value">{{ $ortu->nama_ayah ?? '-' }}</div></div>
+                        <div class="form-group"><label>NIK <span class="required">*</span></label><div class="detail-value">{{ $ortu->nik_ayah ?? '-' }}</div></div>
                         <div class="form-group"><label>Tahun Lahir</label><div class="detail-value">{{ $ortu->tahun_lahir_ayah ?? '-' }}</div></div>
                         <div class="form-group"><label>Pendidikan</label><div class="detail-value">{{ $ortu->pendidikan_ayah ?? '-' }}</div></div>
                         <div class="form-group"><label>Pekerjaan</label><div class="detail-value">{{ $ortu->pekerjaan_ayah ?? '-' }}</div></div>
@@ -323,8 +322,8 @@
                 <div class="detail-box">
                     <div class="header">BIODATA IBU</div>
                     <div class="body">
-                        <div class="form-group"><label>Nama Ibu</label><div class="detail-value">{{ $ortu->nama_ibu ?? '-' }}</div></div>
-                        <div class="form-group"><label>NIK</label><div class="detail-value">{{ $ortu->nik_ibu ?? '-' }}</div></div>
+                        <div class="form-group"><label>Nama Ibu <span class="required">*</span></label><div class="detail-value">{{ $ortu->nama_ibu ?? '-' }}</div></div>
+                        <div class="form-group"><label>NIK <span class="required">*</span></label><div class="detail-value">{{ $ortu->nik_ibu ?? '-' }}</div></div>
                         <div class="form-group"><label>Tahun Lahir</label><div class="detail-value">{{ $ortu->tahun_lahir_ibu ?? '-' }}</div></div>
                         <div class="form-group"><label>Pendidikan</label><div class="detail-value">{{ $ortu->pendidikan_ibu ?? '-' }}</div></div>
                         <div class="form-group"><label>Pekerjaan</label><div class="detail-value">{{ $ortu->pekerjaan_ibu ?? '-' }}</div></div>
@@ -355,10 +354,7 @@
                 <a href="{{ route('admin.datasiswa.index') }}" class="btn btn-gray">Kembali ke Daftar</a>
             </div>
 
-
         </div>
     </div>
 </div>
-
-{{-- Hapus script JS yang terkait dengan upload/preview foto, karena ini mode view --}}
 @endsection

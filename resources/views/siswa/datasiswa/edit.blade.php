@@ -18,7 +18,7 @@
     }
 
     .section-title {
-        background-color: #1e3a67; /* Warna Asli */
+        background-color: #1e3a67;
         color: white;
         padding: 12px 20px;
         font-weight: 600;
@@ -26,7 +26,7 @@
         width: 100%;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
-        box-sizing: border-box; /* Mencegah padding melebar keluar */
+        box-sizing: border-box; 
     }
 
     .form-body {
@@ -44,6 +44,11 @@
         display: block;
     }
 
+    .required {
+        color: #e74c3c;
+        margin-left: 2px;
+    }
+
     input, select, textarea {
         width: 100%;
         padding: 8px 10px;
@@ -51,7 +56,8 @@
         border: 1px solid #ccc;
         background: #f9f9f9;
         font-size: 0.95rem;
-        box-sizing: border-box; /* Agar padding tidak merusak lebar */
+        box-sizing: border-box;
+        font-family: inherit;
     }
 
     /* ---------------------------------
@@ -59,12 +65,11 @@
     ------------------------------------*/
     .form-row {
         display: grid;
-        grid-template-columns: 1fr; /* Default Mobile: 1 Kolom */
+        grid-template-columns: 1fr; 
         gap: 15px;
         margin-bottom: 20px;
     }
 
-    /* Media Query: Tablet & Desktop jadi 2 Kolom */
     @media (min-width: 768px) {
         .form-row {
             grid-template-columns: repeat(2, 1fr);
@@ -84,8 +89,9 @@
         text-decoration: none;
         margin-right: 10px;
         display: inline-block;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
+        font-family: inherit;
     }
     .btn-blue:hover { background-color: #0056b3; color: white; }
 
@@ -97,8 +103,9 @@
         text-decoration: none;
         border: none;
         display: inline-block;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
+        font-family: inherit;
     }
     .btn-gray:hover { background-color: #3a3a3a; color: white; }
 
@@ -107,14 +114,14 @@
     ------------------------------------*/
     .detail-container {
         display: flex;
-        flex-wrap: wrap; /* Agar turun ke bawah di HP */
+        flex-wrap: wrap; 
         gap: 20px;
         margin-top: 30px;
     }
 
     .detail-box {
         flex: 1;
-        min-width: 300px; /* Agar tidak gepeng di layar kecil */
+        min-width: 300px; 
         background-color: #f9fafc;
         border-radius: 10px;
         overflow: hidden;
@@ -143,20 +150,19 @@
         max-height: 80vh;
         overflow-y: auto;
         padding-bottom: 20px;
-        /* Scrollbar styling optional */
         scrollbar-width: thin;
     }
 
     @media (max-width: 768px) {
         .form-body {
-            padding: 20px; /* Padding lebih kecil di HP */
+            padding: 20px; 
         }
         .detail-box {
             width: 100%;
             min-width: 100%;
         }
         .btn-blue, .btn-gray {
-            width: 100%; /* Tombol full width di HP */
+            width: 100%; 
             margin-bottom: 10px;
             text-align: center;
         }
@@ -188,18 +194,18 @@
                         <input type="text" value="{{ $siswa->nis }}" readonly style="background: #e9ecef; cursor: not-allowed;">
                     </div>
                     <div>
-                        <label>NISN</label>
+                        <label>NISN <span class="required">*</span></label>
                         <input type="number" name="nisn" value="{{ $siswa->nisn }}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label>Nama Lengkap</label>
+                        <label>Nama Lengkap <span class="required">*</span></label>
                         <input type="text" name="nama_lengkap" value="{{ $siswa->nama_lengkap }}">
                     </div>
                     <div>
-                        <label>Jenis Kelamin</label>
+                        <label>Jenis Kelamin <span class="required">*</span></label>
                         <select name="jenis_kelamin">
                             <option value="Laki-laki" {{ $siswa->jenis_kelamin=='Laki-laki'?'selected':'' }}>Laki-laki</option>
                             <option value="Perempuan" {{ $siswa->jenis_kelamin=='Perempuan'?'selected':'' }}>Perempuan</option>
@@ -209,22 +215,22 @@
 
                 <div class="form-row">
                     <div>
-                        <label>Email</label>
+                        <label>Email <span class="required">*</span></label>
                         <input type="email" name="email" value="{{ $siswa->email }}">
                     </div>
                     <div>
-                        <label>No WhatsApp</label>
+                        <label>No WhatsApp <span class="required">*</span></label>
                         <input type="text" name="no_whatsapp" value="{{ $siswa->no_whatsapp }}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label>Rombel</label>
+                        <label>Rombel <span class="required">*</span></label>
                         <input type="text" name="rombel" value="{{ $siswa->rombel }}">
                     </div>
                     <div>
-                        <label>Jurusan</label>
+                        <label>Jurusan <span class="required">*</span></label>
                         <input type="text" name="jurusan" value="{{ $siswa->jurusan }}">
                     </div>
                 </div>
@@ -246,14 +252,14 @@
                         <input type="text" name="agama" value="{{ $siswa->agama }}">
                     </div>
                     <div>
-                        <label>Nama Orang Tua</label>
+                        <label>Nama Orang Tua <span class="required">*</span></label>
                         <input type="text" name="nama_ortu" value="{{ $siswa->nama_ortu }}">
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div style="grid-column: 1 / -1;"> {{-- Full Width --}}
-                        <label>Alamat Lengkap</label>
+                    <div style="grid-column: 1 / -1;"> 
+                        <label>Alamat Lengkap <span class="required">*</span></label>
                         <textarea name="alamat" rows="3">{{ $siswa->alamat }}</textarea>
                     </div>
                 </div>
@@ -346,7 +352,7 @@
 
                 <div style="text-align: right;">
                     <button type="submit" class="btn-blue">Simpan Perubahan</button>
-                    <a href="{{ route('siswa.profil.show', $siswa->nis) }}" class="btn-gray">Batal</a>
+                    <a href="{{ route('siswa.profil.show') }}" class="btn-gray">Batal</a>
                 </div>
 
             </form>
