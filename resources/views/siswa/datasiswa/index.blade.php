@@ -17,9 +17,9 @@
     }
 
     .section-title {
-        background-color: #1e3a67; /* Warna Asli */
+        background-color: #1e3a67; 
         color: white;
-        padding: 15px 25px; /* Sedikit padding adjustment agar rapi */
+        padding: 15px 25px; 
         font-weight: 600;
         font-size: 1.1rem;
         border-top-left-radius: 10px;
@@ -57,10 +57,16 @@
         display: block;
     }
 
+    /* Gaya untuk bintang merah */
+    .required {
+        color: #e74c3c;
+        margin-left: 2px;
+    }
+
     .detail-value {
-        padding: 6px 10px; /* Padding dirapikan */
+        padding: 6px 10px; 
         border-radius: 10px;
-        background-color: #f9f9f9; /* Warna Asli */
+        background-color: #f9f9f9; 
         border: 1px solid #ccc;
         font-size: 0.95rem;
         color: #333;
@@ -68,8 +74,8 @@
         min-height: 40px;
         display: flex;
         align-items: center;
-        width: 100%; /* Pastikan memenuhi wadah */
-        box-sizing: border-box; /* Agar padding tidak melebar */
+        width: 100%; 
+        box-sizing: border-box; 
     }
 
     /* ---------------------------------
@@ -77,12 +83,11 @@
     ------------------------------------*/
     .form-row {
         display: grid;
-        grid-template-columns: 1fr; /* Default HP: 1 Kolom */
+        grid-template-columns: 1fr; 
         gap: 15px;
         margin-bottom: 20px;
     }
 
-    /* Media Query: Tablet & Desktop jadi 2 Kolom */
     @media (min-width: 768px) {
         .form-row {
             grid-template-columns: repeat(2, 1fr);
@@ -95,22 +100,22 @@
     ------------------------------------*/
     .detail-container {
         display: flex;
-        flex-wrap: wrap; /* Agar turun ke bawah di HP */
+        flex-wrap: wrap; 
         gap: 20px;
         margin-top: 30px;
     }
 
     .detail-box {
         flex: 1;
-        min-width: 300px; /* Agar tidak gepeng di layar kecil */
-        background-color: #f9fafc; /* Warna Asli */
+        min-width: 300px; 
+        background-color: #f9fafc; 
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
 
     .detail-box .header {
-        background-color: #1e3a67; /* Warna Asli */
+        background-color: #1e3a67; 
         color: white;
         font-weight: 600;
         padding: 10px 15px;
@@ -154,7 +159,7 @@
 
     @media (max-width: 768px) {
         .form-body {
-            padding: 20px; /* Padding lebih kecil di HP */
+            padding: 20px; 
         }
         .detail-box {
             width: 100%;
@@ -180,11 +185,11 @@
             {{-- Row 1: NIS & NISN --}}
             <div class="form-row">
                 <div>
-                    <label>NIS</label>
+                    <label>NIS <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nis ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>NISN</label>
+                    <label>NISN <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nisn ?? '-' }}</div>
                 </div>
             </div>
@@ -192,11 +197,11 @@
             {{-- Row 2: Nama & JK --}}
             <div class="form-row">
                 <div>
-                    <label>Nama Lengkap</label>
+                    <label>Nama Lengkap <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nama_lengkap ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>Jenis Kelamin</label>
+                    <label>Jenis Kelamin <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->jenis_kelamin ?? '-' }}</div>
                 </div>
             </div>
@@ -204,11 +209,11 @@
             {{-- Row 3: Email & WA --}}
             <div class="form-row">
                 <div>
-                    <label>Email</label>
+                    <label>Email <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->email ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>No. WhatsApp</label>
+                    <label>No. WhatsApp <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->no_whatsapp ?? '-' }}</div>
                 </div>
             </div>
@@ -216,11 +221,11 @@
             {{-- Row 4: Rombel & Jurusan --}}
             <div class="form-row">
                 <div>
-                    <label>Rombel</label>
+                    <label>Rombel <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->rombel ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>Jurusan</label>
+                    <label>Jurusan <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->jurusan ?? '-' }}</div>
                 </div>
             </div>
@@ -246,7 +251,7 @@
                     <div class="detail-value">{{ $siswa->agama ?? '-' }}</div>
                 </div>
                 <div>
-                    <label>Nama Orang Tua (Utama)</label>
+                    <label>Nama Orang Tua (Utama) <span class="required">*</span></label>
                     <div class="detail-value">{{ $siswa->nama_ortu ?? '-' }}</div>
                 </div>
             </div>
@@ -254,7 +259,7 @@
             {{-- Row 7: Alamat (Full Width) --}}
             <div class="form-row">
                 <div style="grid-column: 1 / -1;">
-                    <label>Alamat Lengkap</label>
+                    <label>Alamat Lengkap <span class="required">*</span></label>
                     <div class="detail-value" style="height: auto; min-height: 60px; align-items: flex-start; padding-top: 10px;">
                         {{ $siswa->alamat ?? '-' }}
                     </div>

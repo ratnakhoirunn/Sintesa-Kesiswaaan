@@ -58,6 +58,12 @@
         display: block;
     }
 
+    /* Gaya untuk bintang merah */
+    .required {
+        color: #e74c3c;
+        margin-left: 2px;
+    }
+
     input, select, textarea {
         width: 100%;
         border: 1px solid #ccc;
@@ -66,7 +72,7 @@
         font-size: 0.95rem;
         background-color: #f9f9f9;
         transition: 0.3s;
-        margin-bottom: 5px; /* Spacing for tighter layouts */
+        margin-bottom: 5px; 
     }
 
     input:focus, select:focus, textarea:focus {
@@ -83,7 +89,6 @@
         margin-bottom: 20px;
     }
 
-    /* Single column layout for mobile forms */
     @media (max-width: 768px) {
         .form-row {
             grid-template-columns: 1fr;
@@ -100,14 +105,13 @@
 
     .detail-box {
         flex: 1;
-        min-width: 300px; /* Reduced min-width for better mobile fit */
+        min-width: 300px;
         background-color: #f9fafc;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
 
-    /* Full width detail box on mobile */
     @media (max-width: 768px) {
         .detail-box {
             min-width: 100%;
@@ -127,28 +131,30 @@
         padding: 20px;
     }
 
-    .detail-box .body > div { /* Targetting potential wrappers inside body if any */
+    .detail-box .body > div {
         margin-bottom: 15px;
     }
     
-    /* Ensure inputs inside detail box have bottom margin */
     .detail-box .body input, 
     .detail-box .body select {
         margin-bottom: 15px;
     }
 
-    .btn-blue {
-        display: inline-block;
-        background-color: #1e3a67;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 6px;
-        border: none;
-        transition: 0.3s;
-        font-weight: 600;
-        text-decoration: none;
-        cursor: pointer;
-    }
+   .btn-blue {
+    display: inline-block;
+    background-color: #1e3a67;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: none;
+    transition: 0.3s;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    /* Tambahkan ini */
+    font-family: inherit; 
+    font-size: 0.95rem; /* Pastikan ukuran font juga sama */
+}
 
     .btn-blue:hover {
         background-color: #0056b3;
@@ -178,7 +184,6 @@
         padding-right: 10px;
     }
 
-    /* Better scroll height on mobile */
     @media (max-width: 768px) {
         .scrollable-content {
             max-height: 85vh;
@@ -216,25 +221,24 @@
                     <input type="file" name="foto" accept="image/*" onchange="previewImage(event)" style="width: auto; max-width: 100%;">
                 </div>
 
-                {{-- Baris utama data siswa --}}
                 <div class="form-row">
                     <div>
-                        <label>NIS</label>
+                        <label>NIS <span class="required">*</span></label>
                         <input type="text" name="nis" value="{{ old('nis', $siswa->nis) }}">
                     </div>
                     <div>
-                        <label>NISN</label>
+                        <label>NISN <span class="required">*</span></label>
                         <input type="text" name="nisn" value="{{ old('nisn', $siswa->nisn) }}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label>Nama Lengkap</label>
+                        <label>Nama Lengkap <span class="required">*</span></label>
                         <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $siswa->nama_lengkap) }}">
                     </div>
                     <div>
-                        <label>Jenis Kelamin</label>
+                        <label>Jenis Kelamin <span class="required">*</span></label>
                         <select name="jenis_kelamin">
                             <option value="Laki-laki" {{ $siswa->jenis_kelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                             <option value="Perempuan" {{ $siswa->jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
@@ -244,18 +248,18 @@
 
                 <div class="form-row">
                     <div>
-                        <label>Email</label>
+                        <label>Email <span class="required">*</span></label>
                         <input type="email" name="email" value="{{ old('email', $siswa->email) }}">
                     </div>
                     <div>
-                        <label>No. WhatsApp</label>
+                        <label>No. WhatsApp <span class="required">*</span></label>
                         <input type="text" name="no_whatsapp" value="{{ old('no_whatsapp', $siswa->no_whatsapp) }}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label>Rombel</label>
+                        <label>Rombel <span class="required">*</span></label>
                         <select name="rombel" class="form-select">
                             <option value="">Pilih Rombel</option>
                             @foreach ([
@@ -273,7 +277,7 @@
                     </div>
 
                     <div>
-                        <label>Jurusan</label>
+                        <label>Jurusan <span class="required">*</span></label>
                         <select name="jurusan" class="form-select">
                             <option value="">Pilih Jurusan</option>
                             @foreach ([
@@ -313,19 +317,18 @@
                         <input type="text" name="agama" value="{{ old('agama', $siswa->agama) }}">
                     </div>
                     <div>
-                        <label>Nama Orang Tua (Utama)</label>
+                        <label>Nama Orang Tua (Utama) <span class="required">*</span></label>
                         <input type="text" name="nama_ortu" value="{{ old('nama_ortu', $siswa->nama_ortu) }}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div style="grid-column: span 2; @media (max-width: 768px) { grid-column: span 1; }">
-                        <label>Alamat Lengkap</label>
+                        <label>Alamat Lengkap <span class="required">*</span></label>
                         <textarea name="alamat" rows="3">{{ old('alamat', $siswa->alamat) }}</textarea>
                     </div>
                 </div>
 
-                {{-- Detail Box --}}
                 @php 
                     $detail = $siswa->detailSiswa;
                     $ortu = $siswa->orangTua;
@@ -401,13 +404,12 @@
                     </div>
                 </div>
 
-                {{-- AYAH, IBU, WALI --}}
                 <div class="detail-container">
                     <div class="detail-box">
                         <div class="header">BIODATA AYAH</div>
                         <div class="body">
-                            <label>Nama Ayah</label><input type="text" name="nama_ayah" value="{{ old('nama_ayah', $ortu->nama_ayah ?? '') }}">
-                            <label>NIK</label><input type="text" name="nik_ayah" value="{{ old('nik_ayah', $ortu->nik_ayah ?? '') }}">
+                            <label>Nama Ayah <span class="required">*</span></label><input type="text" name="nama_ayah" value="{{ old('nama_ayah', $ortu->nama_ayah ?? '') }}">
+                            <label>NIK <span class="required">*</span></label><input type="text" name="nik_ayah" value="{{ old('nik_ayah', $ortu->nik_ayah ?? '') }}">
                             <label>Tahun Lahir</label><input type="text" name="tahun_lahir_ayah" value="{{ old('tahun_lahir_ayah', $ortu->tahun_lahir_ayah ?? '') }}">
                             <label>Pendidikan</label>
                                 <select name="pendidikan_ayah" class="form-select">
@@ -461,8 +463,8 @@
                     <div class="detail-box">
                         <div class="header">BIODATA IBU</div>
                         <div class="body">
-                            <label>Nama Ibu</label><input type="text" name="nama_ibu" value="{{ old('nama_ibu', $ortu->nama_ibu ?? '') }}">
-                            <label>NIK</label><input type="text" name="nik_ibu" value="{{ old('nik_ibu', $ortu->nik_ibu ?? '') }}">
+                            <label>Nama Ibu <span class="required">*</span></label><input type="text" name="nama_ibu" value="{{ old('nama_ibu', $ortu->nama_ibu ?? '') }}">
+                            <label>NIK <span class="required">*</span></label><input type="text" name="nik_ibu" value="{{ old('nik_ibu', $ortu->nik_ibu ?? '') }}">
                             <label>Tahun Lahir</label><input type="text" name="tahun_lahir_ibu" value="{{ old('tahun_lahir_ibu', $ortu->tahun_lahir_ibu ?? '') }}">
                             <label>Pendidikan</label>
                                 <select name="pendidikan_ibu" class="form-select">
